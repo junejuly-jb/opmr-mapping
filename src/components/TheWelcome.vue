@@ -1,0 +1,65 @@
+<script setup>
+  import MappingList from './MappingList.vue';
+  import { useMappingStore } from '@/stores/mappings';
+  const mappingStore = useMappingStore()
+
+</script>
+
+<template>
+  <div>
+    <div class="cpoe__heading">
+      <h2>OPMR Mapping Rules</h2>
+    </div>
+    <div class="opmr__spacer__v">
+      <span class="opmr__spacer__h"></span>
+      <v-btn
+        color="primary"
+        @click="mappingStore.setEmptyMapping"
+      >
+        Mapping Rule
+        <v-icon
+          icon="mdi-plus"
+          end
+        ></v-icon>
+      </v-btn>
+      <span class="opmr__spacer__h"></span>
+      <v-btn
+        color="primary"
+        @click="mappingStore.getMappings"
+      >
+        Reload Mappings
+        <v-icon
+          icon="mdi-reload"
+          end
+        ></v-icon>
+      </v-btn>
+      <span class="opmr__spacer__h"></span>
+      <v-btn
+        color="success"
+      >
+        Save
+        <v-icon
+          icon="mdi-check"
+          end
+        ></v-icon>
+      </v-btn>
+    </div>
+    <div v-for="(mapping, index) in mappingStore.mappings">
+      <MappingList :index="index" :mapping="mapping"></MappingList>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.cpoe__heading{
+  padding: 10px 20px;
+  background-color: rgb(28, 42, 75);
+  color: white;
+}
+.opmr__spacer__h{
+  padding: 0px 20px;
+}
+.opmr__spacer__v{
+  padding: 20px 0px;
+}
+</style>

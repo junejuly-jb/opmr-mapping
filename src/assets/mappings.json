@@ -1,0 +1,50 @@
+[
+    {
+        "productReference": "Ketovie 3:1",
+        "conditions": [
+            { 
+                "condition": "",
+                "reference": "WATER",
+                "theFortifierParser" : [
+                    {"FortifierKey": "Compleat JUNIOR 1.5"},
+                    {"CalOzStart": null},
+                    {"CalOzEnd": 50},
+                    {"Modular": null}
+                ]
+            }
+        ]
+    },
+    {
+        "productReference": "Enfamil A+",
+        "conditions": [
+            { 
+                "condition": "",
+                "reference": "WATER",
+                "theFortifierParser" : [
+                    {"FortifierKey": "Compleat JUNIOR 1.5"},
+                    {"CalOzStart": null},
+                    {"CalOzEnd": 50},
+                    {"Modular": null}
+                ]
+            }
+        ]
+    }
+    ,
+    {
+        "productReference": "Enfamil Gentlease",
+        "conditions": [
+            { 
+                "condition": "",
+                "reference": "WATER",
+                "theFortifierParser" : [
+                    {
+                        "FortifierKey": "Compleat JUNIOR 1.5",
+                        "CalOzStart": null,
+                        "CalOzEnd": 50,
+                        "Modular": null
+                    }
+                ]
+            }
+        ]
+    }
+]
