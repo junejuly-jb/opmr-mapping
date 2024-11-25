@@ -12,19 +12,22 @@ export const useMappingStore = defineStore ('mappings', () => {
     //functions
     const setEmptyMapping = () => { mappings.value.push(emptyMapping.value)}
     const removeMapping = (i) => { mappings.value.splice(i, 1) }
+    const removeConditionWithinAMapping = (mappingIndex, conditionIndex) => {
+        mappings.value[mappingIndex].conditions.splice(conditionIndex, 1)
+    }
     const addCondition = (data, i) => {
         console.log(data)
-        const condition: Conditions = {
-            condition: data.value.condition,
-            reference: data.value.reference,
-            FortifierKey: data.value.FortifierKey,
-            CalOzStart: data.value.CalOzStart ?? null,
-            CalOzEnd: data.value.CalOzEnd ?? null,
-            Modular: data.value.Modular ?? null
-        }
-        console.log(condition)
+        // const condition: Conditions = {
+        //     calories: data.value.condition,
+        //     reference: data.value.reference,
+        //     FortifierKey: data.value.FortifierKey,
+        //     CalOzStart: data.value.CalOzStart ?? null,
+        //     CalOzEnd: data.value.CalOzEnd ?? null,
+        //     Modular: data.value.Modular ?? null
+        // }
+        console.log()
         console.log(i)
     }
 
-    return { mappings, getMappings, setEmptyMapping, removeMapping, addCondition };
+    return { mappings, getMappings, setEmptyMapping, removeMapping, addCondition, removeConditionWithinAMapping };
 })

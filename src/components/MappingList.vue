@@ -83,8 +83,8 @@ defineProps({
                 </template>
             </v-dialog>
             <div class="test">
-                <div v-for="condition in mapping.conditions">
-                    <Conditions :condition="condition"/>
+                <div v-for="(condition, c_index) in mapping.conditions">
+                    <Conditions :condition="condition" :m_index="index" :c_index="c_index"/>
                 </div>
             </div>
         </div>

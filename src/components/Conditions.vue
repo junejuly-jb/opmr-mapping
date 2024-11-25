@@ -1,7 +1,19 @@
 <script setup>
+import FortifierKey from './FortifierKey.vue'
+import { useMappingStore } from '@/stores/mappings'
+
+const mappingStore = useMappingStore();
 defineProps({
   condition: {
     type: Object,
+    required: true,
+  },
+  c_index: {
+    type: Number,
+    required: true,
+  },
+  m_index: {
+    type: Number,
     required: true,
   }
 });
@@ -10,30 +22,21 @@ defineProps({
     <div class="cpoe__condition__container">
         <div class="cpoe__btn__array">
             <div class="cpoe__btn__update">
-                <v-btn icon="mdi-pencil" variant="tonal" size="x-small"></v-btn>
+                <v-btn prepend-icon="mdi-pencil" variant="tonal" size="small" rounded="xl">Update</v-btn>
             </div>
             <div class="spacer"></div>
             <div class="cpoe__btn__delete">
-                <v-btn icon="mdi-delete" variant="tonal" size="x-small" color="error"></v-btn>
+                <v-btn @click="mappingStore.removeConditionWithinAMapping(m_index, c_index)" icon="mdi-close" variant="tonal" size="x-small" color="error"></v-btn>
             </div>
         </div>
         <div>
             Reference: {{condition.reference}}
         </div>
         <div>
-            Calories: 20
+            Calories: {{condition.calories}}
         </div>
         <div>
-            Product: {{ condition.FortifierKey }}
-        </div>
-        <div>
-            Cal/Oz Start: {{ condition.CalOzStart }}
-        </div>
-        <div>
-            Cal/Oz End: {{ condition.CalOzEnd }}
-        </div>
-        <div>
-            Modular: {{ condition.Modular }}
+            <FortifierKey/>
         </div>
     </div>
 </template>
