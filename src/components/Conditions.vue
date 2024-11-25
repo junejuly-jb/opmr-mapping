@@ -24,16 +24,16 @@ defineProps({
             Calories: 20
         </div>
         <div>
-            Product: {{ condition.theFortifierParser[0].FortifierKey }}
+            Product: {{ condition.FortifierKey }}
         </div>
         <div>
-            Cal/Oz Start: {{ condition.theFortifierParser[0].CalOzStart }}
+            Cal/Oz Start: {{ condition.CalOzStart }}
         </div>
         <div>
-            Cal/Oz End: {{ condition.theFortifierParser[0].CalOzEnd }}
+            Cal/Oz End: {{ condition.CalOzEnd }}
         </div>
         <div>
-            Modular: {{ condition.theFortifierParser[0].Modular }}
+            Modular: {{ condition.Modular }}
         </div>
     </div>
 </template>
@@ -47,6 +47,7 @@ defineProps({
 .cpoe__btn__array{
     display: flex;
     justify-content: right;
+    padding: 5px 0px;
 }
 .spacer{
     padding: 0px 2px;

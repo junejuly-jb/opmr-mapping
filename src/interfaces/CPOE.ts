@@ -6,14 +6,10 @@ export interface CPOE{
 export interface Conditions{
     condition: String,
     reference: String,
-    theFortifierParser: Array<FortifierParser>
-}
-
-export interface FortifierParser{
     FortifierKey: String,
-    CalOzStart: number | null,
-    CalOzEnd: number,
-    Modular: number | null
+    CalOzStart: Number | null,
+    CalOzEnd: Number | null,
+    Modular: Number | null
 }
 
 export interface MapType {

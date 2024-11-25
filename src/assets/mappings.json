@@ -5,26 +5,20 @@
             { 
                 "condition": "",
                 "reference": "WATER",
-                "theFortifierParser" : [
-                    {
-                        "FortifierKey": "Ketovie 3:1",
-                        "CalOzStart": null,
-                        "CalOzEnd": 50,
-                        "Modular": null
-                    }
-                ]
+                "FortifierKey": "Ketovie 3:1",
+                "CalOzStart": null,
+                "CalOzEnd": 50,
+                "Modular": null
+                    
             },
             { 
                 "condition": "",
                 "reference": "WATER",
-                "theFortifierParser" : [
-                    {
-                        "FortifierKey": "Ketovie 3:1 Chocolate",
-                        "CalOzStart": null,
-                        "CalOzEnd": 50,
-                        "Modular": null
-                    }
-                ]
+                "FortifierKey": "Ketovie 3:1",
+                "CalOzStart": null,
+                "CalOzEnd": 50,
+                "Modular": null
+                    
             }
         ]
     },
@@ -34,14 +28,10 @@
             { 
                 "condition": "",
                 "reference": "WATER",
-                "theFortifierParser" : [
-                    {
-                        "FortifierKey": "Gentlease",
-                        "CalOzStart": null,
-                        "CalOzEnd": 50,
-                        "Modular": null
-                    }
-                ]
+                "FortifierKey": "Gentlease",
+                "CalOzStart": null,
+                "CalOzEnd": 50,
+                "Modular": null
             }
         ]
     }
@@ -52,14 +42,10 @@
             { 
                 "condition": "",
                 "reference": "WATER",
-                "theFortifierParser" : [
-                    {
-                        "FortifierKey": "Compleat JUNIOR 1.5",
-                        "CalOzStart": null,
-                        "CalOzEnd": 50,
-                        "Modular": null
-                    }
-                ]
+                "FortifierKey": "Compleat JUNIOR 1.5",
+                "CalOzStart": null,
+                "CalOzEnd": 50,
+                "Modular": null
             }
         ]
     }

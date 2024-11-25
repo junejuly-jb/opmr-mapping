@@ -97,9 +97,6 @@ defineProps({
     padding: 0px 30px;
     /* background-color: green; */
 }
-.col-2{
-    /* background-color: red; */
-}
 
 .opmr__hl7__reference{
     margin: 10px 0px;
