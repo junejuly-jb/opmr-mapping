@@ -4,14 +4,17 @@ export interface CPOE{
 }
 
 export interface Conditions{
-    condition: String,
+    calories: Array<Number>,
     reference: String,
-    FortifierKey: String,
-    CalOzStart: Number | null,
-    CalOzEnd: Number | null,
-    Modular: Number | null
+    FortifierKey: Array<FortifierKey>
 }
 
+export interface FortifierKey{
+    fortifierKey: String,
+    calOzStart: Number | null,
+    calOzEnd: Number | null,
+    Modular: Number | null
+}
 export interface MapType {
     productReference: String,
     conditions: Array<Conditions>

@@ -1,7 +1,13 @@
 <script setup>
+import { ref } from 'vue';
 import { useMappingStore } from '@/stores/mappings';
 import Conditions from './Conditions.vue';
+const newCondition = ref({})
 const mappingStore = useMappingStore();
+const addCondition = (isActive, index) => {
+    mappingStore.addCondition(newCondition, index)
+    isActive.value = false
+}
 defineProps({
   mapping: {
     type: Object,
@@ -39,8 +45,8 @@ defineProps({
                     <v-card title="Set Product Mapping">
                     <v-spacer></v-spacer>
                     <v-card-text>
-                        <v-text-field label="Calories" variant="outlined"></v-text-field>
-                        <v-text-field label="Product Reference" variant="outlined"></v-text-field>
+                        <v-text-field v-model="newCondition.condition" label="Calories" variant="outlined"></v-text-field>
+                        <v-text-field v-model="newCondition.reference" label="Product Reference" variant="outlined"></v-text-field>
                         <v-select
                         label="Fortifier Key"
                         :items="['Enfamil Infant', 'Enfamil Gentlease', 'Ketovie 3:1', 'Peptide', 'Alfamino Junior', 'Neosure PWD']"
@@ -50,15 +56,15 @@ defineProps({
                             <v-col
                             cols="6"
                             >
-                                <v-text-field label="Cal/oz Start" variant="outlined"></v-text-field>
+                                <v-text-field v-model="newCondition.CalOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
                             </v-col>
                             <v-col
                             cols="6"
                             >
-                                <v-text-field label="Cal/oz End" variant="outlined"></v-text-field>
+                                <v-text-field v-model="newCondition.CalOzEnd" label="Cal/oz End" variant="outlined"></v-text-field>
                             </v-col>
                         </v-row>
-                        <v-text-field label="Modular" variant="outlined"></v-text-field>
+                        <v-text-field v-model="newCondition.Modular" label="Modular" variant="outlined"></v-text-field>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -70,7 +76,7 @@ defineProps({
                         <v-btn
                         text="Save Condition"
                         color="success"
-                        @click="isActive.value = false"
+                        @click="addCondition(isActive, index)"
                         ></v-btn>
                     </v-card-actions>
                     </v-card>

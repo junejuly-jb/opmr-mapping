@@ -1,23 +1,31 @@
 [
     {
-        "productReference": "Ketovie 3:1",
+        "productReference": "Alfamino JUNIOR (Elemental, High MCT)",
         "conditions": [
             { 
-                "condition": "",
+                "calories": [1,2,3,4],
                 "reference": "WATER",
-                "FortifierKey": "Ketovie 3:1",
-                "CalOzStart": null,
-                "CalOzEnd": 50,
-                "Modular": null
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
                     
             },
             { 
-                "condition": "",
+                "calories": [],
                 "reference": "WATER",
-                "FortifierKey": "Ketovie 3:1",
-                "CalOzStart": null,
-                "CalOzEnd": 50,
-                "Modular": null
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
                     
             }
         ]
@@ -26,12 +34,16 @@
         "productReference": "Enfamil A+",
         "conditions": [
             { 
-                "condition": "",
+                "calories": [],
                 "reference": "WATER",
-                "FortifierKey": "Gentlease",
-                "CalOzStart": null,
-                "CalOzEnd": 50,
-                "Modular": null
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
             }
         ]
     }
@@ -40,12 +52,16 @@
         "productReference": "Enfamil Gentlease",
         "conditions": [
             { 
-                "condition": "",
+                "calories": [],
                 "reference": "WATER",
-                "FortifierKey": "Compleat JUNIOR 1.5",
-                "CalOzStart": null,
-                "CalOzEnd": 50,
-                "Modular": null
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
             }
         ]
     }
