@@ -6,6 +6,7 @@ import { emptyMap, type CPOE, type MapType, type Conditions } from '@/interfaces
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])
     const emptyMapping = ref<MapType>(emptyMap)
+    const isSearching = ref(false)
 
     const getMappings = computed( () => mappings.value = jsonData);
 
@@ -28,6 +29,9 @@ export const useMappingStore = defineStore ('mappings', () => {
         console.log()
         console.log(i)
     }
+    const toggleSearch = () => {
+        isSearching.value = !isSearching.value
+    }
 
-    return { mappings, getMappings, setEmptyMapping, removeMapping, addCondition, removeConditionWithinAMapping };
+    return { toggleSearch, isSearching, mappings, getMappings, setEmptyMapping, removeMapping, addCondition, removeConditionWithinAMapping };
 })
