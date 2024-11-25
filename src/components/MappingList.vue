@@ -1,5 +1,6 @@
 <script setup>
 import { useMappingStore } from '@/stores/mappings';
+import Conditions from './Conditions.vue';
 const mappingStore = useMappingStore();
 defineProps({
   mapping: {
@@ -75,23 +76,34 @@ defineProps({
                     </v-card>
                 </template>
             </v-dialog>
+            <div class="test">
+                <div v-for="condition in mapping.conditions">
+                    <Conditions :condition="condition"/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.test{
+    display: flex;
+}
 .opmr__mapping_lists{
     padding: 0px 20px;
     display: flex;
 }
 .col-1{
     padding: 0px 30px;
- /* background-color: green; */
+    /* background-color: green; */
+}
+.col-2{
+    /* background-color: red; */
 }
 
 .opmr__hl7__reference{
     margin: 10px 0px;
-    width: 500px;
+    width: 350px;
     padding: 12px 20px;
     border: 1px solid gray;
     border-radius: 10px;
