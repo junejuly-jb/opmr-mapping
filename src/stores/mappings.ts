@@ -2,6 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import jsonData from "@/assets/mappings.json";
 import { emptyMap, type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
+import FortifierKey from '@/components/FortifierKey.vue';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>(jsonData)
@@ -11,24 +12,25 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     //functions
     const setEmptyMapping = () => { mappings.value.push(emptyMapping.value)}
-    const removeMapping = (i) => { 
-        mappings.value.splice(i, 1)
+    const removeMapping = (productReference) => { 
+        // const res = mappings.value.filter((mapping) =>
+        //     mapping.productReference.includes(productReference)
+        // );
+        // if (res.length != 1) return;
+        const index = mappings.value.findIndex(obj => obj.productReference === productReference);
+        mappings.value.splice(index, 1)
     }
     const removeConditionWithinAMapping = (mappingIndex, conditionIndex) => {
         mappings.value[mappingIndex].conditions.splice(conditionIndex, 1)
     }
-    const addCondition = (data, i) => {
-        console.log(data)
-        // const condition: Conditions = {
-        //     calories: data.value.condition,
-        //     reference: data.value.reference,
-        //     FortifierKey: data.value.FortifierKey,
-        //     CalOzStart: data.value.CalOzStart ?? null,
-        //     CalOzEnd: data.value.CalOzEnd ?? null,
-        //     Modular: data.value.Modular ?? null
-        // }
-        console.log()
-        console.log(i)
+    const addCondition = (data) => {
+        const index = mappings.value.findIndex(obj => obj.productReference === data.parent)
+        const condition = {
+            calories: data.calories,
+            reference: data.reference,
+            FortifierKey: []
+        }
+        mappings.value[index].conditions.push(condition)
     }
     const toggleSearch = () => { 
         isSearching.value = !isSearching.value 
