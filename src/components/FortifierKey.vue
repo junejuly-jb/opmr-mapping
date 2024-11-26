@@ -9,6 +9,17 @@
 <template>
     <div class="opmr__chips">
         <span>
+            <v-btn icon color="success" variant="text" size="small">
+                <v-tooltip activator="parent" location="start">Edit Fortifier</v-tooltip> 
+                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn icon color="error" variant="text" size="small" rounded="xl">
+                <v-tooltip activator="parent" location="start">Remove Fortifier</v-tooltip> 
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </span>
+        <span class="spacer"></span>
+        <span>
             <v-chip size="small">{{fortifierkey.fortifierKey}}</v-chip>
         </span>
         <span class="spacer"></span>

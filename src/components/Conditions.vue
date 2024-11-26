@@ -28,11 +28,11 @@ defineProps({
 <template>
     <div class="cpoe__condition__container">
         <div class="cpoe__btn__array">
-            <div class="cpoe__btn__update">
-                <v-btn prepend-icon="mdi-pencil" variant="tonal" size="small" rounded="xl">{{condition.FortifierKey.length == 0 ? 'Add Fortifier' : 'Update'}}</v-btn>
+            <div>
+                <v-btn prepend-icon="mdi-pencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
             </div>
-            <div class="spacer"></div>
-            <div class="cpoe__btn__delete">
+            <div class="spacer-h"></div>
+            <div>
                 <v-btn @click="mappingStore.removeConditionWithinAMapping(m_index, c_index)" icon="mdi-close" variant="tonal" size="x-small" color="error"></v-btn>
             </div>
         </div>
@@ -42,6 +42,10 @@ defineProps({
         <div>
             Calories: {{getCalories(condition.calories)}}
         </div>
+        <div>
+            <v-btn prepend-icon="mdi-plus" color="primary" variant="tonal" size="small" rounded="xl">Fortifier</v-btn>
+        </div>
+        <div class="spacer-v"></div>
         <div v-if="condition.FortifierKey.length != 0">
             <div v-for="fortifierkey in condition.FortifierKey">
                 <FortifierKey :fortifierkey="fortifierkey"/>
@@ -61,7 +65,10 @@ defineProps({
     justify-content: right;
     padding: 5px 0px;
 }
-.spacer{
+.spacer-h{
     padding: 0px 2px;
+}
+.spacer-v{
+    padding: 2px 0px;
 }
 </style>
