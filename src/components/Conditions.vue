@@ -29,7 +29,7 @@ defineProps({
     <div class="cpoe__condition__container">
         <div class="cpoe__btn__array">
             <div class="cpoe__btn__update">
-                <v-btn prepend-icon="mdi-pencil" variant="tonal" size="small" rounded="xl">Update</v-btn>
+                <v-btn prepend-icon="mdi-pencil" variant="tonal" size="small" rounded="xl">{{condition.FortifierKey.length == 0 ? 'Add Fortifier' : 'Update'}}</v-btn>
             </div>
             <div class="spacer"></div>
             <div class="cpoe__btn__delete">
@@ -42,8 +42,10 @@ defineProps({
         <div>
             Calories: {{getCalories(condition.calories)}}
         </div>
-        <div>
-            <FortifierKey/>
+        <div v-if="condition.FortifierKey.length != 0">
+            <div v-for="fortifierkey in condition.FortifierKey">
+                <FortifierKey :fortifierkey="fortifierkey"/>
+            </div>
         </div>
     </div>
 </template>

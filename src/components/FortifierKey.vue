@@ -1,15 +1,23 @@
+<script setup>
+    defineProps({
+        fortifierkey: {
+            type: Object,
+            required: true,
+        }
+    });
+</script>
 <template>
     <div class="opmr__chips">
         <span>
-            <v-chip size="small">Enfamil A+ Gentlease</v-chip>
+            <v-chip size="small">{{fortifierkey.fortifierKey}}</v-chip>
         </span>
         <span class="spacer"></span>
         <span>
-            <v-chip size="small">0 - 20</v-chip>
+            <v-chip size="small">{{fortifierkey.calOzStart ?? '0'}} - {{fortifierkey.calOzEnd}}</v-chip>
         </span>
         <span class="spacer"></span>
         <span>
-            <v-chip size="small">Modular: 0</v-chip>
+            <v-chip size="small">Modular: {{fortifierkey.modular ?? 'null'}}</v-chip>
         </span>
     </div>
 </template>
