@@ -2,6 +2,13 @@
 import FortifierKey from './FortifierKey.vue'
 import { useMappingStore } from '@/stores/mappings'
 
+const getCalories = (cals) => {
+    if(cals.length == 0 ){ return 'null'}
+    else{
+        return cals[0] + ' - ' + cals[cals.length -1]
+    }
+}
+
 const mappingStore = useMappingStore();
 defineProps({
   condition: {
@@ -33,7 +40,7 @@ defineProps({
             Reference: {{condition.reference}}
         </div>
         <div>
-            Calories: {{condition.calories}}
+            Calories: {{getCalories(condition.calories)}}
         </div>
         <div>
             <FortifierKey/>

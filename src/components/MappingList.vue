@@ -27,8 +27,7 @@ defineProps({
             ></v-btn>
         </div>
         <div class="col-1">
-            <div>Product Reference</div>
-            <input :name="`${mapping.productReference}`" :id="`${mapping.productReference}`" v-model="mapping.productReference" type="text" placeholder="HL7 Reference" class="opmr__hl7__reference">
+            <v-text-field width="300" v-model="mapping.productReference" density="compact" label="Product Reference" variant="outlined" clearable></v-text-field>
         </div>
         <div class="col-2">
             <v-dialog max-width="500">
@@ -100,8 +99,13 @@ defineProps({
     display: flex;
 }
 .col-1{
-    padding: 0px 30px;
-    /* background-color: green; */
+    padding: 0px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.col-2{
+    padding: 5px 0px;
 }
 
 .opmr__hl7__reference{
