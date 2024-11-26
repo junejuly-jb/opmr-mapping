@@ -4,15 +4,16 @@ import jsonData from "@/assets/mappings.json";
 import { emptyMap, type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
 
 export const useMappingStore = defineStore ('mappings', () => {
-    const mappings = ref<Array<CPOE>>([])
+    const mappings = ref<Array<CPOE>>(jsonData)
     const emptyMapping = ref<MapType>(emptyMap)
     const isSearching = ref(false)
-
-    const getMappings = computed( () => mappings.value = jsonData);
+    const searchTerm = ref('');
 
     //functions
     const setEmptyMapping = () => { mappings.value.push(emptyMapping.value)}
-    const removeMapping = (i) => { mappings.value.splice(i, 1) }
+    const removeMapping = (i) => { 
+        mappings.value.splice(i, 1)
+    }
     const removeConditionWithinAMapping = (mappingIndex, conditionIndex) => {
         mappings.value[mappingIndex].conditions.splice(conditionIndex, 1)
     }
@@ -29,9 +30,28 @@ export const useMappingStore = defineStore ('mappings', () => {
         console.log()
         console.log(i)
     }
-    const toggleSearch = () => {
-        isSearching.value = !isSearching.value
+    const toggleSearch = () => { 
+        isSearching.value = !isSearching.value 
+        if (!isSearching.value) searchTerm.value = ''
     }
+    const filteredMapping = computed(() => {
+        if (!searchTerm.value) {
+            return mappings.value; // Return all mappings if search is empty
+        }
+        return mappings.value.filter((mapping) =>
+            mapping.productReference
+                .toLowerCase()
+                .includes(searchTerm.value.toLowerCase())
+        );
+    });
 
-    return { toggleSearch, isSearching, mappings, getMappings, setEmptyMapping, removeMapping, addCondition, removeConditionWithinAMapping };
+    return { searchTerm, 
+        filteredMapping, 
+        toggleSearch, 
+        isSearching, 
+        mappings, 
+        setEmptyMapping, 
+        removeMapping, 
+        addCondition, 
+        removeConditionWithinAMapping };
 })

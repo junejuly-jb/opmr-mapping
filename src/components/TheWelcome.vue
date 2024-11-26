@@ -13,9 +13,9 @@
     </div>
     <ButtonArray/>
     <div class="opmr__search">
-      <v-text-field density="compact" v-if="mappingStore.isSearching" label="Search" variant="outlined" clearable prepend-inner-icon="mdi-magnify"></v-text-field>
+      <v-text-field v-model="mappingStore.searchTerm" density="compact" v-if="mappingStore.isSearching" label="Search" variant="outlined" clearable prepend-inner-icon="mdi-magnify"></v-text-field>
     </div>
-    <div v-for="(mapping, index) in mappingStore.mappings">
+    <div v-for="(mapping, index) in mappingStore.filteredMapping">
       <MappingList :index="index" :mapping="mapping"></MappingList>
     </div>
   </div>
