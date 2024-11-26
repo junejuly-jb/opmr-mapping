@@ -52,9 +52,9 @@
         color="primary"
         @click="mappingStore.getMappings"
       >
-        Reload Mappings
+        File Upload
         <v-icon
-          icon="mdi-reload"
+          icon="mdi-cloud"
           end
         ></v-icon>
       </v-btn>
