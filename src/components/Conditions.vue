@@ -1,5 +1,6 @@
 <script setup>
 import FortifierKey from './FortifierKey.vue'
+import AddFortifier from './Dialogs/AddFortifier.vue';
 import { useMappingStore } from '@/stores/mappings'
 
 const getCalories = (cals) => {
@@ -43,7 +44,8 @@ defineProps({
             Calories: {{getCalories(condition.calories)}}
         </div>
         <div>
-            <v-btn prepend-icon="mdi-plus" color="primary" variant="tonal" size="small" rounded="xl">Fortifier</v-btn>
+            <AddFortifier/>
+            <!-- <v-btn prepend-icon="mdi-plus" color="primary" variant="tonal" size="small" rounded="xl">Fortifier</v-btn> -->
         </div>
         <div class="spacer-v"></div>
         <div v-if="condition.FortifierKey.length != 0">
@@ -57,7 +59,7 @@ defineProps({
 .cpoe__condition__container{
     padding: 10px 15px;
     border: 0.5px solid gray;
-    margin: 0px 10px;
+    margin: 0px 5px;
     border-radius: 15px;
 }
 .cpoe__btn__array{

@@ -2,7 +2,6 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import jsonData from "@/assets/mappings.json";
 import { emptyMap, type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
-import FortifierKey from '@/components/FortifierKey.vue';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>(jsonData)

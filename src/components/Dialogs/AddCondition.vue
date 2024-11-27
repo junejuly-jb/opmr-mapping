@@ -23,7 +23,7 @@ defineProps({
 });
 </script>
 <template>
-    <v-dialog :max-width="mapping.conditions.length == 0 ? '500' : '1200'">
+    <v-dialog max-width="400">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
@@ -37,12 +37,9 @@ defineProps({
             <v-card title="Set Product Mapping">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-row>
-                    <v-col :cols="mapping.conditions.length == 0 ? '12' : '4'">
-                        <v-text-field v-model="calories" label="Calories" variant="outlined"></v-text-field>
-                        <v-text-field v-model="reference" label="Product Reference" variant="outlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="8" v-if="mapping.conditions.length != 0">
+                <v-text-field v-model="calories" label="Calories" variant="outlined"></v-text-field>
+                <v-text-field v-model="reference" label="Product Reference" variant="outlined"></v-text-field>
+                    <!-- <v-col cols="8" v-if="mapping.conditions.length != 0">
                         <v-row>
                             <v-col cols="6">
                                 <v-select
@@ -61,8 +58,7 @@ defineProps({
                                 <v-text-field v-model="newCondition.Modular" label="Modular" variant="outlined"></v-text-field>
                             </v-col>
                         </v-row>
-                    </v-col>
-                </v-row>
+                    </v-col> -->
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
