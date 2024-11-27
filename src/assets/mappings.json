@@ -29,5 +29,98 @@
                     
             }
         ]
+    },
+    {
+        "productReference": "test 2",
+        "conditions": [
+            { 
+                "calories": [45],
+                "reference": "Compleat JUNIOR 1.5",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            },
+            { 
+                "calories": [15,16,17,18,19,20],
+                "reference": "WATER",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Compleat JUNIOR 1.5",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            }
+        ]
+    },
+    {
+        "productReference": "test 3",
+        "conditions": [
+            { 
+                "calories": [45],
+                "reference": "Compleat JUNIOR 1.5",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            },
+            { 
+                "calories": [15,16,17,18,19,20],
+                "reference": "WATER",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Compleat JUNIOR 1.5",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            }
+        ]
+    },
+    {
+        "productReference": "test 4",
+        "conditions": [
+            { 
+                "calories": [45],
+                "reference": "Compleat JUNIOR 1.5",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Ketovie 3:1",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            },
+            { 
+                "calories": [15,16,17,18,19,20],
+                "reference": "WATER",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Compleat JUNIOR 1.5",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            }
+        ]
     }
 ]

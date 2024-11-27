@@ -1,17 +1,45 @@
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
 import jsonData from "@/assets/mappings.json";
-import { emptyMap, type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
+import { type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>(jsonData)
-    const emptyMapping = ref<MapType>(emptyMap)
     const isSearching = ref(false)
     const searchTerm = ref('');
     const fileUploadDialog = ref(false)
+    const currentPage = ref(1);
+    const itemsPerPage = ref(3);
 
     //functions
-    const setEmptyMapping = () => { mappings.value.push(emptyMapping.value)}
+    const filteredMapping = computed(() => {
+        if (!searchTerm.value) {
+            return mappings.value; // Return all mappings if search is empty
+        }
+        return mappings.value.filter((mapping) =>
+            mapping.productReference
+                .toLowerCase()
+                .includes(searchTerm.value.toLowerCase())
+        );
+    });
+
+    const totalPages = computed(() => {
+        return Math.ceil(mappings.value.length / itemsPerPage.value);
+    })
+
+    const filteredPaginatedItems = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage.value;
+        const end = start + itemsPerPage.value;
+        return filteredMapping.value.slice(start, end);
+    })
+
+    const setEmptyMapping = () => { 
+        const emptyMap = <CPOE>({
+            productReference: '',
+            conditions: []
+        })
+        mappings.value.unshift(emptyMap)
+    }
     const removeMapping = (productReference) => { 
         // const res = mappings.value.filter((mapping) =>
         //     mapping.productReference.includes(productReference)
@@ -37,16 +65,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         isSearching.value = !isSearching.value 
         if (!isSearching.value) searchTerm.value = ''
     }
-    const filteredMapping = computed(() => {
-        if (!searchTerm.value) {
-            return mappings.value; // Return all mappings if search is empty
-        }
-        return mappings.value.filter((mapping) =>
-            mapping.productReference
-                .toLowerCase()
-                .includes(searchTerm.value.toLowerCase())
-        );
-    });
+    
 
     const addFortifier = (data, c_index, mapping) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
@@ -62,6 +81,10 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[c_index].FortifierKey.splice(index, 1)
     }
 
+    watch(searchTerm, (newValue, oldValue) => {
+        currentPage.value = 1
+    });
+
     return { searchTerm, 
         filteredMapping, 
         toggleSearch, 
@@ -74,6 +97,8 @@ export const useMappingStore = defineStore ('mappings', () => {
         fileUploadDialog,
         toggleFileUploadDialog,
         addFortifier,
-        removeFortifier
+        removeFortifier,
+        totalPages,
+        filteredPaginatedItems, currentPage
     };
 })

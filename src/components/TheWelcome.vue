@@ -17,7 +17,7 @@
     <div class="opmr__search">
       <v-text-field v-model="mappingStore.searchTerm" density="compact" v-if="mappingStore.isSearching" label="Search" variant="outlined" clearable prepend-inner-icon="mdi-magnify"></v-text-field>
     </div>
-    <div v-for="(mapping, index) in mappingStore.filteredMapping">
+    <div v-for="(mapping, index) in mappingStore.filteredPaginatedItems">
       <MappingList :index="index" :mapping="mapping"></MappingList>
     </div>
   </div>
