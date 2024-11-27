@@ -49,8 +49,8 @@ defineProps({
         </div>
         <div class="spacer-v"></div>
         <div v-if="condition.FortifierKey.length != 0">
-            <div v-for="fortifierkey in condition.FortifierKey">
-                <Fortifiers :fortifierkey="fortifierkey"/>
+            <div v-for="(fortifierkey, index ) in condition.FortifierKey">
+                <Fortifiers :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
             </div>
         </div>
     </div>

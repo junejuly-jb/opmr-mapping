@@ -57,6 +57,11 @@ export const useMappingStore = defineStore ('mappings', () => {
         fileUploadDialog.value = !fileUploadDialog.value
     }
 
+    const removeFortifier = (mapping, c_index, index) => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey.splice(index, 1)
+    }
+
     return { searchTerm, 
         filteredMapping, 
         toggleSearch, 
@@ -68,6 +73,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         removeConditionWithinAMapping,
         fileUploadDialog,
         toggleFileUploadDialog,
-        addFortifier
+        addFortifier,
+        removeFortifier
     };
 })

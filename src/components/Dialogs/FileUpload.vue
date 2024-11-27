@@ -8,7 +8,7 @@
         width="600"
         >
         <v-card
-            prepend-icon="mdi-update"
+            prepend-icon="mdi-upload"
             text="Select your file (csv and xls files only)"
             title="File Upload"
         >

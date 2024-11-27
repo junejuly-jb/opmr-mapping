@@ -45,9 +45,9 @@ const mappingStore = useMappingStore();
         color="primary"
         @click="mappingStore.toggleFileUploadDialog"
       >
-        File Upload
+        Import File
         <v-icon
-          icon="mdi-cloud"
+          icon="mdi-upload"
           end
         ></v-icon>
       </v-btn>

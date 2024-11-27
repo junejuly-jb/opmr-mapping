@@ -1,8 +1,23 @@
 <script setup>
+    import { useMappingStore } from '@/stores/mappings';
+    const mappingStore = useMappingStore();
+
     defineProps({
         fortifierkey: {
             type: Object,
             required: true,
+        },
+        c_index: {
+            type: Number,
+            required: true,
+        },
+        mapping: {
+            type: Object,
+            required: true,
+        },
+        index: {
+            type: Number,
+            required: true
         }
     });
 </script>
@@ -13,7 +28,7 @@
                 <v-tooltip activator="parent" location="start">Edit Fortifier</v-tooltip> 
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon color="error" variant="text" size="small" rounded="xl">
+            <v-btn @click="mappingStore.removeFortifier(mapping, c_index, index)" icon color="error" variant="text" size="small" rounded="xl">
                 <v-tooltip activator="parent" location="start">Remove Fortifier</v-tooltip> 
                 <v-icon>mdi-close</v-icon>
             </v-btn>
