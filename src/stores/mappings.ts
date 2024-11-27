@@ -8,6 +8,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const emptyMapping = ref<MapType>(emptyMap)
     const isSearching = ref(false)
     const searchTerm = ref('');
+    const fileUploadDialog = ref(false)
 
     //functions
     const setEmptyMapping = () => { mappings.value.push(emptyMapping.value)}
@@ -19,8 +20,9 @@ export const useMappingStore = defineStore ('mappings', () => {
         const index = mappings.value.findIndex(obj => obj.productReference === productReference);
         mappings.value.splice(index, 1)
     }
-    const removeConditionWithinAMapping = (mappingIndex, conditionIndex) => {
-        mappings.value[mappingIndex].conditions.splice(conditionIndex, 1)
+    const removeConditionWithinAMapping = (mapping, conditionIndex) => {
+        const index = mappings.value.findIndex(obj => obj.productReference === mapping.productReference)
+        mappings.value[index].conditions.splice(conditionIndex, 1)
     }
     const addCondition = (data) => {
         const index = mappings.value.findIndex(obj => obj.productReference === data.parent)
@@ -46,6 +48,15 @@ export const useMappingStore = defineStore ('mappings', () => {
         );
     });
 
+    const addFortifier = (data, c_index, mapping) => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey.push(data)
+    }
+
+    const toggleFileUploadDialog = () => {
+        fileUploadDialog.value = !fileUploadDialog.value
+    }
+
     return { searchTerm, 
         filteredMapping, 
         toggleSearch, 
@@ -54,5 +65,9 @@ export const useMappingStore = defineStore ('mappings', () => {
         setEmptyMapping, 
         removeMapping, 
         addCondition, 
-        removeConditionWithinAMapping };
+        removeConditionWithinAMapping,
+        fileUploadDialog,
+        toggleFileUploadDialog,
+        addFortifier
+    };
 })

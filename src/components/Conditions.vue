@@ -1,5 +1,5 @@
 <script setup>
-import FortifierKey from './FortifierKey.vue'
+import Fortifiers from './Fortifiers.vue'
 import AddFortifier from './Dialogs/AddFortifier.vue';
 import { useMappingStore } from '@/stores/mappings'
 
@@ -20,8 +20,8 @@ defineProps({
     type: Number,
     required: true,
   },
-  m_index: {
-    type: Number,
+  mapping: {
+    type: Object,
     required: true,
   }
 });
@@ -34,7 +34,7 @@ defineProps({
             </div>
             <div class="spacer-h"></div>
             <div>
-                <v-btn @click="mappingStore.removeConditionWithinAMapping(m_index, c_index)" icon="mdi-close" variant="tonal" size="x-small" color="error"></v-btn>
+                <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" icon="mdi-close" variant="tonal" size="x-small" color="error"></v-btn>
             </div>
         </div>
         <div>
@@ -44,13 +44,13 @@ defineProps({
             Calories: {{getCalories(condition.calories)}}
         </div>
         <div>
-            <AddFortifier/>
+            <AddFortifier :c_index="c_index" :mapping="mapping"/>
             <!-- <v-btn prepend-icon="mdi-plus" color="primary" variant="tonal" size="small" rounded="xl">Fortifier</v-btn> -->
         </div>
         <div class="spacer-v"></div>
         <div v-if="condition.FortifierKey.length != 0">
             <div v-for="fortifierkey in condition.FortifierKey">
-                <FortifierKey :fortifierkey="fortifierkey"/>
+                <Fortifiers :fortifierkey="fortifierkey"/>
             </div>
         </div>
     </div>

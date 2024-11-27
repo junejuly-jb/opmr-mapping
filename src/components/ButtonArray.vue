@@ -43,7 +43,7 @@ const mappingStore = useMappingStore();
       <span class="opmr__spacer__h"></span>
       <v-btn
         color="primary"
-        @click="mappingStore.getMappings"
+        @click="mappingStore.toggleFileUploadDialog"
       >
         File Upload
         <v-icon

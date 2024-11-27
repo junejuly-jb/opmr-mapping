@@ -1,7 +1,34 @@
-<script setup>
-    const test = () => {
-        console.log('test')
+<script setup lang="ts">
+    import { ref } from 'vue';
+    import { FortifierKey } from '@/interfaces/CPOE'
+    import { useMappingStore } from '@/stores/mappings';
+    const mappingStore = useMappingStore();
+    const fortifier = ref<FortifierKey>({
+        fortifierKey: 'Enfamil Infant',
+        calOzStart: null,
+        calOzEnd: null,
+        Modular: null,
+    });
+    const addFortifier = (c_index, mapping, isActive) => {
+        mappingStore.addFortifier(fortifier.value, c_index, mapping)
+        fortifier.value = {
+            fortifierKey: 'Enfamil Infant',
+            calOzStart: null,
+            calOzEnd: null,
+            Modular: null,
+        }
+        isActive.value = false
     }
+    defineProps({
+        c_index: {
+            type: Number,
+            required: true,
+        },
+        mapping: {
+            type: Object,
+            required: true,
+        }
+    });
 </script>
 <template>
     <v-dialog max-width="600">
@@ -22,19 +49,20 @@
             <v-spacer></v-spacer>
             <v-card-text>
                 <v-select
+                v-model="fortifier.fortifierKey"
                 label="Fortifier Key"
                 :items="['Enfamil Infant', 'Enfamil Gentlease', 'Ketovie 3:1', 'Peptide', 'Alfamino Junior', 'Neosure PWD']"
                 variant="outlined"
                 ></v-select>
                 <v-row>
                     <v-col cols="4">
-                        <v-text-field label="Cal/oz Start" variant="outlined"></v-text-field>
+                        <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                        <v-text-field label="Cal/oz End" variant="outlined"></v-text-field>
+                        <v-text-field v-model="fortifier.calOzEnd" label="Cal/oz End" variant="outlined"></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                        <v-text-field label="Modular" variant="outlined"></v-text-field>
+                        <v-text-field v-model="fortifier.Modular" label="Modular" variant="outlined"></v-text-field>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -47,7 +75,7 @@
                 <v-btn
                 text="Save"
                 color="success"
-                @click="test"
+                @click="addFortifier(c_index, mapping, isActive)"
                 ></v-btn>
             </v-card-actions>
             </v-card>

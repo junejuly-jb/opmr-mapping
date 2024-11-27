@@ -20,21 +20,21 @@
         </span>
         <span class="spacer"></span>
         <span>
-            <v-chip size="small">{{fortifierkey.fortifierKey}}</v-chip>
+            <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>
+        </span>
+        <span class="spacer" variant="outlined"></span>
+        <span>
+            <v-chip size="small" variant="outlined">{{fortifierkey.calOzStart ?? '0'}} - {{fortifierkey.calOzEnd}}</v-chip>
         </span>
         <span class="spacer"></span>
         <span>
-            <v-chip size="small">{{fortifierkey.calOzStart ?? '0'}} - {{fortifierkey.calOzEnd}}</v-chip>
-        </span>
-        <span class="spacer"></span>
-        <span>
-            <v-chip size="small">Modular: {{fortifierkey.modular ?? 'null'}}</v-chip>
+            <v-chip size="small" variant="outlined">Modular: {{fortifierkey.modular}}</v-chip>
         </span>
     </div>
 </template>
 <style scoped>
 .opmr__chips{
-    padding: 5px 0px;
+    padding: 2px 0px;
 }
 .spacer{
     padding: 0px 2px;

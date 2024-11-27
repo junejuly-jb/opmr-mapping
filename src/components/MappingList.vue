@@ -28,7 +28,7 @@ defineProps({
             <AddCondition :mapping="mapping"/>
             <div class="test">
                 <div v-for="(condition, c_index) in mapping.conditions">
-                    <Conditions :condition="condition" :m_index="index" :c_index="c_index"/>
+                    <Conditions :condition="condition" :mapping="mapping" :c_index="c_index"/>
                 </div>
             </div>
         </div>

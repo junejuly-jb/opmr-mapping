@@ -2,12 +2,14 @@
   import MappingList from './MappingList.vue';
   import { useMappingStore } from '@/stores/mappings';
   import ButtonArray from './ButtonArray.vue';
+  import FileUpload from './Dialogs/FileUpload.vue';
   const mappingStore = useMappingStore()
 
 </script>
 
 <template>
   <div>
+    <FileUpload/>
     <div class="cpoe__heading">
       <h2>OPMR Mapping Rules</h2>
     </div>

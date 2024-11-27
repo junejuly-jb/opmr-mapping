@@ -39,26 +39,6 @@ defineProps({
             <v-card-text>
                 <v-text-field v-model="calories" label="Calories" variant="outlined"></v-text-field>
                 <v-text-field v-model="reference" label="Product Reference" variant="outlined"></v-text-field>
-                    <!-- <v-col cols="8" v-if="mapping.conditions.length != 0">
-                        <v-row>
-                            <v-col cols="6">
-                                <v-select
-                                label="Fortifier Key"
-                                :items="['Enfamil Infant', 'Enfamil Gentlease', 'Ketovie 3:1', 'Peptide', 'Alfamino Junior', 'Neosure PWD']"
-                                variant="outlined"
-                                ></v-select>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-text-field v-model="newCondition.CalOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-text-field v-model="newCondition.CalOzEnd" label="Cal/oz End" variant="outlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-text-field v-model="newCondition.Modular" label="Modular" variant="outlined"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-col> -->
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
