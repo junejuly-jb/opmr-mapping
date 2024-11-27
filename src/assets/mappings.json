@@ -1,10 +1,10 @@
 [
     {
-        "productReference": "Alfamino JUNIOR (Elemental, High MCT)",
+        "productReference": "Compleat JUNIOR 1.0 (Blenderized)",
         "conditions": [
             { 
-                "calories": [1,2,3,4],
-                "reference": "WATER",
+                "calories": [45],
+                "reference": "Compleat JUNIOR 1.5",
                 "FortifierKey": [
                     { 
                         "fortifierKey": "Ketovie 3:1",
@@ -16,52 +16,17 @@
                     
             },
             { 
-                "calories": [],
+                "calories": [15,16,17,18,19,20],
                 "reference": "WATER",
                 "FortifierKey": [
                     { 
-                        "fortifierKey": "Ketovie 3:1",
+                        "fortifierKey": "Compleat JUNIOR 1.5",
                         "calOzStart": null,
                         "calOzEnd": 50,
                         "modular": null
                     }
                 ]
                     
-            }
-        ]
-    },
-    {
-        "productReference": "Enfamil A+",
-        "conditions": [
-            { 
-                "calories": [],
-                "reference": "WATER",
-                "FortifierKey": [
-                    { 
-                        "fortifierKey": "Ketovie 3:1",
-                        "calOzStart": null,
-                        "calOzEnd": 50,
-                        "modular": null
-                    }
-                ]
-            }
-        ]
-    }
-    ,
-    {
-        "productReference": "Enfamil Gentlease",
-        "conditions": [
-            { 
-                "calories": [],
-                "reference": "WATER",
-                "FortifierKey": [
-                    { 
-                        "fortifierKey": "Ketovie 3:1",
-                        "calOzStart": null,
-                        "calOzEnd": 50,
-                        "modular": null
-                    }
-                ]
             }
         ]
     }
