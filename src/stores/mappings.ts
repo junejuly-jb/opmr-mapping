@@ -99,6 +99,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         addFortifier,
         removeFortifier,
         totalPages,
-        filteredPaginatedItems, currentPage
+        filteredPaginatedItems, currentPage, itemsPerPage
     };
 })

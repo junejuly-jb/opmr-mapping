@@ -14,6 +14,11 @@
       <h2>OPMR Mapping Rules</h2>
     </div>
     <ButtonArray/>
+    <v-pagination
+      v-model="mappingStore.currentPage"
+      :length="Math.ceil(mappingStore.mappings.length / mappingStore.itemsPerPage)"
+      total-visible="3"
+    ></v-pagination>
     <div class="opmr__search">
       <v-text-field v-model="mappingStore.searchTerm" density="compact" v-if="mappingStore.isSearching" label="Search" variant="outlined" clearable prepend-inner-icon="mdi-magnify"></v-text-field>
     </div>
