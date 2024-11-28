@@ -24,15 +24,17 @@
 <template>
     <div class="opmr__chips">
         <span>
-            <v-btn icon color="success" variant="text" size="small">
+            <v-btn density="compact" icon color="success" variant="text" size="small">
                 <v-tooltip activator="parent" location="start">Edit Fortifier</v-tooltip> 
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn @click="mappingStore.removeFortifier(mapping, c_index, index)" icon color="error" variant="text" size="small" rounded="xl">
+            <span class="spacer"></span>
+            <v-btn density="compact" @click="mappingStore.removeFortifier(mapping, c_index, index)" icon color="error" variant="text" size="small" rounded="xl">
                 <v-tooltip activator="parent" location="start">Remove Fortifier</v-tooltip> 
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </span>
+        <span class="spacer"></span>
         <span class="spacer"></span>
         <span>
             <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>

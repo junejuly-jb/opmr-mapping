@@ -27,7 +27,7 @@ defineProps({
         <div class="col-2">
             <AddCondition :mapping="mapping"/>
             <div class="test">
-                <div v-for="(condition, c_index) in mapping.conditions">
+                <div class="item" v-for="(condition, c_index) in mapping.conditions">
                     <Conditions :condition="condition" :mapping="mapping" :c_index="c_index"/>
                 </div>
             </div>
@@ -38,10 +38,15 @@ defineProps({
 <style scoped>
 .test{
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 .opmr__mapping_lists{
     padding: 0px 20px;
     display: flex;
+}
+.item{
+    flex: 0 0 calc(33% - 10px); 
 }
 .col-1{
     padding: 0px 15px;
@@ -51,6 +56,7 @@ defineProps({
 }
 .col-2{
     padding: 5px 0px;
+    width: 100%;
 }
 
 .opmr__hl7__reference{

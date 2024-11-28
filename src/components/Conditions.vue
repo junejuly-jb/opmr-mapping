@@ -59,7 +59,7 @@ defineProps({
 .cpoe__condition__container{
     padding: 10px 15px;
     border: 0.5px solid gray;
-    margin: 0px 5px;
+    margin: 0px 0px;
     border-radius: 15px;
 }
 .cpoe__btn__array{

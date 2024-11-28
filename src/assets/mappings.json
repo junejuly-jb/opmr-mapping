@@ -27,6 +27,32 @@
                     }
                 ]
                     
+            },
+            { 
+                "calories": [15,16,17,18,19,20],
+                "reference": "WATER",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Compleat JUNIOR 1.5",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
+            },
+            { 
+                "calories": [15,16,17,18,19,20],
+                "reference": "WATER",
+                "FortifierKey": [
+                    { 
+                        "fortifierKey": "Compleat JUNIOR 1.5",
+                        "calOzStart": null,
+                        "calOzEnd": 50,
+                        "modular": null
+                    }
+                ]
+                    
             }
         ]
     },

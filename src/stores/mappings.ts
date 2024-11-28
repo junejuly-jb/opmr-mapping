@@ -5,11 +5,10 @@ import { type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>(jsonData)
-    const isSearching = ref(false)
     const searchTerm = ref('');
     const fileUploadDialog = ref(false)
     const currentPage = ref(1);
-    const itemsPerPage = ref(3);
+    const itemsPerPage = ref(5);
 
     //functions
     const filteredMapping = computed(() => {
@@ -61,11 +60,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
         mappings.value[index].conditions.push(condition)
     }
-    const toggleSearch = () => { 
-        isSearching.value = !isSearching.value 
-        if (!isSearching.value) searchTerm.value = ''
-    }
-    
 
     const addFortifier = (data, c_index, mapping) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
@@ -86,9 +80,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     });
 
     return { searchTerm, 
-        filteredMapping, 
-        toggleSearch, 
-        isSearching, 
+        filteredMapping,
         mappings, 
         setEmptyMapping, 
         removeMapping, 
