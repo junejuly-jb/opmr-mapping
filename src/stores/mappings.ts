@@ -1,7 +1,7 @@
 import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
 import jsonData from "@/assets/mappings.json";
-import { type CPOE, type MapType, type Conditions } from '@/interfaces/CPOE'
+import { type CPOE, type Conditions } from '@/interfaces/CPOE'
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>(jsonData)
