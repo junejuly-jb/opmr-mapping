@@ -81,6 +81,13 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[c_index].calories = serializeCalories(data.calories)
     }
 
+    const updateFortifierKey = (mapping, c_index, index, data) => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
+        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
+        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
+    }
+
     const serializeCalories = (cal) => {
         if(!cal) return []
         const arr = cal.split('-');
@@ -104,6 +111,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         addFortifier,
         removeFortifier,
         totalPages,
-        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition
+        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey
     };
 })

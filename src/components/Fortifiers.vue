@@ -1,5 +1,6 @@
 <script setup>
     import { useMappingStore } from '@/stores/mappings';
+    import UpdateFortifier from './Dialogs/UpdateFortifier.vue';
     const mappingStore = useMappingStore();
 
     defineProps({
@@ -38,9 +39,7 @@
                 </template>
 
                 <v-list>
-                    <v-list-item>
-                        <v-list-item-title><v-icon>mdi-pencil</v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
-                    </v-list-item>
+                    <UpdateFortifier :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
                     <v-list-item @click="mappingStore.removeFortifier(mapping, c_index, index)">
                         <v-list-item-title><v-icon>mdi-delete</v-icon><span class="spacer"></span><span class="spacer"></span>Delete</v-list-item-title>
                     </v-list-item>
