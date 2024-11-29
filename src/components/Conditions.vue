@@ -6,9 +6,8 @@ import UpdateCondition from '@/components/Dialogs/UpdateCondition.vue'
 
 const getCalories = (cals) => {
     if(cals.length == 0 ){ return 'null'}
-    else{
-        return cals[0] + ' - ' + cals[cals.length -1]
-    }
+    else if(cals.length == 1){ return cals[0] }
+    else{ return cals[0] + ' - ' + cals[cals.length -1] }
 }
 
 const mappingStore = useMappingStore();
@@ -31,7 +30,7 @@ defineProps({
     <div class="cpoe__condition__container">
         <div class="cpoe__btn__array">
             <div>
-                <UpdateCondition :mapping="mapping"/>
+                <UpdateCondition :condition="condition" :mapping="mapping" :c_index="c_index"/>
             </div>
             <div class="spacer-h"></div>
             <div>

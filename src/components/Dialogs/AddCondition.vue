@@ -2,16 +2,11 @@
 import { ref } from 'vue';
 import { useMappingStore } from '@/stores/mappings';
 const mappingStore = useMappingStore();
-const newCondition = ref({})
 const calories = ref('')
 const reference = ref('')
 
-const serializeCalories = (cal) => {
-    const arr = cal.split('-');
-    return arr
-}
 const addCondition = (isActive, mapping) => {
-    const data = { calories: serializeCalories(calories.value), reference: reference.value, parent: mapping.productReference}
+    const data = { calories: calories.value, reference: reference.value, parent: mapping.productReference}
     mappingStore.addCondition(data)
     isActive.value = false
 }

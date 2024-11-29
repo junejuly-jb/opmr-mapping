@@ -3,7 +3,7 @@
         "productReference": "Compleat JUNIOR 1.0 (Blenderized)",
         "conditions": [
             { 
-                "calories": [45],
+                "calories": [],
                 "reference": "Compleat JUNIOR 1.5",
                 "FortifierKey": [
                     { 
@@ -29,7 +29,7 @@
                     
             },
             { 
-                "calories": [15,16,17,18,19,20],
+                "calories": [10],
                 "reference": "WATER",
                 "FortifierKey": [
                     { 
