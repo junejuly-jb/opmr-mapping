@@ -8,6 +8,11 @@
         reference: ''
     })
 
+    const updateCondition = (mapping, updatedCondition, c_index, isActive) => {
+        mappingStore.updateCondition(mapping, updatedCondition, c_index)
+        isActive.value = false
+    }
+
     const toggleUpdate = (condition) => {
         updatedCondition.value.reference = condition.reference
         if(condition.calories.length == 0){
@@ -58,7 +63,7 @@
                 <v-btn
                 text="Save"
                 color="success"
-                @click="mappingStore.updateCondition(mapping, updatedCondition, c_index)"
+                @click="updateCondition(mapping, updatedCondition, c_index, isActive)"
                 ></v-btn>
             </v-card-actions>
             </v-card>

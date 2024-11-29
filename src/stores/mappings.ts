@@ -84,7 +84,8 @@ export const useMappingStore = defineStore ('mappings', () => {
     const serializeCalories = (cal) => {
         if(!cal) return []
         const arr = cal.split('-');
-        return arr
+        const rangeArray = Array.from({ length: Number(arr[1]) - Number(arr[0]) + 1 }, (v, i) => Number(arr[0]) + i);
+        return rangeArray
     }
 
     watch(searchTerm, (newValue, oldValue) => {

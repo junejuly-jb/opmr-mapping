@@ -7,7 +7,7 @@
         fortifierKey: 'Enfamil Infant',
         calOzStart: null,
         calOzEnd: null,
-        Modular: null,
+        modular: null,
     });
     const addFortifier = (c_index, mapping, isActive) => {
         mappingStore.addFortifier(fortifier.value, c_index, mapping)
@@ -15,7 +15,7 @@
             fortifierKey: 'Enfamil Infant',
             calOzStart: null,
             calOzEnd: null,
-            Modular: null,
+            modular: null,
         }
         isActive.value = false
     }
@@ -55,14 +55,14 @@
                 variant="outlined"
                 ></v-select>
                 <v-row>
-                    <v-col cols="4">
+                    <!-- <v-col cols="4">
                         <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
+                    </v-col> -->
+                    <v-col cols="6">
+                        <v-text-field v-model="fortifier.calOzEnd" label="Fortifier Calorie" variant="outlined"></v-text-field>
                     </v-col>
-                    <v-col cols="4">
-                        <v-text-field v-model="fortifier.calOzEnd" label="Cal/oz End" variant="outlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field v-model="fortifier.Modular" label="Modular" variant="outlined"></v-text-field>
+                    <v-col cols="6">
+                        <v-text-field v-model="fortifier.modular" label="Modular Volume" variant="outlined"></v-text-field>
                     </v-col>
                 </v-row>
             </v-card-text>

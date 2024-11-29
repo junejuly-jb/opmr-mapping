@@ -24,6 +24,30 @@
 <template>
     <div class="opmr__chips">
         <span>
+            <v-menu location="start">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                    dark
+                    v-bind="props"
+                    icon
+                    size="small"
+                    variant="text"
+                    >
+                    <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item>
+                        <v-list-item-title><v-icon>mdi-pencil</v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="mappingStore.removeFortifier(mapping, c_index, index)">
+                        <v-list-item-title><v-icon>mdi-delete</v-icon><span class="spacer"></span><span class="spacer"></span>Delete</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </span>
+        <!-- <span>
             <v-btn density="compact" icon color="success" variant="text" size="small">
                 <v-tooltip activator="parent" location="start">Edit Fortifier</v-tooltip> 
                 <v-icon>mdi-pencil</v-icon>
@@ -35,17 +59,17 @@
             </v-btn>
         </span>
         <span class="spacer"></span>
-        <span class="spacer"></span>
+        <span class="spacer"></span> -->
         <span>
             <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>
         </span>
         <span class="spacer" variant="outlined"></span>
         <span>
-            <v-chip size="small" variant="outlined">{{fortifierkey.calOzStart ?? '0'}} - {{fortifierkey.calOzEnd}}</v-chip>
+            <v-chip size="small" variant="outlined">{{fortifierkey.calOzEnd}} kcal</v-chip>
         </span>
         <span class="spacer"></span>
         <span>
-            <v-chip size="small" variant="outlined">Modular: {{fortifierkey.modular}}</v-chip>
+            <v-chip size="small" variant="outlined">{{fortifierkey.modular ? fortifierkey.modular : 'Non modular'}}</v-chip>
         </span>
     </div>
 </template>
@@ -55,5 +79,9 @@
 }
 .spacer{
     padding: 0px 2px;
+}
+.v-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.08); /* Slightly darker hover effect */
+  cursor: pointer;
 }
 </style>

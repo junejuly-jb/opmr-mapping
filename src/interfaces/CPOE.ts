@@ -13,5 +13,5 @@ export interface FortifierKey{
     fortifierKey: String,
     calOzStart: Number | null,
     calOzEnd: Number | null,
-    Modular: Number | null
+    modular: Number | null
 }
