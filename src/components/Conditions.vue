@@ -2,6 +2,7 @@
 import Fortifiers from './Fortifiers.vue'
 import AddFortifier from './Dialogs/AddFortifier.vue';
 import { useMappingStore } from '@/stores/mappings'
+import UpdateCondition from '@/components/Dialogs/UpdateCondition.vue'
 
 const getCalories = (cals) => {
     if(cals.length == 0 ){ return 'null'}
@@ -30,7 +31,7 @@ defineProps({
     <div class="cpoe__condition__container">
         <div class="cpoe__btn__array">
             <div>
-                <v-btn prepend-icon="mdi-pencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
+                <UpdateCondition :mapping="mapping"/>
             </div>
             <div class="spacer-h"></div>
             <div>
