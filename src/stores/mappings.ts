@@ -83,9 +83,9 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     const updateFortifierKey = (mapping, c_index, index, data) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
-        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
-        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
-        mapping.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
     }
 
     const serializeCalories = (cal) => {

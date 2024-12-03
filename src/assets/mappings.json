@@ -150,7 +150,7 @@
         ]
     },
     {
-        "productReference": "test 3",
+        "productReference": "test 5",
         "conditions": [
             { 
                 "calories": [45],
@@ -181,7 +181,7 @@
         ]
     },
     {
-        "productReference": "test 4",
+        "productReference": "test 6",
         "conditions": [
             { 
                 "calories": [45],
@@ -212,7 +212,7 @@
         ]
     },
     {
-        "productReference": "test 3",
+        "productReference": "test 7",
         "conditions": [
             { 
                 "calories": [45],
@@ -243,7 +243,7 @@
         ]
     },
     {
-        "productReference": "test 4",
+        "productReference": "test 8",
         "conditions": [
             { 
                 "calories": [45],
@@ -274,7 +274,7 @@
         ]
     },
     {
-        "productReference": "test 3",
+        "productReference": "test 9",
         "conditions": [
             { 
                 "calories": [45],
@@ -305,7 +305,7 @@
         ]
     },
     {
-        "productReference": "test 4",
+        "productReference": "test 10",
         "conditions": [
             { 
                 "calories": [45],

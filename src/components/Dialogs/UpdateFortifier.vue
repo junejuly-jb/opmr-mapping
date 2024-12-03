@@ -4,15 +4,9 @@
     import { useMappingStore } from '@/stores/mappings';
     const mappingStore = useMappingStore();
     
-    const addFortifier = () => {
-        // mappingStore.addFortifier(fortifier.value, c_index, mapping)
-        // fortifier.value = {
-        //     fortifierKey: 'Enfamil Infant',
-        //     calOzStart: null,
-        //     calOzEnd: null,
-        //     modular: null,
-        // }
-        // isActive.value = false
+    const updateFortifier = (isActive) => {
+        mappingStore.updateFortifierKey(props.mapping, props.c_index, props.index, fortifier.value)
+        isActive.value = false
     }
 
     const props = defineProps({
@@ -79,9 +73,9 @@
                 @click="isActive.value = false"
                 ></v-btn>
                 <v-btn
-                text="Save"
+                text="Update"
                 color="success"
-                @click="addFortifier()"
+                @click="updateFortifier(isActive)"
                 ></v-btn>
             </v-card-actions>
             </v-card>
