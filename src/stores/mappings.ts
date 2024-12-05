@@ -9,8 +9,23 @@ export const useMappingStore = defineStore ('mappings', () => {
     const fileUploadDialog = ref(false)
     const currentPage = ref(1);
     const itemsPerPage = ref(5);
+    const isUpdated = ref(false)
 
     //functions
+    const setLocalStorage = computed (() => {
+        const browserStorage = parseInt(localStorage.getItem('currentPage'))
+        if(!browserStorage){
+            localStorage.setItem('currentPage', '1')
+            currentPage.value = 1
+        } else {
+            currentPage.value = browserStorage
+        }
+    })
+
+    const checkForUnsavedMappings = (val) => {
+        isUpdated.value = val
+    }
+
     const filteredMapping = computed(() => {
         if (!searchTerm.value) {
             return mappings.value; // Return all mappings if search is empty
@@ -38,6 +53,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             conditions: []
         })
         mappings.value.unshift(emptyMap)
+        currentPage.value = 1
     }
     const removeMapping = (productReference) => { 
         // const res = mappings.value.filter((mapping) =>
@@ -99,18 +115,15 @@ export const useMappingStore = defineStore ('mappings', () => {
         currentPage.value = 1
     });
 
-    return { searchTerm, 
-        filteredMapping,
-        mappings, 
-        setEmptyMapping, 
-        removeMapping, 
-        addCondition, 
-        removeConditionWithinAMapping,
-        fileUploadDialog,
-        toggleFileUploadDialog,
-        addFortifier,
-        removeFortifier,
-        totalPages,
-        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey
+    watch(currentPage, (newValue, oldValue) => {
+        localStorage.setItem('currentPage', newValue.toString())
+    })
+
+    return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
+        removeMapping, addCondition, removeConditionWithinAMapping,
+        fileUploadDialog, toggleFileUploadDialog, addFortifier,
+        removeFortifier, totalPages,
+        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey, setLocalStorage,
+        isUpdated, checkForUnsavedMappings
     };
 })
