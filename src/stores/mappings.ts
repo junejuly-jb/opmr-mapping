@@ -9,9 +9,32 @@ export const useMappingStore = defineStore ('mappings', () => {
     const fileUploadDialog = ref(false)
     const currentPage = ref(1);
     const itemsPerPage = ref(5);
-    const isUpdated = ref(false)
+    const isUpdated = ref(false);
+    const confirmationDialog = ref(false)
+    const confirmationDialogText = ref({ title: '', text: ''})
 
     //functions
+    const setCurrentPage = (val) => {
+        currentPage.value = val
+    }
+
+    const setBulkMapping = (data) => {
+        mappings.value = data    
+    }
+
+    const mergeMappings = (data) => {
+        mappings.value = [...mappings.value, ...data]
+    }
+
+    const setConfirmationDialogText = (title, text) => {
+        confirmationDialogText.value.title = title;
+        confirmationDialogText.value.text = text
+    }
+
+    const toggleConfirmationDialog = (val) => {
+        confirmationDialog.value = val
+    }
+
     const setLocalStorage = computed (() => {
         const browserStorage = parseInt(localStorage.getItem('currentPage'))
         if(!browserStorage){
@@ -124,6 +147,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         fileUploadDialog, toggleFileUploadDialog, addFortifier,
         removeFortifier, totalPages,
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey, setLocalStorage,
-        isUpdated, checkForUnsavedMappings
+        isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
+        toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage
     };
 })
