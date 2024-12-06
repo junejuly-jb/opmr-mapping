@@ -19,7 +19,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setBulkMapping = (data) => {
-        mappings.value = data    
+        mappings.value = data.value
     }
 
     const mergeMappings = (data) => {
@@ -37,11 +37,18 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     const setLocalStorage = computed (() => {
         const browserStorage = parseInt(localStorage.getItem('currentPage'))
-        if(!browserStorage){
+        if(browserStorage){
+            const length = Math.ceil(mappings.value.length / itemsPerPage.value)
+            if(browserStorage > length){
+                currentPage.value = 1
+                localStorage.setItem('currentPage', '1')
+            }
+            else{
+                currentPage.value = browserStorage
+            }
+        } else {
             localStorage.setItem('currentPage', '1')
             currentPage.value = 1
-        } else {
-            currentPage.value = browserStorage
         }
     })
 
@@ -67,7 +74,9 @@ export const useMappingStore = defineStore ('mappings', () => {
     const filteredPaginatedItems = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage.value;
         const end = start + itemsPerPage.value;
-        return filteredMapping.value.slice(start, end);
+        if(filteredMapping.value.length > 0){
+            return filteredMapping.value.slice(start, end);
+        }
     })
 
     const setEmptyMapping = () => { 
@@ -128,8 +137,9 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const serializeCalories = (cal) => {
-        if(!cal) return []
+        if(!cal) return [];
         const arr = cal.split('-');
+        if(arr.length == 1) return [arr[0]];
         const rangeArray = Array.from({ length: Number(arr[1]) - Number(arr[0]) + 1 }, (v, i) => Number(arr[0]) + i);
         return rangeArray
     }
@@ -148,6 +158,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         removeFortifier, totalPages,
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey, setLocalStorage,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
-        toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage
+        toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories
     };
 })

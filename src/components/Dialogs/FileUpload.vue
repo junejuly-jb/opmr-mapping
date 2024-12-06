@@ -26,6 +26,7 @@
       }
       else{
         mappingStore.setBulkMapping(sampleMappings)
+        mappingStore.toggleFileUploadDialog()
       }
     }
 
@@ -54,15 +55,15 @@
           if(errors.value.length < 1){
             sheetData.forEach((item, index) => {
               const data = {}
-              if(item[0]){
+              if(item[0]){ //if product reference column is not null (create a new mapping)
                 data.productReference = item[0]
-                data.conditions = [{
-                  calories: item[1],
+                data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
+                  calories: mappingStore.serializeCalories(item[1]),
                   reference: item[2],
                   FortifierKey: []
                 }]
 
-                if(item[3]){
+                if(item[3]){ // check if the condition has fortifier associated if yes, add the fortifierkey
                   data.conditions[0].FortifierKey.push({
                     "fortifierKey": item[3],
                     "calOzStart": null,
@@ -72,29 +73,39 @@
                 }
                 sampleMappings.value.push(data)
               }
-              else if(!item[0] && item[1]){
+              else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
                 const condition = {
-                  calories: item[1],
+                  calories: mappingStore.serializeCalories(item[1]),
                   reference: item[2],
                   FortifierKey: []
                 }
                 sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
 
-                if(item[3]){
+                if(item[3]){ //add fortifierkey if column is not null
                   const fortifier = {
                     fortifierKey: item[3],
                     calOzStart: null,
                     calOzEnd: null,
                     modular: null
                   }
-                  // sampleMappings.value[sampleMappings.value.length - 1].conditions[sampleMappings.value.conditions.length - 1].push(fortifier)
+                  const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
+                  lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
                 }
+              }
+              else if(!item[0] && !item[1] && !item[2] && item[3]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
+                const fortifier = {
+                  fortifierKey: item[3],
+                  calOzStart: null,
+                  calOzEnd: null,
+                  modular: null
+                }
+                const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
+                lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
               }
             });
           }
-          console.log(sampleMappings.value)
         } else {
-          alert('Sheet not found!');
+          errors.value.push('Workbook sheet must contains Feed_Base Example');
         }
       };
 

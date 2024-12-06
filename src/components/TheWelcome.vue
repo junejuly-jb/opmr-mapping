@@ -4,7 +4,6 @@
   import ButtonArray from './ButtonArray.vue';
   import FileUpload from './Dialogs/FileUpload.vue';
   const mappingStore = useMappingStore()
-
 </script>
 
 <template>
@@ -33,24 +32,23 @@
 </template>
 
 <style>
-.cpoe__heading{
-  padding: 10px 20px;
-  background-color: rgb(28, 42, 75);
-  color: white;
-}
-.opmr__pagination__search{
-  display: flex;
-  padding: 0px 20px;
-}
-.search{
-  width: 30%;
-}
-.pagination{
-  width: 50%;
-  /* margin-right: auto; */
-  margin-left: auto;
-}
-.v-pagination__list{
-  justify-content: right !important;
-}
+  .cpoe__heading{
+    padding: 10px 20px;
+    background-color: rgb(28, 42, 75);
+    color: white;
+  }
+  .opmr__pagination__search{
+    display: flex;
+    padding: 0px 20px;
+  }
+  .search{
+    width: 30%;
+  }
+  .pagination{
+    width: 50%;
+    margin-left: auto;
+  }
+  .v-pagination__list{
+    justify-content: right !important;
+  }
 </style>
