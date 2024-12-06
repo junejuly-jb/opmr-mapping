@@ -28,6 +28,16 @@ const mappingStore = useMappingStore();
       </v-btn>
       <span class="opmr__spacer__h"></span>
       <v-btn
+        color="primary"
+      >
+        Download Mapping
+        <v-icon
+          icon="mdi-download"
+          end
+        ></v-icon>
+      </v-btn>
+      <span class="opmr__spacer__h"></span>
+      <v-btn
         color="success"
       >
         Save
