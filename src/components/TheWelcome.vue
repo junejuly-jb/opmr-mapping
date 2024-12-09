@@ -8,9 +8,8 @@
 
   const mappingStore = useMappingStore()
   onMounted(() => { 
-    mappingStore.setLocalStorage
-    mappingStore.getProducts()
     mappingStore.getMappings()
+    mappingStore.getProducts()
   })
 </script>
 

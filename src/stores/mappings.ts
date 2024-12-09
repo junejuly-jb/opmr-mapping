@@ -20,6 +20,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const getMappings = async () => {
         const data = await OPMRServices.getMappings();
         mappings.value = data.data
+        setLocalStorage()
     }
 
     const getProducts = async () => {
@@ -47,7 +48,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         confirmationDialog.value = val
     }
 
-    const setLocalStorage = computed (() => {
+    const setLocalStorage = () => {
         var browserStorage = localStorage.getItem('currentPage')
         if(browserStorage){
             const page = parseInt(browserStorage)
@@ -63,7 +64,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             localStorage.setItem('currentPage', '1')
             currentPage.value = 1
         }
-    })
+    }
 
     const checkForUnsavedMappings = (val) => {
         isUpdated.value = val
@@ -169,7 +170,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         removeMapping, addCondition, removeConditionWithinAMapping,
         fileUploadDialog, toggleFileUploadDialog, addFortifier,
         removeFortifier, totalPages,
-        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey, setLocalStorage,
+        filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings

@@ -10,7 +10,7 @@ export interface Conditions{
 }
 
 export interface FortifierKey{
-    fortifierKey: String,
+    fortifierKey: String | null,
     calOzStart: Number | null,
     calOzEnd: Number | null,
     modular: Number | null
