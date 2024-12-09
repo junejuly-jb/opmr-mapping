@@ -19,13 +19,17 @@ export const useMappingStore = defineStore ('mappings', () => {
     //functions
     const getMappings = async () => {
         const data = await OPMRServices.getMappings();
-        mappings.value = data.data
+        if(data.data.success){
+            mappings.value = data.data.data
+        }
         setLocalStorage()
     }
 
     const getProducts = async () => {
         const data = await OPMRServices.getProducts();
-        products.value = data.data
+        if(data.data.success){
+            products.value = data.data.data
+        }
     }
     const setCurrentPage = (val) => {
         currentPage.value = val
