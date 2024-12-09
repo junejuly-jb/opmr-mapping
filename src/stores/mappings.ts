@@ -36,15 +36,16 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setLocalStorage = computed (() => {
-        const browserStorage = parseInt(localStorage.getItem('currentPage'))
+        var browserStorage = localStorage.getItem('currentPage')
         if(browserStorage){
+            const page = parseInt(browserStorage)
             const length = Math.ceil(mappings.value.length / itemsPerPage.value)
-            if(browserStorage > length){
+            if(page > length){
                 currentPage.value = 1
                 localStorage.setItem('currentPage', '1')
             }
             else{
-                currentPage.value = browserStorage
+                currentPage.value = page
             }
         } else {
             localStorage.setItem('currentPage', '1')
