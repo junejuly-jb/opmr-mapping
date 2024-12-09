@@ -7,7 +7,11 @@
   import { onMounted } from 'vue';
 
   const mappingStore = useMappingStore()
-  onMounted(() => { mappingStore.setLocalStorage })
+  onMounted(() => { 
+    mappingStore.setLocalStorage
+    mappingStore.getProducts()
+    mappingStore.getMappings()
+  })
 </script>
 
 <template>

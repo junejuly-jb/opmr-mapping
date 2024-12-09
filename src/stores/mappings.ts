@@ -2,9 +2,12 @@ import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
 import jsonData from "@/assets/mappings.json";
 import { type CPOE, type Conditions } from '@/interfaces/CPOE'
+import { type Products } from '@/interfaces/Products';
+import OPMRServices from '@/services/OPMRServices';
 
 export const useMappingStore = defineStore ('mappings', () => {
-    const mappings = ref<Array<CPOE>>(jsonData)
+    const mappings = ref<Array<CPOE>>([])
+    const products = ref<Array<Products>>([])
     const searchTerm = ref('');
     const fileUploadDialog = ref(false)
     const currentPage = ref(1);
@@ -14,6 +17,15 @@ export const useMappingStore = defineStore ('mappings', () => {
     const confirmationDialogText = ref({ title: '', text: ''})
 
     //functions
+    const getMappings = async () => {
+        const data = await OPMRServices.getMappings();
+        mappings.value = data.data
+    }
+
+    const getProducts = async () => {
+        const data = await OPMRServices.getProducts();
+        products.value = data.data
+    }
     const setCurrentPage = (val) => {
         currentPage.value = val
     }
@@ -159,6 +171,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         removeFortifier, totalPages,
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey, setLocalStorage,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
-        toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories
+        toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
+        getProducts, products, getMappings
     };
 })

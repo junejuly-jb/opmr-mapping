@@ -6,7 +6,7 @@
 
     const mappingStore = useMappingStore();
     const fortifier = ref<FortifierKey>({
-        fortifierKey: 'Enfamil Infant',
+        fortifierKey: null,
         calOzStart: null,
         calOzEnd: null,
         modular: null,
@@ -53,7 +53,9 @@
                 <v-select
                 v-model="fortifier.fortifierKey"
                 label="Fortifier Key"
-                :items="['Enfamil Infant', 'Enfamil Gentlease', 'Ketovie 3:1', 'Peptide', 'Alfamino Junior', 'Neosure PWD']"
+                item-value="formtypeHL7Reference" 
+                item-title="formtypeHL7Reference"
+                :items="mappingStore.products"
                 variant="outlined"
                 ></v-select>
                 <v-row>

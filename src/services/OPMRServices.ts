@@ -1,17 +1,17 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost/api',
+    baseURL: 'http://localhost:3000',
 })
 
 export default {
     getProducts(){
-        return apiClient.get('/products')
+        return apiClient.get('/api/customer/interoperability/get-products');
     },
     getMappings(){
-        return apiClient.get('/mappings')
+        return apiClient.get('/api/customer/interoperability/get-mappings')
     },
     saveMapping(payload){
-        return apiClient.post('/save-mapping', payload)
+        return apiClient.post('/api/customer/interoperability/save-mappings', payload)
     }
 }
