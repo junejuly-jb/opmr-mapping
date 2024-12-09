@@ -19,7 +19,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setBulkMapping = (data) => {
-        mappings.value = data.value
+        mappings.value = data
     }
 
     const mergeMappings = (data) => {

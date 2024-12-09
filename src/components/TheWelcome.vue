@@ -4,7 +4,10 @@
   import { useMappingStore } from '@/stores/mappings';
   import ButtonArray from './ButtonArray.vue';
   import FileUpload from './Dialogs/FileUpload.vue';
+  import { onMounted } from 'vue';
+
   const mappingStore = useMappingStore()
+  onMounted(() => { mappingStore.setLocalStorage })
 </script>
 
 <template>

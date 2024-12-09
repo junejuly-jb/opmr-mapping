@@ -1,7 +1,7 @@
 <script setup>
     import { ref } from 'vue';
     import { useMappingStore } from '@/stores/mappings';
-    import { mdiPen, mdiPencil } from '@mdi/js';
+    import { mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();
     const updatedCondition = ref({

@@ -2,7 +2,7 @@
     import { ref } from 'vue';
     import { FortifierKey } from '@/interfaces/CPOE'
     import { useMappingStore } from '@/stores/mappings';
-    import { mdiPen, mdiPencil } from '@mdi/js';
+    import { mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();
     
