@@ -1,6 +1,7 @@
 <script setup>
     import { useMappingStore } from '@/stores/mappings';
     import { ref } from 'vue';
+    import { mdiUpload } from '@mdi/js';
     import * as XLSX from 'xlsx';
     import ConfirmationDialog from './ConfirmationDialog.vue';
 
@@ -138,7 +139,7 @@
         width="600"
         >
         <v-card
-            prepend-icon="mdi-upload"
+            :prepend-icon="mdiUpload"
             text="Select your file (csv and xls files only)"
             title="File Upload"
         >

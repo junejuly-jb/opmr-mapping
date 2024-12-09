@@ -1,6 +1,8 @@
 <script setup>
     import { useMappingStore } from '@/stores/mappings';
     import UpdateFortifier from './Dialogs/UpdateFortifier.vue';
+    import { mdiDotsVertical, mdiDelete } from '@mdi/js';
+
     const mappingStore = useMappingStore();
 
     defineProps({
@@ -34,14 +36,14 @@
                     size="small"
                     variant="text"
                     >
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <v-icon :icon="mdiDotsVertical"></v-icon>
                     </v-btn>
                 </template>
 
                 <v-list>
                     <UpdateFortifier :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
                     <v-list-item @click="mappingStore.removeFortifier(mapping, c_index, index)">
-                        <v-list-item-title><v-icon>mdi-delete</v-icon><span class="spacer"></span><span class="spacer"></span>Delete</v-list-item-title>
+                        <v-list-item-title><v-icon :icon="mdiDelete"></v-icon><span class="spacer"></span><span class="spacer"></span>Delete</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>

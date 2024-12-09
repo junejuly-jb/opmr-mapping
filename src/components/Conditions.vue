@@ -3,6 +3,7 @@ import Fortifiers from './Fortifiers.vue'
 import AddFortifier from './Dialogs/AddFortifier.vue';
 import { useMappingStore } from '@/stores/mappings'
 import UpdateCondition from '@/components/Dialogs/UpdateCondition.vue'
+import { mdiClose } from '@mdi/js'
 
 const getCalories = (cals) => {
     if(cals.length == 0 ){ return 'null'}
@@ -34,7 +35,7 @@ defineProps({
             </div>
             <div class="spacer-h"></div>
             <div>
-                <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" icon="mdi-close" variant="tonal" size="x-small" color="error"></v-btn>
+                <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" :icon="mdiClose" variant="tonal" size="x-small" color="error"></v-btn>
             </div>
         </div>
         <div>

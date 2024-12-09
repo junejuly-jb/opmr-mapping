@@ -2,6 +2,8 @@
 import { useMappingStore } from '@/stores/mappings';
 import Conditions from './Conditions.vue';
 import AddCondition from './Dialogs/AddCondition.vue';
+import { mdiMinusCircle } from '@mdi/js';
+
 const mappingStore = useMappingStore();
 defineProps({
   mapping: {
@@ -16,7 +18,7 @@ defineProps({
         <div class="col-remove">
             <v-btn
                 color="red-lighten-2"
-                icon="mdi-minus-circle"
+                :icon="mdiMinusCircle"
                 variant="text"
                 @click="mappingStore.removeMapping(mapping.productReference)"
             ></v-btn>

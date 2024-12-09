@@ -1,6 +1,7 @@
 <script setup>
     import { ref } from 'vue';
     import { useMappingStore } from '@/stores/mappings';
+    import { mdiPen, mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();
     const updatedCondition = ref({
@@ -44,7 +45,7 @@
 <template>
     <v-dialog max-width="400">
         <template v-slot:activator="{ props: activatorProps }">
-            <v-btn @click="toggleUpdate(condition)" v-bind="activatorProps" prepend-icon="mdi-pencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
+            <v-btn @click="toggleUpdate(condition)" v-bind="activatorProps" :prepend-icon="mdiPencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">

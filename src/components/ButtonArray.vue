@@ -1,5 +1,7 @@
 <script setup>
 import { useMappingStore } from '@/stores/mappings';
+import { mdiPlus, mdiFile, mdiCheck, mdiDownload } from '@mdi/js';
+
 const mappingStore = useMappingStore();
 </script>
 <template>
@@ -11,7 +13,7 @@ const mappingStore = useMappingStore();
       >
         Mapping Rule
         <v-icon
-          icon="mdi-plus"
+          :icon="mdiPlus"
           end
         ></v-icon>
       </v-btn>
@@ -22,7 +24,7 @@ const mappingStore = useMappingStore();
       >
         Import File
         <v-icon
-          icon="mdi-file"
+          :icon="mdiFile"
           end
         ></v-icon>
       </v-btn>
@@ -32,7 +34,7 @@ const mappingStore = useMappingStore();
       >
         Download Mapping
         <v-icon
-          icon="mdi-download"
+          :icon="mdiDownload"
           end
         ></v-icon>
       </v-btn>
@@ -42,7 +44,7 @@ const mappingStore = useMappingStore();
       >
         Save
         <v-icon
-          icon="mdi-check"
+          :icon="mdiCheck"
           end
         ></v-icon>
       </v-btn>

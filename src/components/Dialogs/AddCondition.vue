@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useMappingStore } from '@/stores/mappings';
+import { mdiPlus } from '@mdi/js';
+
 const mappingStore = useMappingStore();
 const calories = ref('')
 const reference = ref('')
@@ -22,7 +24,7 @@ defineProps({
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
-            prepend-icon="mdi-plus"
+            :prepend-icon="mdiPlus"
             text="Condition"
             variant="plain"
             ></v-btn>

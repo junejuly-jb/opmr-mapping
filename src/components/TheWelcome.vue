@@ -1,4 +1,5 @@
 <script setup>
+  import { mdiMagnify } from '@mdi/js';
   import MappingList from './MappingList.vue';
   import { useMappingStore } from '@/stores/mappings';
   import ButtonArray from './ButtonArray.vue';
@@ -15,7 +16,7 @@
     <ButtonArray/>
     <div class="opmr__pagination__search">
       <div class="search">
-        <v-text-field v-model="mappingStore.searchTerm" density="compact" label="Search" variant="outlined" clearable prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-text-field v-model="mappingStore.searchTerm" density="compact" label="Search" variant="outlined" clearable :prepend-inner-icon="mdiMagnify"></v-text-field>
       </div>
       <div class="pagination">
         <v-pagination

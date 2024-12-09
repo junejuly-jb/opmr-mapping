@@ -2,6 +2,8 @@
     import { ref } from 'vue';
     import { FortifierKey } from '@/interfaces/CPOE'
     import { useMappingStore } from '@/stores/mappings';
+    import { mdiPen, mdiPencil } from '@mdi/js';
+
     const mappingStore = useMappingStore();
     
     const updateFortifier = (isActive) => {
@@ -40,7 +42,7 @@
     <v-dialog max-width="600">
         <template v-slot:activator="{ props: activatorProps }">
             <v-list-item v-bind="activatorProps">
-                <v-list-item-title><v-icon>mdi-pencil</v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
+                <v-list-item-title><v-icon :icon="mdiPencil"></v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
             </v-list-item>
         </template>
 

@@ -2,6 +2,8 @@
     import { ref } from 'vue';
     import { FortifierKey } from '@/interfaces/CPOE'
     import { useMappingStore } from '@/stores/mappings';
+    import { mdiPlus } from '@mdi/js';
+
     const mappingStore = useMappingStore();
     const fortifier = ref<FortifierKey>({
         fortifierKey: 'Enfamil Infant',
@@ -35,7 +37,7 @@
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
-            prepend-icon="mdi-plus"
+            :prepend-icon="mdiPlus"
             text="Fortifier"
             variant="tonal"
             color="primary"
