@@ -50,12 +50,15 @@
             <v-card title="Update Fortifier Key">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-select
-                v-model="fortifier.fortifierKey"
-                label="Fortifier Key"
-                :items="['Enfamil Infant', 'Enfamil Gentlease', 'Ketovie 3:1', 'Peptide', 'Alfamino Junior', 'Neosure PWD']"
-                variant="outlined"
-                ></v-select>
+                <v-autocomplete
+                    v-model="fortifier.fortifierKey"
+                    label="Fortifier Key"
+                    item-value="formtypeHL7Reference" 
+                    item-title="formtypeHL7Reference"
+                    :items="mappingStore.products"
+                    variant="outlined"
+                    clearable
+                ></v-autocomplete>
                 <v-row>
                     <!-- <v-col cols="4">
                         <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>

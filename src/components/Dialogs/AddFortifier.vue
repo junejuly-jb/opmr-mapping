@@ -6,7 +6,7 @@
 
     const mappingStore = useMappingStore();
     const fortifier = ref<FortifierKey>({
-        fortifierKey: null,
+        fortifierKey: 'WATER',
         calOzStart: null,
         calOzEnd: null,
         modular: null,
@@ -50,14 +50,15 @@
             <v-card title="Add Fortifier Key">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-select
+                <v-autocomplete
                 v-model="fortifier.fortifierKey"
                 label="Fortifier Key"
                 item-value="formtypeHL7Reference" 
                 item-title="formtypeHL7Reference"
                 :items="mappingStore.products"
                 variant="outlined"
-                ></v-select>
+                clearable
+                ></v-autocomplete>
                 <v-row>
                     <!-- <v-col cols="4">
                         <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>

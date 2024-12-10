@@ -52,8 +52,16 @@
             <v-card title="Update Product Mapping">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-text-field v-model="updatedCondition.calories" label="Calories" variant="outlined"></v-text-field>
-                <v-text-field v-model="updatedCondition.reference" label="Product Reference" variant="outlined"></v-text-field>
+                <v-text-field v-model="updatedCondition.calories" label="Caloric Range" variant="outlined"></v-text-field>
+                <v-autocomplete
+                v-model="updatedCondition.reference"
+                label="Product Reference"
+                item-value="formtypeHL7Reference" 
+                item-title="formtypeHL7Reference"
+                :items="mappingStore.products"
+                variant="outlined"
+                clearable
+                ></v-autocomplete>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
