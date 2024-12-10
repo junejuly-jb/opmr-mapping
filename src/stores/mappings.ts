@@ -2,6 +2,7 @@ import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { type CPOE, type Conditions } from '@/interfaces/CPOE'
 import { type Products } from '@/interfaces/Products';
+import { type Notification } from '@/interfaces/Notification';
 import OPMRServices from '@/services/OPMRServices';
 
 export const useMappingStore = defineStore ('mappings', () => {
@@ -14,7 +15,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const isUpdated = ref(false);
     const confirmationDialog = ref(false)
     const confirmationDialogText = ref({ title: '', text: ''})
-    const notifs = ref([])
+    const notifs = ref<Array<Notification>>([])
 
     //functions
     const removeNotifs = (id) => {
