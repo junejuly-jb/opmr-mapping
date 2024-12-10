@@ -5,6 +5,7 @@
   import ButtonArray from './ButtonArray.vue';
   import FileUpload from './Dialogs/FileUpload.vue';
   import { onMounted } from 'vue';
+  import Notification from './Notification.vue';
 
   const mappingStore = useMappingStore()
   onMounted(() => { 
@@ -15,6 +16,7 @@
 
 <template>
   <div>
+    <Notification/>
     <FileUpload/>
     <div class="cpoe__heading">
       <h2>OPMR Mapping Rules</h2>

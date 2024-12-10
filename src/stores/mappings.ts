@@ -1,6 +1,5 @@
 import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
-import jsonData from "@/assets/mappings.json";
 import { type CPOE, type Conditions } from '@/interfaces/CPOE'
 import { type Products } from '@/interfaces/Products';
 import OPMRServices from '@/services/OPMRServices';
@@ -15,21 +14,53 @@ export const useMappingStore = defineStore ('mappings', () => {
     const isUpdated = ref(false);
     const confirmationDialog = ref(false)
     const confirmationDialogText = ref({ title: '', text: ''})
+    const notifs = ref([])
 
     //functions
+    const removeNotifs = (id) => {
+        const index = notifs.value.findIndex((item) => item.id === id);
+        notifs.value.splice(index, 1);
+    }
     const getMappings = async () => {
-        const data = await OPMRServices.getMappings();
-        if(data.data.success){
-            mappings.value = data.data.data
-        }
+        try {
+            const data = await OPMRServices.getMappings();
+            if(data.data.success){
+                mappings.value = data.data.data
+                const id = Date.now()
+                const alert = {id, message: 'OPMR Mapping Rules fetched successfully.', type: 'success'}
+                notifs.value.push(alert)
+                setTimeout(() => {
+                    removeNotifs(id)
+                }, 4000);
+            }
+            else{
+                notifs.value.push({id: Date.now(),message: 'Unable to retrieve OPMR Mappings.', type: 'error'})
+            }
+        } catch (error) {
+            notifs.value.push({id: Date.now(), message: 'Unable to retrieve OPMR Mappings.', type: 'error'})
+        }        
         setLocalStorage()
     }
 
     const getProducts = async () => {
-        const data = await OPMRServices.getProducts();
-        if(data.data.success){
-            products.value = data.data.data
+        try {
+            const data = await OPMRServices.getProducts();
+            if(data.data.success){
+                products.value = data.data.data
+                const id = Date.now()
+                const alert = {id, message: 'Products loaded successfully.', type: 'success'}
+                notifs.value.push(alert)
+                setTimeout(() => {
+                    removeNotifs(id)
+                }, 4000);
+            }
+            else{
+                notifs.value.push({id: Date.now(), message: 'Unable to retrieve product list.', type: 'error'})
+            }
+        } catch (error) {
+            notifs.value.push({id: Date.now(), message: 'Unable to retrieve product list.', type: 'error'})
         }
+        
     }
     const setCurrentPage = (val) => {
         currentPage.value = val
@@ -177,6 +208,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
-        getProducts, products, getMappings
+        getProducts, products, getMappings, notifs, removeNotifs
     };
 })
