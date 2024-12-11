@@ -1,5 +1,5 @@
 <script setup>
-    import { useMappingStore } from '@/stores/mappings';
+    import { useMappingStore } from '../../../stores/mappings';
     import { ref } from 'vue';
     import { mdiUpload } from '@mdi/js';
     import * as XLSX from 'xlsx';

@@ -1,5 +1,5 @@
 <script setup>
-import { useMappingStore } from '@/stores/mappings';
+import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
 import AddCondition from './Dialogs/AddCondition.vue';
 import { mdiMinusCircle } from '@mdi/js';

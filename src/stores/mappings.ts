@@ -16,11 +16,24 @@ export const useMappingStore = defineStore ('mappings', () => {
     const confirmationDialog = ref(false)
     const confirmationDialogText = ref({ title: '', text: ''})
     const notifs = ref<Array<Notification>>([])
+    const isSaving = ref(false)
 
     //functions
+    const autoRemoveNotifs = (id) => {
+        setTimeout(() => {
+            removeNotifs(id)
+        }, 3000)
+    }
+    const toggleSaving = () => {
+        isSaving.value = !isSaving.value
+    }
     const removeNotifs = (id) => {
         const index = notifs.value.findIndex((item) => item.id === id);
         notifs.value.splice(index, 1);
+    }
+    const addNotifs = (id, message, type) => {
+        const alert = {id, message, type}
+        notifs.value.push(alert)
     }
     const getMappings = async () => {
         try {
@@ -28,17 +41,16 @@ export const useMappingStore = defineStore ('mappings', () => {
             if(data.data.success){
                 mappings.value = data.data.data
                 const id = Date.now()
-                const alert = {id, message: 'OPMR Mapping Rules fetched successfully.', type: 'success'}
-                notifs.value.push(alert)
+                addNotifs(id, 'OPMR Mapping Rules fetched successfully.', 'success')
                 setTimeout(() => {
                     removeNotifs(id)
                 }, 4000);
             }
             else{
-                notifs.value.push({id: Date.now(),message: 'Unable to retrieve OPMR Mappings.', type: 'error'})
+                addNotifs(Date.now(), 'Unable to retrieve OPMR Mappings.', 'error')
             }
         } catch (error) {
-            notifs.value.push({id: Date.now(), message: 'Unable to retrieve OPMR Mappings.', type: 'error'})
+            addNotifs(Date.now(), 'Unable to retrieve OPMR Mappings.', 'error')
         }        
         setLocalStorage()
     }
@@ -49,17 +61,16 @@ export const useMappingStore = defineStore ('mappings', () => {
             if(data.data.success){
                 products.value = data.data.data
                 const id = Date.now()
-                const alert = {id, message: 'Products loaded successfully.', type: 'success'}
-                notifs.value.push(alert)
+                addNotifs(id, 'Products loaded successfully.', 'success')
                 setTimeout(() => {
                     removeNotifs(id)
                 }, 4000);
             }
             else{
-                notifs.value.push({id: Date.now(), message: 'Unable to retrieve product list.', type: 'error'})
+                addNotifs(Date.now(), 'Unable to retrieve product list.', 'error')
             }
         } catch (error) {
-            notifs.value.push({id: Date.now(), message: 'Unable to retrieve product list.', type: 'error'})
+            addNotifs(Date.now(), 'Unable to retrieve product list.', 'error')
         }
         
     }
@@ -209,6 +220,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
-        getProducts, products, getMappings, notifs, removeNotifs
+        getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs
     };
 })

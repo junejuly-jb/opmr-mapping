@@ -1,5 +1,5 @@
 <script setup>
-import { useMappingStore } from '@/stores/mappings';
+import { useMappingStore } from '../../stores/mappings';
 const mappingStore = useMappingStore();
 </script>
 <template>

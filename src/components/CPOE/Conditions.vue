@@ -1,8 +1,8 @@
 <script setup>
 import Fortifiers from './Fortifiers.vue'
 import AddFortifier from './Dialogs/AddFortifier.vue';
-import { useMappingStore } from '@/stores/mappings'
-import UpdateCondition from '@/components/Dialogs/UpdateCondition.vue'
+import { useMappingStore } from '../../stores/mappings'
+import UpdateCondition from './Dialogs/UpdateCondition.vue'
 import { mdiClose } from '@mdi/js'
 
 const getCalories = (cals) => {

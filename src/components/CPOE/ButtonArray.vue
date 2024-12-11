@@ -1,8 +1,12 @@
 <script setup>
-import { useMappingStore } from '@/stores/mappings';
+import { useMappingStore } from '../../stores/mappings';
 import { mdiPlus, mdiFile, mdiCheck, mdiDownload } from '@mdi/js';
 
 const mappingStore = useMappingStore();
+const handleSave = () => {
+  mappingStore.setConfirmationDialogText('Save','Do you want to save your changes to the OPMR mapping rules?')
+  mappingStore.toggleConfirmationDialog(true)
+}
 </script>
 <template>
     <div class="opmr__spacer__v">
@@ -41,6 +45,7 @@ const mappingStore = useMappingStore();
       <span class="opmr__spacer__h"></span>
       <v-btn
         color="success"
+        @click="handleSave"
       >
         Save
         <v-icon

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    import { FortifierKey } from '@/interfaces/CPOE'
-    import { useMappingStore } from '@/stores/mappings';
+    import { FortifierKey } from '../../../interfaces/CPOE'
+    import { useMappingStore } from '../../../stores/mappings';
     import { mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();

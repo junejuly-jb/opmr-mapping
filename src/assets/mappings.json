@@ -1,6 +1,7 @@
 [
     {
         "productReference": "Compleat JUNIOR 1.0 (Blenderized)",
+        "type": "Feed Base",
         "conditions": [
             { 
                 "calories": [],
@@ -58,6 +59,7 @@
     },
     {
         "productReference": "test 2",
+        "type": "Fortifier",
         "conditions": [
             { 
                 "calories": [45],

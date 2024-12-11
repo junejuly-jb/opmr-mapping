@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from 'vue';
-    import { useMappingStore } from '@/stores/mappings';
+    import { useMappingStore } from '../../../stores/mappings';
     import { mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();

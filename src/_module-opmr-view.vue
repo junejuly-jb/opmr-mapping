@@ -1,11 +1,11 @@
 <script setup>
   import { mdiMagnify } from '@mdi/js';
-  import MappingList from './MappingList.vue';
-  import { useMappingStore } from '@/stores/mappings';
-  import ButtonArray from './ButtonArray.vue';
-  import FileUpload from './Dialogs/FileUpload.vue';
+  import MappingList from './components/CPOE/MappingList.vue';
+  import { useMappingStore } from './stores/mappings';
+  import ButtonArray from './components/CPOE/ButtonArray.vue';
+  import FileUpload from './components/CPOE/Dialogs/FileUpload.vue';
   import { onMounted } from 'vue';
-  import Notification from './Notification.vue';
+  import Notification from './components/CPOE/Notification.vue';
 
   const mappingStore = useMappingStore()
   onMounted(() => { 

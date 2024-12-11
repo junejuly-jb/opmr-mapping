@@ -1,5 +1,5 @@
 <script setup>
-    import { useMappingStore } from '@/stores/mappings';
+    import { useMappingStore } from '../../stores/mappings';
     import UpdateFortifier from './Dialogs/UpdateFortifier.vue';
     import { mdiDotsVertical, mdiDelete } from '@mdi/js';
 
