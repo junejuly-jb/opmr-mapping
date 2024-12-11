@@ -24,7 +24,10 @@ defineProps({
             ></v-btn>
         </div>
         <div class="col-1">
-            <v-text-field width="300" v-model="mapping.productReference" density="compact" label="Product Reference" variant="outlined" clearable></v-text-field>
+            <div>
+                <v-chip class="my-3">{{mapping.type}}</v-chip>
+                <v-text-field width="300" v-model="mapping.productReference" density="compact" label="Product Reference" variant="outlined" clearable></v-text-field>
+            </div>
         </div>
         <div class="col-2">
             <AddCondition :mapping="mapping"/>

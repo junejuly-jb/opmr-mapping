@@ -11,7 +11,7 @@ const handleSave = () => {
 <template>
     <div class="opmr__spacer__v">
       <span class="opmr__spacer__h"></span>
-      <v-btn
+      <!-- <v-btn
         color="primary"
         @click="mappingStore.setEmptyMapping"
       >
@@ -20,7 +20,29 @@ const handleSave = () => {
           :icon="mdiPlus"
           end
         ></v-icon>
-      </v-btn>
+      </v-btn> -->
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn
+            color="primary"
+            v-bind="props"
+          >
+            Mapping Rule
+            <v-icon
+            :icon="mdiPlus"
+            end
+            ></v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item @click="mappingStore.setEmptyMapping('Feed Base')">
+            <v-list-item-title>Feed Base</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="mappingStore.setEmptyMapping('Fortifier')">
+            <v-list-item-title>Fortifier</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <span class="opmr__spacer__h"></span>
       <v-btn
         color="primary"
@@ -61,5 +83,13 @@ const handleSave = () => {
 }
 .opmr__spacer__v{
   padding: 20px 0px;
+}
+.v-list-item {
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.v-list-item:hover {
+  background-color: rgb(223, 223, 223);
 }
 </style>

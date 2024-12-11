@@ -10,14 +10,16 @@
         calOzStart: null,
         calOzEnd: null,
         modular: null,
+        isModular: false
     });
     const addFortifier = (c_index, mapping, isActive) => {
         mappingStore.addFortifier(fortifier.value, c_index, mapping)
         fortifier.value = {
-            fortifierKey: 'Enfamil Infant',
+            fortifierKey: 'Water',
             calOzStart: null,
             calOzEnd: null,
             modular: null,
+            isModular: false
         }
         isActive.value = false
     }
@@ -33,7 +35,7 @@
     });
 </script>
 <template>
-    <v-dialog max-width="600">
+    <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
@@ -59,17 +61,7 @@
                 variant="outlined"
                 clearable
                 ></v-autocomplete>
-                <v-row>
-                    <!-- <v-col cols="4">
-                        <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
-                    </v-col> -->
-                    <v-col cols="6">
-                        <v-text-field v-model="fortifier.calOzEnd" label="Fortifier Calorie" variant="outlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field v-model="fortifier.modular" label="Modular Volume" variant="outlined"></v-text-field>
-                    </v-col>
-                </v-row>
+                <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

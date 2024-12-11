@@ -43,7 +43,7 @@
     })
 </script>
 <template>
-    <v-dialog max-width="400">
+    <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn @click="toggleUpdate(condition)" v-bind="activatorProps" :prepend-icon="mdiPencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
         </template>
@@ -61,6 +61,7 @@
                 :items="mappingStore.products"
                 variant="outlined"
                 clearable
+                :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
                 ></v-autocomplete>
             </v-card-text>
             <v-card-actions>

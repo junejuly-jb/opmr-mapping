@@ -34,6 +34,11 @@
         ></v-pagination>
       </div>
     </div>
+    <div v-if="mappingStore.unSavedChanges.length > 0" class="mx-5">
+      <v-alert variant="outlined" class="w-50" type="warning">
+        There are ({{mappingStore.unSavedChanges.length}}) unsaved changes on your mapping. Please hit Save before closing
+      </v-alert>
+    </div>
     <div v-for="(mapping, index) in mappingStore.filteredPaginatedItems">
       <MappingList :index="index" :mapping="mapping"></MappingList>
     </div>

@@ -39,8 +39,8 @@
         const workbook = XLSX.read(data, { type: 'array' });
         
         // Check if the sheet exists in the workbook
-        if (workbook.Sheets['Feed_Base Example']) {
-          const sheet = workbook.Sheets['Feed_Base Example'];
+        if (workbook.Sheets['Feed_Base']) {
+          const sheet = workbook.Sheets['Feed_Base'];
 
           // Convert the sheet data to JSON
           const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
@@ -58,6 +58,7 @@
               const data = {}
               if(item[0]){ //if product reference column is not null (create a new mapping)
                 data.productReference = item[0]
+                data.type = 'Feed base'
                 data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                   calories: mappingStore.serializeCalories(item[1]),
                   reference: item[2],

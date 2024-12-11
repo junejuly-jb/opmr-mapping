@@ -53,7 +53,7 @@
         </span>
         <span class="spacer" variant="outlined"></span>
         <span>
-            <v-chip size="small" variant="outlined">{{fortifierkey.modular ? fortifierkey.modular : 'Non modular'}}</v-chip>
+            <v-chip size="small" variant="outlined">{{fortifierkey.isModular ? 'Modular' : 'Non modular'}}</v-chip>
         </span>
     </div>
 </template>

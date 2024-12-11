@@ -8,7 +8,7 @@ const calories = ref('')
 const reference = ref('WATER')
 
 const addCondition = (isActive, mapping) => {
-    const data = { calories: calories.value, reference: reference.value, parent: mapping.productReference}
+    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, parent: mapping.productReference}
     mappingStore.addCondition(data)
     isActive.value = false
     calories.value = ''
@@ -22,7 +22,7 @@ defineProps({
 });
 </script>
 <template>
-    <v-dialog max-width="550">
+    <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
@@ -44,6 +44,7 @@ defineProps({
                 item-title="formtypeHL7Reference"
                 :items="mappingStore.products"
                 variant="outlined"
+                :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
                 clearable
                 ></v-autocomplete>
             </v-card-text>

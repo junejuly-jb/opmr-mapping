@@ -81,7 +81,7 @@ const handleSave = async () => {
             :text="mappingStore.confirmationDialogText.text"
             :title="mappingStore.confirmationDialogText.title"
         >
-        <template v-if="mappingStore.confirmationDialog.title === 'confirmation'" v-slot:actions>
+        <template v-if="mappingStore.confirmationDialogText.title === 'Confirmation'" v-slot:actions>
           <v-btn @click="handleClose">
             Close
           </v-btn>

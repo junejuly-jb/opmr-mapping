@@ -1,11 +1,15 @@
 export interface CPOE{
+    mappingId: Number,
     productReference: String,
+    type: String,
     conditions: Array<Conditions>
 }
 
 export interface Conditions{
     calories: Array<Number>,
     reference: String,
+    isUsed: Boolean,
+    userId: Number | null,
     FortifierKey: Array<FortifierKey>
 }
 
@@ -14,4 +18,5 @@ export interface FortifierKey{
     calOzStart: Number | null,
     calOzEnd: Number | null,
     modular: Number | null
+    isModular: Boolean
 }

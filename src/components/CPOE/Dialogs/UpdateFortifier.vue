@@ -35,11 +35,12 @@
         calOzStart: props.fortifierkey.calOzStart,
         calOzEnd: props.fortifierkey.calOzEnd,
         modular: props.fortifierkey.modular,
+        isModular: props.fortifierkey.isModular
     });
 
 </script>
 <template>
-    <v-dialog max-width="600">
+    <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-list-item v-bind="activatorProps">
                 <v-list-item-title><v-icon :icon="mdiPencil"></v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
@@ -59,17 +60,7 @@
                     variant="outlined"
                     clearable
                 ></v-autocomplete>
-                <v-row>
-                    <!-- <v-col cols="4">
-                        <v-text-field v-model="fortifier.calOzStart" label="Cal/oz Start" variant="outlined"></v-text-field>
-                    </v-col> -->
-                    <v-col cols="6">
-                        <v-text-field v-model="fortifier.calOzEnd" label="Fortifier Calorie" variant="outlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field v-model="fortifier.modular" label="Modular Volume" variant="outlined"></v-text-field>
-                    </v-col>
-                </v-row>
+                <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

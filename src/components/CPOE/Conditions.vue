@@ -44,9 +44,8 @@ defineProps({
         <div>
             Calories: {{getCalories(condition.calories)}}
         </div>
-        <div>
+        <div v-if="condition.calories.length != 0">
             <AddFortifier :c_index="c_index" :mapping="mapping"/>
-            <!-- <v-btn prepend-icon="mdi-plus" color="primary" variant="tonal" size="small" rounded="xl">Fortifier</v-btn> -->
         </div>
         <div class="spacer-v"></div>
         <div v-if="condition.FortifierKey.length != 0">

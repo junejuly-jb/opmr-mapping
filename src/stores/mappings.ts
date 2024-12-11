@@ -17,8 +17,20 @@ export const useMappingStore = defineStore ('mappings', () => {
     const confirmationDialogText = ref({ title: '', text: ''})
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
+    const unSavedChanges = ref([]);
 
     //functions
+    const addUnsavedChanges = (id) => {
+        const results = unSavedChanges.value.filter(mappingId => mappingId == id);
+        if(results){
+            unSavedChanges.value.push(id)
+        }
+    }
+    const generateId = () => {
+        const lastMapping = mappings.value[mappings.value.length - 1]
+        const lastId = Number(lastMapping.mappingId)
+        return lastId + 1;
+    }
     const autoRemoveNotifs = (id) => {
         setTimeout(() => {
             removeNotifs(id)
@@ -140,13 +152,16 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
     })
 
-    const setEmptyMapping = () => { 
+    const setEmptyMapping = (type) => { 
         const emptyMap = <CPOE>({
+            mappingId: generateId(),
+            type: type,
             productReference: '',
             conditions: []
         })
         mappings.value.unshift(emptyMap)
         currentPage.value = 1
+        addUnsavedChanges(emptyMap.mappingId)
     }
     const removeMapping = (productReference) => { 
         // const res = mappings.value.filter((mapping) =>
@@ -162,9 +177,11 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
     const addCondition = (data) => {
         const index = mappings.value.findIndex(obj => obj.productReference === data.parent)
-        const condition = {
+        const condition:Conditions = {
             calories: serializeCalories(data.calories),
             reference: data.reference,
+            isUsed: data.isUsed,
+            userId: data.userId,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
@@ -195,6 +212,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].isModular = data.isModular
     }
 
     const serializeCalories = (cal) => {
@@ -213,6 +231,10 @@ export const useMappingStore = defineStore ('mappings', () => {
         localStorage.setItem('currentPage', newValue.toString())
     })
 
+    watch(mappings, (newValue, oldValue) => {
+        console.log('changed!')
+    })
+
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
         removeMapping, addCondition, removeConditionWithinAMapping,
         fileUploadDialog, toggleFileUploadDialog, addFortifier,
@@ -220,6 +242,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         filteredPaginatedItems, currentPage, itemsPerPage, updateCondition, updateFortifierKey,
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
-        getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs
+        getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
+        unSavedChanges, addUnsavedChanges
     };
 })
