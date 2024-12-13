@@ -27,9 +27,12 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
     }
     const generateId = () => {
-        const lastMapping = mappings.value[mappings.value.length - 1]
-        const lastId = Number(lastMapping.mappingId)
-        return lastId + 1;
+        if(mappings.value.length > 0){
+            const lastMapping = mappings.value[mappings.value.length - 1]
+            const lastId = Number(lastMapping.mappingId)
+            return lastId + 1;
+        }
+        return 1;
     }
     const autoRemoveNotifs = (id) => {
         setTimeout(() => {
@@ -91,11 +94,19 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setBulkMapping = (data) => {
-        mappings.value = data
+        mappings.value = []
+        data.forEach(item => {
+            item.mappingId = generateId()
+            mappings.value.push(item)
+        })
+        // mappings.value = data
     }
 
     const mergeMappings = (data) => {
-        mappings.value = [...mappings.value, ...data]
+        data.forEach(item => {
+            item.mappingId = generateId()
+            mappings.value.push(item)
+        });
     }
 
     const setConfirmationDialogText = (title, text) => {
@@ -163,32 +174,29 @@ export const useMappingStore = defineStore ('mappings', () => {
         currentPage.value = 1
         addUnsavedChanges(emptyMap.mappingId)
     }
-    const removeMapping = (productReference) => { 
-        // const res = mappings.value.filter((mapping) =>
-        //     mapping.productReference.includes(productReference)
-        // );
-        // if (res.length != 1) return;
-        const index = mappings.value.findIndex(obj => obj.productReference === productReference);
+    const removeMapping = (id) => {
+        const index = mappings.value.findIndex(obj => obj.mappingId === id);
         mappings.value.splice(index, 1)
     }
     const removeConditionWithinAMapping = (mapping, conditionIndex) => {
-        const index = mappings.value.findIndex(obj => obj.productReference === mapping.productReference)
+        const index = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId)
         mappings.value[index].conditions.splice(conditionIndex, 1)
     }
     const addCondition = (data) => {
-        const index = mappings.value.findIndex(obj => obj.productReference === data.parent)
+        const index = mappings.value.findIndex(obj => obj.mappingId === data.parent)
         const condition:Conditions = {
             calories: serializeCalories(data.calories),
-            reference: data.reference,
+            reference: mappings.value[index].type == 'Feed Base' ? data.reference : '',
             isUsed: data.isUsed,
             userId: data.userId,
+            isModular: data.isModular,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
     }
 
     const addFortifier = (data, c_index, mapping) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
         mappings.value[mappingIndex].conditions[c_index].FortifierKey.push(data)
     }
 
@@ -197,22 +205,22 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const removeFortifier = (mapping, c_index, index) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
         mappings.value[mappingIndex].conditions[c_index].FortifierKey.splice(index, 1)
     }
 
     const updateCondition = (mapping, data, c_index) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
-        mappings.value[mappingIndex].conditions[c_index].reference = data.reference
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
+        mappings.value[mappingIndex].conditions[c_index].reference = mappings.value[mappingIndex].type == 'Feed Base' ? data.reference : ''
         mappings.value[mappingIndex].conditions[c_index].calories = serializeCalories(data.calories)
+        mappings.value[mappingIndex].conditions[c_index].isModular = data.isModular
     }
 
     const updateFortifierKey = (mapping, c_index, index, data) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.productReference === mapping.productReference);
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].isModular = data.isModular
     }
 
     const serializeCalories = (cal) => {
@@ -229,10 +237,6 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     watch(currentPage, (newValue, oldValue) => {
         localStorage.setItem('currentPage', newValue.toString())
-    })
-
-    watch(mappings, (newValue, oldValue) => {
-        console.log('changed!')
     })
 
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 

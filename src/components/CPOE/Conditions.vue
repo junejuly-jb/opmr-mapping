@@ -8,7 +8,7 @@ import { mdiClose } from '@mdi/js'
 const getCalories = (cals) => {
     if(cals.length == 0 ){ return 'null'}
     else if(cals.length == 1){ return cals[0] }
-    else{ return cals[0] + ' - ' + cals[cals.length -1] }
+    else{ return cals[0] + '-' + cals[cals.length -1] }
 }
 
 const mappingStore = useMappingStore();
@@ -39,10 +39,13 @@ defineProps({
             </div>
         </div>
         <div>
-            Reference: {{condition.reference}}
+            Reference: {{mapping.type == 'Feed Base' ? condition.reference : 'Feed Base Dependent'}}
         </div>
         <div>
-            Calories: {{getCalories(condition.calories)}}
+            Caloric Range: {{getCalories(condition.calories)}}
+        </div>
+        <div>
+            Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
         </div>
         <div v-if="condition.calories.length != 0">
             <AddFortifier :c_index="c_index" :mapping="mapping"/>

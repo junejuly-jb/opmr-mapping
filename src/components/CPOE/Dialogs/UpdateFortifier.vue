@@ -35,7 +35,6 @@
         calOzStart: props.fortifierkey.calOzStart,
         calOzEnd: props.fortifierkey.calOzEnd,
         modular: props.fortifierkey.modular,
-        isModular: props.fortifierkey.isModular
     });
 
 </script>
@@ -60,7 +59,7 @@
                     variant="outlined"
                     clearable
                 ></v-autocomplete>
-                <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch>
+                <!-- <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch> -->
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -69,7 +68,7 @@
                 @click="isActive.value = false"
                 ></v-btn>
                 <v-btn
-                text="Update"
+                text="Update Fortifier"
                 color="success"
                 @click="updateFortifier(isActive)"
                 ></v-btn>

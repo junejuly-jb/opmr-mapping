@@ -20,7 +20,7 @@ defineProps({
                 color="red-lighten-2"
                 :icon="mdiMinusCircle"
                 variant="text"
-                @click="mappingStore.removeMapping(mapping.productReference)"
+                @click="mappingStore.removeMapping(mapping.mappingId)"
             ></v-btn>
         </div>
         <div class="col-1">

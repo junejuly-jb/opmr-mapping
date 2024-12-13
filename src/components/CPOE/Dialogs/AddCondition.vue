@@ -6,9 +6,10 @@ import { mdiPlus } from '@mdi/js';
 const mappingStore = useMappingStore();
 const calories = ref('')
 const reference = ref('WATER')
+const isModular = ref(false)
 
 const addCondition = (isActive, mapping) => {
-    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, parent: mapping.productReference}
+    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular, parent: mapping.mappingId}
     mappingStore.addCondition(data)
     isActive.value = false
     calories.value = ''
@@ -37,16 +38,19 @@ defineProps({
             <v-spacer></v-spacer>
             <v-card-text>
                 <v-text-field v-model="calories" label="Caloric Range" variant="outlined"></v-text-field>
-                <v-autocomplete
-                v-model="reference"
-                label="Product Reference"
-                item-value="formtypeHL7Reference" 
-                item-title="formtypeHL7Reference"
-                :items="mappingStore.products"
-                variant="outlined"
-                :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
-                clearable
-                ></v-autocomplete>
+                <div v-if="mapping.type == 'Feed Base'">
+                    <v-autocomplete
+                        v-model="reference"
+                        label="Product Reference"
+                        item-value="formtypeHL7Reference" 
+                        item-title="formtypeHL7Reference"
+                        :items="mappingStore.products"
+                        variant="outlined"
+                        :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
+                        clearable
+                    ></v-autocomplete>
+                </div>
+                <v-switch color="primary" v-model="isModular" inset :label="isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -55,7 +59,7 @@ defineProps({
                 @click="isActive.value = false"
                 ></v-btn>
                 <v-btn
-                text="Save Condition"
+                text="Add Condition"
                 color="success"
                 @click="addCondition(isActive, mapping)"
                 ></v-btn>

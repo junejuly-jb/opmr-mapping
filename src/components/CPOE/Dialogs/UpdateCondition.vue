@@ -6,7 +6,8 @@
     const mappingStore = useMappingStore();
     const updatedCondition = ref({
         calories: '',
-        reference: ''
+        reference: '',
+        isModular: false
     })
 
     const updateCondition = (mapping, updatedCondition, c_index, isActive) => {
@@ -16,6 +17,7 @@
 
     const toggleUpdate = (condition) => {
         updatedCondition.value.reference = condition.reference
+        updatedCondition.value.isModular = condition.isModular
         if(condition.calories.length == 0){
             updatedCondition.value.calories = ''
         }
@@ -53,16 +55,19 @@
             <v-spacer></v-spacer>
             <v-card-text>
                 <v-text-field v-model="updatedCondition.calories" label="Caloric Range" variant="outlined"></v-text-field>
-                <v-autocomplete
-                v-model="updatedCondition.reference"
-                label="Product Reference"
-                item-value="formtypeHL7Reference" 
-                item-title="formtypeHL7Reference"
-                :items="mappingStore.products"
-                variant="outlined"
-                clearable
-                :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
-                ></v-autocomplete>
+                <div v-if="mapping.type == 'Feed Base'">
+                    <v-autocomplete
+                    v-model="updatedCondition.reference"
+                    label="Product Reference"
+                    item-value="formtypeHL7Reference" 
+                    item-title="formtypeHL7Reference"
+                    :items="mappingStore.products"
+                    variant="outlined"
+                    clearable
+                    :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
+                    ></v-autocomplete>
+                </div>
+                <v-switch color="primary" v-model="updatedCondition.isModular" inset :label="updatedCondition.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -71,7 +76,7 @@
                 @click="isActive.value = false"
                 ></v-btn>
                 <v-btn
-                text="Save"
+                text="Update Condition"
                 color="success"
                 @click="updateCondition(mapping, updatedCondition, c_index, isActive)"
                 ></v-btn>

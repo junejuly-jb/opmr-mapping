@@ -10,7 +10,6 @@
         calOzStart: null,
         calOzEnd: null,
         modular: null,
-        isModular: false
     });
     const addFortifier = (c_index, mapping, isActive) => {
         mappingStore.addFortifier(fortifier.value, c_index, mapping)
@@ -19,7 +18,6 @@
             calOzStart: null,
             calOzEnd: null,
             modular: null,
-            isModular: false
         }
         isActive.value = false
     }
@@ -61,7 +59,6 @@
                 variant="outlined"
                 clearable
                 ></v-autocomplete>
-                <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -70,7 +67,7 @@
                 @click="isActive.value = false"
                 ></v-btn>
                 <v-btn
-                text="Save"
+                text="Add Fortifier"
                 color="success"
                 @click="addFortifier(c_index, mapping, isActive)"
                 ></v-btn>

@@ -1,24 +1,29 @@
 [
     {
         "mappingId": 1,
-        "productReference": "Compleat JUNIOR 1.0 (Blenderized)",
-        "type": "Feed Base",
+        "productReference": "Similac Liquid HMF",
+        "type": "Fortifier",
         "conditions": [
             { 
-                "calories": [],
-                "reference": "Compleat JUNIOR 1.5",
+                "calories": [20,21,22,23,24],
+                "reference": "Feed Base Dependent",
                 "isUsed": false,
                 "userId": null,
+                "isModular": true,
                 "FortifierKey": [
                     { 
-                        "fortifierKey": "Ketovie 3:1",
+                        "fortifierKey": "Similac Human Milk Fortifier Hydrolyzed Protein Liquid Pack",
                         "calOzStart": null,
                         "calOzEnd": null,
-                        "modular": null,
-                        "isModular": false
+                        "modular": null
+                    },
+                    { 
+                        "fortifierKey": "Similac Neosure Powder",
+                        "calOzStart": null,
+                        "calOzEnd": null,
+                        "modular": null
                     }
                 ]
-                    
             }
         ]
     }

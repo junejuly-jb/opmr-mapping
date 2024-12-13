@@ -9,6 +9,11 @@
 
     const sampleMappings = ref([])
     const errors = ref([])
+    const isDoneLoading = ref(false)
+
+    const feedbaseCount = (keyword) => {
+      return sampleMappings.value.filter(item => item.type === keyword).length;
+    }
 
     const handleFileChange = (event) => {
       errors.value = []
@@ -26,8 +31,9 @@
         mappingStore.toggleConfirmationDialog(true)
       }
       else{
-        mappingStore.setBulkMapping(sampleMappings)
+        mappingStore.setBulkMapping(sampleMappings.value)
         mappingStore.toggleFileUploadDialog()
+        isDoneLoading.value = false
       }
     }
 
@@ -38,80 +44,141 @@
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         
-        // Check if the sheet exists in the workbook
-        if (workbook.Sheets['Feed_Base']) {
-          const sheet = workbook.Sheets['Feed_Base'];
+        readFeedBase(workbook)
+        readFortifier(workbook)
 
-          // Convert the sheet data to JSON
-          const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      };
 
-          // Remove empty rows (arrays)
-          var sheetData = jsonData.filter(row => row.some(cell => cell !== null && cell !== ''));
-          sheetData = sheetData.slice(1)
+      reader.readAsArrayBuffer(file);
+      isDoneLoading.value = true
+    }
 
-          //check for caloric errorrs.
+    const readFeedBase = (workbook) => {
+      // Check if the sheet exists in the workbook
+      if (workbook.Sheets['Feed_Base']) {
+        const sheet = workbook.Sheets['Feed_Base'];
+
+        // Convert the sheet data to JSON
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        // Remove empty rows (arrays)
+        var sheetData = jsonData.filter(row => row.some(cell => cell !== null && cell !== ''));
+        sheetData = sheetData.slice(1)
+
+        //check for caloric errorrs.
+        sheetData.forEach((item, index) => {
+          checkForErrors(item, index)
+        })
+        if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
-            checkForErrors(item, index)
-          })
-          if(errors.value.length < 1){
-            sheetData.forEach((item, index) => {
-              const data = {}
-              if(item[0]){ //if product reference column is not null (create a new mapping)
-                data.productReference = item[0]
-                data.type = 'Feed base'
-                data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
-                  calories: mappingStore.serializeCalories(item[1]),
-                  reference: item[2],
-                  FortifierKey: []
-                }]
+            const data = {}
+            if(item[0]){ //if product reference column is not null (create a new mapping)
+              data.productReference = item[0]
+              data.type = 'Feed Base'
+              data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
+                calories: mappingStore.serializeCalories(item[1]),
+                reference: item[2],
+                isUsed: false,
+                userId: null,
+                isModular: false,
+                FortifierKey: []
+              }]
 
-                if(item[3]){ // check if the condition has fortifier associated if yes, add the fortifierkey
-                  data.conditions[0].FortifierKey.push({
-                    "fortifierKey": item[3],
-                    "calOzStart": null,
-                    "calOzEnd": null,
-                    "modular": null
-                  })
-                }
-                sampleMappings.value.push(data)
+              if(item[3]){ // check if the condition has fortifier associated if yes, add the fortifierkey
+                data.conditions[0].FortifierKey.push({
+                  "fortifierKey": item[3],
+                  "calOzStart": null,
+                  "calOzEnd": null,
+                  "modular": null,
+                })
               }
-              else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
-                const condition = {
-                  calories: mappingStore.serializeCalories(item[1]),
-                  reference: item[2],
-                  FortifierKey: []
-                }
-                sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
+              sampleMappings.value.push(data)
+            }
+            else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
+              const condition = {
+                calories: mappingStore.serializeCalories(item[1]),
+                reference: item[2],
+                isUsed: false,
+                userId: null,
+                isModular: false,
+                FortifierKey: []
+              }
+              sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
 
-                if(item[3]){ //add fortifierkey if column is not null
-                  const fortifier = {
-                    fortifierKey: item[3],
-                    calOzStart: null,
-                    calOzEnd: null,
-                    modular: null
-                  }
-                  const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
-                  lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
-                }
-              }
-              else if(!item[0] && !item[1] && !item[2] && item[3]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
+              if(item[3]){ //add fortifierkey if column is not null
                 const fortifier = {
                   fortifierKey: item[3],
                   calOzStart: null,
                   calOzEnd: null,
-                  modular: null
+                  modular: null,
                 }
                 const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
                 lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
               }
-            });
-          }
-        } else {
-          errors.value.push('Workbook sheet must contains Feed_Base Example');
+            }
+            else if(!item[0] && !item[1] && !item[2] && item[3]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
+              const fortifier = {
+                fortifierKey: item[3],
+                calOzStart: null,
+                calOzEnd: null,
+                modular: null,
+              }
+              const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
+              lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
+            }
+          });
         }
-      };
+      } else {
+        errors.value.push('Workbook sheet must contains Feed_Base');
+      }
+    }
 
-      reader.readAsArrayBuffer(file);
+    const readFortifier = (workbook) => {
+      // Check if the sheet exists in the workbook
+      if (workbook.Sheets['Fortifier']) {
+        const sheet = workbook.Sheets['Fortifier'];
+
+        // Convert the sheet data to JSON
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        // Remove empty rows (arrays)
+        var sheetData = jsonData.filter(row => row.some(cell => cell !== null && cell !== ''));
+        sheetData = sheetData.slice(1)
+
+        //check for caloric errorrs.
+        sheetData.forEach((item, index) => {
+          checkForErrors(item, index)
+        })
+        if(errors.value.length < 1){
+          sheetData.forEach((item, index) => {
+            const data = {}
+            if(item[0]){ //if product reference column is not null (create a new mapping)
+              data.productReference = item[0]
+              data.type = 'Fortifier'
+              data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
+                calories: mappingStore.serializeCalories(item[1]),
+                reference: item[2],
+                isUsed: false,
+                userId: null,
+                FortifierKey: []
+              }]
+              sampleMappings.value.push(data)
+            }
+            else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
+              const condition = {
+                calories: mappingStore.serializeCalories(item[1]),
+                reference: item[2],
+                isUsed: false,
+                userId: null,
+                FortifierKey: []
+              }
+              sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
+            }
+          });
+        }
+      } else {
+        errors.value.push('Workbook sheet must contains Fortifier');
+      }
     }
 
     const checkCaloricFormat = (str) => {
@@ -130,6 +197,7 @@
 
     const setEmptyMapping = () => {
       sampleMappings.value = []
+      isDoneLoading.value = false
     }
 
 </script>
@@ -146,8 +214,15 @@
         >
         <div class="mx-5">
             <v-file-input @change="handleFileChange" type="file" clearable label="File input" variant="outlined" accept=".xlsx, .xls"></v-file-input>
+            <div v-if="errors.length < 1 && isDoneLoading">
+              <div class="my-1">
+                <v-chip color="success">{{ feedbaseCount('Feed Base') }}</v-chip> mapping rules loaded for feed bases.
+              </div>
+              <div class="my-1">
+                <v-chip color="success">{{ feedbaseCount('Fortifier') }}</v-chip> mapping rules loaded for fortifiers.
+              </div>
+            </div>
             <div class="my-2" v-for="error in errors">
-              <!-- <div>{{ error }}</div> -->
               <v-alert
                 :text="error"
                 type="error"
@@ -164,7 +239,7 @@
             Close
           </v-btn>
           <v-btn @click="handleSave" color="success">
-            Save
+            Add
           </v-btn>
         </template>
       </v-card>

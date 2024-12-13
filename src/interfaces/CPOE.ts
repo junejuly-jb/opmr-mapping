@@ -10,6 +10,7 @@ export interface Conditions{
     reference: String,
     isUsed: Boolean,
     userId: Number | null,
+    isModular: Boolean
     FortifierKey: Array<FortifierKey>
 }
 
@@ -18,5 +19,4 @@ export interface FortifierKey{
     calOzStart: Number | null,
     calOzEnd: Number | null,
     modular: Number | null
-    isModular: Boolean
 }
