@@ -13,7 +13,8 @@ const addCondition = (isActive, mapping) => {
     mappingStore.addCondition(data)
     isActive.value = false
     calories.value = ''
-    reference.value = ''
+    reference.value = 'WATER'
+    isModular.value = false
 }
 defineProps({
   mapping: {
