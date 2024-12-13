@@ -21,7 +21,7 @@
       if (file) {
         readExcel(file);
       } else {
-        alert('Please upload a valid Excel file.');
+        errors.value.push('Please upload a valid Excel file.');
       }
     }
 
@@ -152,27 +152,38 @@
         if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
             const data = {}
-            if(item[0]){ //if product reference column is not null (create a new mapping)
+            if(item[0]){ //if feed base reference column is not null (create a new mapping)
               data.productReference = item[0]
               data.type = 'Fortifier'
-              data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
+              data.conditions = [{ //it always assumed that if feed base reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
-                reference: item[2],
+                reference: '', //always blank if fortifier
                 isUsed: false,
                 userId: null,
+                isModular: false,
                 FortifierKey: []
               }]
+              if(item[2]){ //check Additive has value
+                data.conditions[0].FortifierKey.push({
+                  "fortifierKey": item[2],
+                  "calOzStart": null,
+                  "calOzEnd": null,
+                  "modular": null
+                })
+              }
               sampleMappings.value.push(data)
             }
-            else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
-              const condition = {
-                calories: mappingStore.serializeCalories(item[1]),
-                reference: item[2],
-                isUsed: false,
-                userId: null,
-                FortifierKey: []
+            else if(!item[0] && !item[1]){ // if no feed-base reference on the 1st column and no caloric rule, check for additives
+              if(item[2]){
+                const fortifier = {
+                  fortifierKey: item[2],
+                  calOzStart: null,
+                  calOzEnd: null,
+                  modular: null
+                }
+                const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
+                lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
               }
-              sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
             }
           });
         }
