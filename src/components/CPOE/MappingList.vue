@@ -2,7 +2,7 @@
 import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
 import AddCondition from './Dialogs/AddCondition.vue';
-import { mdiMinusCircle } from '@mdi/js';
+import { mdiMinusCircle, mdiContentCopy } from '@mdi/js';
 
 const mappingStore = useMappingStore();
 defineProps({
@@ -16,12 +16,39 @@ defineProps({
 <template>
     <div class="opmr__mapping_lists">
         <div class="col-remove">
-            <v-btn
-                color="red-lighten-2"
-                :icon="mdiMinusCircle"
-                variant="text"
-                @click="mappingStore.removeMapping(mapping.mappingId)"
-            ></v-btn>
+            <div>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                        v-bind="props"
+                        variant="tonal"
+                        color="red-lighten-2"
+                        icon
+                        @click="mappingStore.removeMapping(mapping.mappingId)"
+                        size="small"
+                        >
+                        <v-icon :icon="mdiMinusCircle"></v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Delete</span>
+                </v-tooltip>
+                <div class="my-2"></div>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                        v-bind="props"
+                        variant="tonal"
+                        color="primary"
+                        icon
+                        @click="mappingStore.removeMapping(mapping.mappingId)"
+                        size="small"
+                        >
+                        <v-icon :icon="mdiContentCopy"></v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Duplicate mapping</span>
+                </v-tooltip>
+            </div>
         </div>
         <div class="col-1">
             <div>

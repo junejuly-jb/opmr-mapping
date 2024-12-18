@@ -1,9 +1,9 @@
 import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { type CPOE, type Conditions } from '@/interfaces/CPOE'
-import { type Products } from '@/interfaces/Products';
-import { type Notification } from '@/interfaces/Notification';
-import OPMRServices from '@/services/OPMRServices';
+import { type CPOE, type Conditions } from '../interfaces/CPOE'
+import { type Products } from '../interfaces/Products';
+import { type Notification } from '../interfaces/Notification';
+import OPMRServices from '../services/OPMRServices';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])

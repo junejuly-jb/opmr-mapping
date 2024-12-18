@@ -37,6 +37,15 @@
       }
     }
 
+    const handleClose = () => {
+      setTimeout(() => {
+        isDoneLoading.value = false
+        errors.value = []
+        sampleMappings.value = []
+      },200)
+      mappingStore.toggleFileUploadDialog()
+    }
+
     const readExcel = (file) => {
       const reader = new FileReader();
 
@@ -60,19 +69,19 @@
 
         // Convert the sheet data to JSON
         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
         // Remove empty rows (arrays)
         var sheetData = jsonData.filter(row => row.some(cell => cell !== null && cell !== ''));
         sheetData = sheetData.slice(1)
 
         //check for caloric errorrs.
         sheetData.forEach((item, index) => {
-          checkForErrors(item, index)
+          checkForErrors(item, index, 'Feed_Base')
         })
         if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
             const data = {}
             if(item[0]){ //if product reference column is not null (create a new mapping)
+              data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Feed Base'
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
@@ -147,12 +156,13 @@
 
         //check for caloric errorrs.
         sheetData.forEach((item, index) => {
-          checkForErrors(item, index)
+          checkForErrors(item, index, 'Fortifier')
         })
         if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
             const data = {}
             if(item[0]){ //if feed base reference column is not null (create a new mapping)
+              data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Fortifier'
               data.conditions = [{ //it always assumed that if feed base reference is not null, the condition has always value
@@ -197,11 +207,26 @@
       return regex.test(str);
     }
 
-    const checkForErrors = (data, i) => {
-      if(data[1]){
+    const checkForErrors = (data, i, type) => {
+      if(data[1]){ //Check for invalid caloric rule
         if(!checkCaloricFormat(data[1])){
           const row = parseInt(i) + 2;
-          errors.value.push('Invalid value at column B row ' + row)
+          errors.value.push(`Invalid calorie range value at B${row}(${type}).` )
+        }
+      }
+      //Check for product if name is not on the product load
+      if(data[2]){ // Applicable for Fortifier and Feed_Base sheets.
+        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[2]);
+        if(!isMatch){
+          const row = parseInt(i) + 2;
+          errors.value.push(`Product name not found at C${row}(${type}).`)
+        }
+      }
+      if(type === 'Feed_Base' && data[3]){ //Applicable to Feed_Base additives only.
+        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[3]);
+        if(!isMatch){
+          const row = parseInt(i) + 2;
+          errors.value.push(`Product name not found at D${row}(${type}).`)
         }
       }
     }
@@ -246,10 +271,10 @@
         <template v-slot:actions>
           <v-spacer></v-spacer>
 
-          <v-btn @click="mappingStore.toggleFileUploadDialog">
+          <v-btn @click="handleClose">
             Close
           </v-btn>
-          <v-btn @click="handleSave" color="success">
+          <v-btn v-if="sampleMappings.length > 0" @click="handleSave" color="success">
             Add
           </v-btn>
         </template>
