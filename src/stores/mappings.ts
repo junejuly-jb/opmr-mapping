@@ -18,7 +18,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const confirmationDialogText = ref({ title: '', text: ''})
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
-    const unSavedChanges = ref([]);
+    const unSavedChanges = ref(false);
 
     //functions
     const duplicateMapping = (data, i) => {
@@ -29,12 +29,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value.splice(toInsertIndex, 0, newMapping)
     }
 
-    // const addUnsavedChanges = (id) => {
-    //     const results = unSavedChanges.value.filter(mappingId => mappingId == id);
-    //     if(results){
-    //         unSavedChanges.value.push(id)
-    //     }
-    // }
     const generateId = () => {
         if(mappings.value.length > 0){
             const lastMapping = mappings.value[mappings.value.length - 1]
@@ -249,7 +243,12 @@ export const useMappingStore = defineStore ('mappings', () => {
     })
 
     watch(mappings, (newValue, oldValue) => {
-        console.log(JSON.stringify(newValue) === forRefMapping.value)
+        if(JSON.stringify(newValue) != forRefMapping.value){
+            unSavedChanges.value = true
+        } else {
+            unSavedChanges.value = false
+        }
+        
     }, { deep: true })
 
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
