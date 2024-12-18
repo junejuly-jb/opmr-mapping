@@ -7,6 +7,7 @@ import OPMRServices from '../services/OPMRServices';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])
+    const forRefMapping = ref<String>('')
     const products = ref<Array<Products>>([])
     const searchTerm = ref('');
     const fileUploadDialog = ref(false)
@@ -20,12 +21,20 @@ export const useMappingStore = defineStore ('mappings', () => {
     const unSavedChanges = ref([]);
 
     //functions
-    const addUnsavedChanges = (id) => {
-        const results = unSavedChanges.value.filter(mappingId => mappingId == id);
-        if(results){
-            unSavedChanges.value.push(id)
-        }
+    const duplicateMapping = (data, i) => {
+        const newMapping:CPOE = JSON.parse(JSON.stringify(data))
+        newMapping.mappingId = generateId()
+        newMapping.productReference = ''
+        const toInsertIndex = i + 1
+        mappings.value.splice(toInsertIndex, 0, newMapping)
     }
+
+    // const addUnsavedChanges = (id) => {
+    //     const results = unSavedChanges.value.filter(mappingId => mappingId == id);
+    //     if(results){
+    //         unSavedChanges.value.push(id)
+    //     }
+    // }
     const generateId = () => {
         if(mappings.value.length > 0){
             const lastMapping = mappings.value[mappings.value.length - 1]
@@ -55,6 +64,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             const data = await OPMRServices.getMappings();
             if(data.data.success){
                 mappings.value = data.data.data
+                forRefMapping.value = JSON.stringify(data.data.data)
                 const id = Date.now()
                 addNotifs(id, 'OPMR Mapping Rules fetched successfully.', 'success')
                 setTimeout(() => {
@@ -172,7 +182,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         })
         mappings.value.unshift(emptyMap)
         currentPage.value = 1
-        addUnsavedChanges(emptyMap.mappingId)
     }
     const removeMapping = (id) => {
         const index = mappings.value.findIndex(obj => obj.mappingId === id);
@@ -239,6 +248,10 @@ export const useMappingStore = defineStore ('mappings', () => {
         localStorage.setItem('currentPage', newValue.toString())
     })
 
+    watch(mappings, (newValue, oldValue) => {
+        console.log(JSON.stringify(newValue) === forRefMapping.value)
+    }, { deep: true })
+
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
         removeMapping, addCondition, removeConditionWithinAMapping,
         fileUploadDialog, toggleFileUploadDialog, addFortifier,
@@ -247,6 +260,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
-        unSavedChanges, addUnsavedChanges
+        unSavedChanges, duplicateMapping, forRefMapping
     };
 })

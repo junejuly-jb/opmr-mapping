@@ -40,7 +40,7 @@ defineProps({
                         variant="tonal"
                         color="primary"
                         icon
-                        @click="mappingStore.removeMapping(mapping.mappingId)"
+                        @click="mappingStore.duplicateMapping(mapping, index)"
                         size="small"
                         >
                         <v-icon :icon="mdiContentCopy"></v-icon>
