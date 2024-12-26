@@ -28,39 +28,44 @@ defineProps({
 });
 </script>
 <template>
-    <div class="cpoe__condition__container">
-        <div class="cpoe__btn__array">
+    <div class="cpoe__condition__outer__container">
+        <div class="cpoe__condition__container">
+            <div class="cpoe__btn__array">
+                <div>
+                    <UpdateCondition :condition="condition" :mapping="mapping" :c_index="c_index"/>
+                </div>
+                <div class="spacer-h"></div>
+                <div>
+                    <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" :icon="mdiClose" variant="tonal" size="x-small" color="error"></v-btn>
+                </div>
+            </div>
             <div>
-                <UpdateCondition :condition="condition" :mapping="mapping" :c_index="c_index"/>
+                Reference: {{mapping.type == 'Feed Base' ? condition.reference : 'Feed Base Dependent'}}
             </div>
-            <div class="spacer-h"></div>
             <div>
-                <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" :icon="mdiClose" variant="tonal" size="x-small" color="error"></v-btn>
+                Caloric Range: {{getCalories(condition.calories)}}
+            </div>
+            <div>
+                Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
+            </div>
+            <div v-if="condition.calories.length != 0">
+                <AddFortifier :c_index="c_index" :mapping="mapping"/>
+            </div>
+            <div class="spacer-v"></div>
+            <div v-if="condition.FortifierKey.length != 0">
+                <div v-for="(fortifierkey, index ) in condition.FortifierKey">
+                    <Fortifiers :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
+                </div>
             </div>
         </div>
-        <div>
-            Reference: {{mapping.type == 'Feed Base' ? condition.reference : 'Feed Base Dependent'}}
-        </div>
-        <div>
-            Caloric Range: {{getCalories(condition.calories)}}
-        </div>
-        <div>
-            Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
-        </div>
-        <div v-if="condition.calories.length != 0">
-            <AddFortifier :c_index="c_index" :mapping="mapping"/>
-        </div>
-        <div class="spacer-v"></div>
-        <div v-if="condition.FortifierKey.length != 0">
-            <div v-for="(fortifierkey, index ) in condition.FortifierKey">
-                <Fortifiers :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
-            </div>
-        </div>
+        <div class="is__used" v-if="condition.isUsed">Mapping is in use</div>
     </div>
 </template>
 <style scoped>
 .cpoe__condition__container{
     padding: 10px 15px;
+}
+.cpoe__condition__outer__container {
     border: 0.5px solid gray;
     margin: 0px 0px;
     border-radius: 15px;
@@ -75,5 +80,12 @@ defineProps({
 }
 .spacer-v{
     padding: 2px 0px;
+}
+.is__used{
+    background-color: gray;
+    border-radius: 0px 0px 15px 15px;
+    text-align: center;
+    padding: 2px 0px;
+    color: white;
 }
 </style>
