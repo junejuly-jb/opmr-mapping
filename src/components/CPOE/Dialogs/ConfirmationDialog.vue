@@ -54,8 +54,8 @@ const handleSave = async () => {
             const id = Date.now()
             if(result.data.success){
                 mappingStore.addNotifs(id, 'OPMR mapping rules saved successfully.', 'success')
-                console.log(result.data.data)
                 mappingStore.autoRemoveNotifs(id)
+                mappingStore.unSavedChanges = false
             } else {
                 mappingStore.addNotifs(id, 'Unable to save mapping rules.', 'error')
                 mappingStore.autoRemoveNotifs(id)

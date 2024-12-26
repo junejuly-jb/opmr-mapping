@@ -259,6 +259,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
-        unSavedChanges, duplicateMapping, forRefMapping
+        unSavedChanges, duplicateMapping
     };
 })
