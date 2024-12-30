@@ -5,13 +5,24 @@ import { useMappingStore } from '../../stores/mappings'
 import UpdateCondition from './Dialogs/UpdateCondition.vue'
 import { mdiClose } from '@mdi/js'
 
+const mappingStore = useMappingStore();
 const getCalories = (cals) => {
     if(cals.length == 0 ){ return 'null'}
     else if(cals.length == 1){ return cals[0] }
     else{ return cals[0] + '-' + cals[cals.length -1] }
 }
 
-const mappingStore = useMappingStore();
+const handleRemoveCondition = (mapping, c_index, condition) => {
+    mappingStore.deleteSelectedCondition.mapping = JSON.parse(JSON.stringify(mapping))
+    mappingStore.deleteSelectedCondition.conditionIndex = c_index
+    if(condition.isUsed){
+        mappingStore.setConfirmationDialogText('delete-condition-in-use', 'Warning', 'The mapping you want to remove is currently in use. Do you wish to continue?')
+        mappingStore.confirmationDialog = true
+    } else {
+        mappingStore.removeConditionWithinAMapping()
+    }
+}
+
 defineProps({
   condition: {
     type: Object,
@@ -36,7 +47,7 @@ defineProps({
                 </div>
                 <div class="spacer-h"></div>
                 <div>
-                    <v-btn @click="mappingStore.removeConditionWithinAMapping(mapping, c_index)" :icon="mdiClose" variant="tonal" size="x-small" color="error"></v-btn>
+                    <v-btn @click="handleRemoveCondition(mapping, c_index, condition)" :icon="mdiClose" variant="tonal" size="x-small" color="error"></v-btn>
                 </div>
             </div>
             <div>

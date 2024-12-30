@@ -27,7 +27,7 @@
 
     const handleSave = () => {
       if(mappingStore.mappings.length != 0){
-        mappingStore.setConfirmationDialogText('Confirmation','You already have an existing mapping. Would you like to overwrite it with the new one or merge the new mapping with the existing one?')
+        mappingStore.setConfirmationDialogText('confirmation-merge-overwrite','Confirmation','You already have an existing mapping. Would you like to overwrite it with the new one or merge the new mapping with the existing one?')
         mappingStore.toggleConfirmationDialog(true)
       }
       else{

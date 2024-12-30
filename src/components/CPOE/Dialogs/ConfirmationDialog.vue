@@ -18,7 +18,7 @@ const handleOverwrite = () => {
         mappingStore.toggleFileUploadDialog()
         mappingStore.setCurrentPage(1)
         emit('notify')
-        mappingStore.setConfirmationDialogText('','')
+        mappingStore.setConfirmationDialogText('','','')
     } catch (error) {
         console.log(error)
     }
@@ -31,7 +31,7 @@ const handleMerge = () => {
         mappingStore.toggleFileUploadDialog()
         mappingStore.setCurrentPage(1)
         emit('notify')
-        mappingStore.setConfirmationDialogText('','')
+        mappingStore.setConfirmationDialogText('','','')
     } catch (error) {
         console.log(error)
     }
@@ -39,7 +39,7 @@ const handleMerge = () => {
 
 const handleClose = () => {
     mappingStore.toggleConfirmationDialog(false)
-    setTimeout(() => { mappingStore.setConfirmationDialogText('','') },1000)
+    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
 }
 
 const handleSave = async () => {
@@ -50,7 +50,7 @@ const handleSave = async () => {
         setTimeout(() => {
             mappingStore.toggleSaving()
             mappingStore.toggleConfirmationDialog(false)
-            mappingStore.setConfirmationDialogText('','')
+            mappingStore.setConfirmationDialogText('','','')
             const id = Date.now()
             if(result.data.success){
                 mappingStore.addNotifs(id, 'OPMR mapping rules saved successfully.', 'success')
@@ -70,6 +70,25 @@ const handleSave = async () => {
         }, 1000)
     }
 }
+
+const handleUpdateCondition = () => {
+    mappingStore.toggleConfirmationDialog(false)
+    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
+    mappingStore.updateConditionDialog = true
+}
+
+const handleDeleteCondition = () => {
+    mappingStore.toggleConfirmationDialog(false)
+    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
+    mappingStore.removeConditionWithinAMapping()
+}
+
+const handleDeleteMapping = () => {
+    mappingStore.toggleConfirmationDialog(false)
+    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
+    mappingStore.removeMapping()
+}
+
 </script>
 <template>
     <v-dialog
@@ -82,7 +101,7 @@ const handleSave = async () => {
             :text="mappingStore.confirmationDialogText.text"
             :title="mappingStore.confirmationDialogText.title"
         >
-        <template v-if="mappingStore.confirmationDialogText.title === 'Confirmation'" v-slot:actions>
+        <template v-if="mappingStore.confirmationDialogText.type === 'confirmation-merge-overwrite'" v-slot:actions>
           <v-btn @click="handleClose">
             Close
           </v-btn>
@@ -93,7 +112,31 @@ const handleSave = async () => {
             Merge
           </v-btn>
         </template>
-        <template v-else v-slot:actions>
+        <template v-else-if="mappingStore.confirmationDialogText.type === 'update-condition-in-use'" v-slot:actions>
+            <v-btn @click="handleClose">
+                Cancel
+            </v-btn>
+            <v-btn @click="handleUpdateCondition" color="success">
+                Update anyway
+            </v-btn>
+        </template>
+        <template v-else-if="mappingStore.confirmationDialogText.type === 'delete-condition-in-use'" v-slot:actions>
+            <v-btn @click="handleClose">
+                Cancel
+            </v-btn>
+            <v-btn @click="handleDeleteCondition" color="error">
+                Delete anyway
+            </v-btn>
+        </template>
+        <template v-else-if="mappingStore.confirmationDialogText.type === 'delete-mapping-in-use'" v-slot:actions>
+            <v-btn @click="handleClose">
+                Cancel
+            </v-btn>
+            <v-btn @click="handleDeleteMapping" color="error">
+                Delete anyway
+            </v-btn>
+        </template>
+        <template v-else v-slot:actions> 
           <v-btn @click="handleClose">
             Cancel
           </v-btn>

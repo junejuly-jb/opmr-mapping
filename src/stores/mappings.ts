@@ -10,15 +10,32 @@ export const useMappingStore = defineStore ('mappings', () => {
     const forRefMapping = ref<String>('')
     const products = ref<Array<Products>>([])
     const searchTerm = ref('');
-    const fileUploadDialog = ref(false)
     const currentPage = ref(1);
     const itemsPerPage = ref(5);
     const isUpdated = ref(false);
-    const confirmationDialog = ref(false)
-    const confirmationDialogText = ref({ title: '', text: ''})
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
+    //Selection for updating and deletion
+    const updateSelectedConditon = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
+    const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
+    const deleteSelectedMapping = ref(0)
+    //Dialogs
+    const fileUploadDialog = ref(false)
+    const confirmationDialog = ref(false)
+    const confirmationDialogText = ref(
+        { 
+            type:'', 
+            //(save-mapping) - confirmation to save mapping
+            //(update-condition-in-use) - alert use that condition is in use
+            //(delete-condition-in-use) - alert use that condition is in use
+            //(delete-mapping-in-use) - alert use that mapping is in use
+            //(confirmation-merge-overwrite) - confirmation to merge/overwrite when loading mappings
+            title: '', 
+            text: ''
+        }
+    )
+    const updateConditionDialog = ref(false)
 
     //functions
     const getProductDID = (productName) => {
@@ -33,6 +50,10 @@ export const useMappingStore = defineStore ('mappings', () => {
         const newMapping:CPOE = JSON.parse(JSON.stringify(data))
         newMapping.mappingId = generateId()
         newMapping.productReference = ''
+        //update in use if in use is true
+        if(newMapping.conditions && newMapping.conditions.length != 0){
+            newMapping.conditions.forEach((item) => { item.isUsed = false })
+        }
         const toInsertIndex = i + 1
         mappings.value.splice(toInsertIndex, 0, newMapping)
     }
@@ -121,7 +142,8 @@ export const useMappingStore = defineStore ('mappings', () => {
         });
     }
 
-    const setConfirmationDialogText = (title, text) => {
+    const setConfirmationDialogText = (type, title, text) => {
+        confirmationDialogText.value.type = type;
         confirmationDialogText.value.title = title;
         confirmationDialogText.value.text = text
     }
@@ -185,13 +207,13 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value.unshift(emptyMap)
         currentPage.value = 1
     }
-    const removeMapping = (id) => {
-        const index = mappings.value.findIndex(obj => obj.mappingId === id);
+    const removeMapping = () => {
+        const index = mappings.value.findIndex(obj => obj.mappingId === deleteSelectedMapping.value);
         mappings.value.splice(index, 1)
     }
-    const removeConditionWithinAMapping = (mapping, conditionIndex) => {
-        const index = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId)
-        mappings.value[index].conditions.splice(conditionIndex, 1)
+    const removeConditionWithinAMapping = () => {
+        const index = mappings.value.findIndex(obj => obj.mappingId === deleteSelectedCondition.value.mapping.mappingId)
+        mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
     const addCondition = (data) => {
         const index = mappings.value.findIndex(obj => obj.mappingId === data.parent)
@@ -222,12 +244,12 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[c_index].FortifierKey.splice(index, 1)
     }
 
-    const updateCondition = (mapping, data, c_index) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
-        mappings.value[mappingIndex].conditions[c_index].reference = mappings.value[mappingIndex].type == 'Feed Base' ? data.reference : ''
-        mappings.value[mappingIndex].conditions[c_index].referenceDID = getProductDID(data.reference)
-        mappings.value[mappingIndex].conditions[c_index].calories = serializeCalories(data.calories)
-        mappings.value[mappingIndex].conditions[c_index].isModular = data.isModular
+    const updateCondition = () => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedConditon.value.mapping.mappingId);
+        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].reference = mappings.value[mappingIndex].type == 'Feed Base' ? updateSelectedConditon.value.updatedMapping.reference : ''
+        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].referenceDID = getProductDID(updateSelectedConditon.value.updatedMapping.reference)
+        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].calories = serializeCalories(updateSelectedConditon.value.updatedMapping.calories)
+        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isModular = updateSelectedConditon.value.updatedMapping.isModular
     }
 
     const updateFortifierKey = (mapping, c_index, index, data) => {
@@ -271,6 +293,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
-        unSavedChanges, duplicateMapping
+        unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedConditon, deleteSelectedCondition,
+        deleteSelectedMapping
     };
 })

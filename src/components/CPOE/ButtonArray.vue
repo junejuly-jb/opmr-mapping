@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 
 const mappingStore = useMappingStore();
 const handleSave = () => {
-  mappingStore.setConfirmationDialogText('Save','Do you want to save your changes to the OPMR mapping rules?')
+  mappingStore.setConfirmationDialogText('save-mapping','Save','Do you want to save your changes to the OPMR mapping rules?')
   mappingStore.toggleConfirmationDialog(true)
 }
 

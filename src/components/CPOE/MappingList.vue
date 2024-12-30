@@ -5,6 +5,23 @@ import AddCondition from './Dialogs/AddCondition.vue';
 import { mdiMinusCircle, mdiContentCopy } from '@mdi/js';
 
 const mappingStore = useMappingStore();
+const handleRemoveMapping = (mapping) => {
+    mappingStore.deleteSelectedMapping = mapping.mappingId
+    if(mapping.conditions && mapping.conditions.length != 0){
+        const hasValue = mapping.conditions.some(obj => obj.isUsed === true);
+        if(hasValue){
+            mappingStore.setConfirmationDialogText('delete-mapping-in-use', 'Warning', 'The mapping you want to delete is currently in use. Do you wish to continue?')
+            mappingStore.confirmationDialog = true
+        }
+        else{ 
+            mappingStore.removeMapping()
+        }
+    }
+    else{
+        mappingStore.removeMapping()
+    }
+}
+
 defineProps({
   mapping: {
     type: Object,
@@ -24,7 +41,7 @@ defineProps({
                         variant="tonal"
                         color="red-lighten-2"
                         icon
-                        @click="mappingStore.removeMapping(mapping.mappingId)"
+                        @click="handleRemoveMapping(mapping)"
                         size="small"
                         >
                         <v-icon :icon="mdiMinusCircle"></v-icon>

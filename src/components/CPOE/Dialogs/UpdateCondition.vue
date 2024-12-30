@@ -10,22 +10,30 @@
         isModular: false
     })
 
-    const updateCondition = (mapping, updatedCondition, c_index, isActive) => {
-        mappingStore.updateCondition(mapping, updatedCondition, c_index)
-        isActive.value = false
+    const handleUpdateCondition = () => {
+        mappingStore.updateCondition()
+        mappingStore.updateConditionDialog = false
     }
 
-    const toggleUpdate = (condition) => {
-        updatedCondition.value.reference = condition.reference
-        updatedCondition.value.isModular = condition.isModular
+    const toggleUpdate = (mapping, condition, c_index) => {
+        mappingStore.updateSelectedConditon.mapping = JSON.parse(JSON.stringify(mapping))
+        mappingStore.updateSelectedConditon.updatedMapping = JSON.parse(JSON.stringify(condition))
+        mappingStore.updateSelectedConditon.conditionIndex = c_index
         if(condition.calories.length == 0){
-            updatedCondition.value.calories = ''
+            mappingStore.updateSelectedConditon.updatedMapping.calories = ''
         }
         else if (condition.calories.length == 1) {
-            updatedCondition.value.calories = condition.calories[0]
+            mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0]
         }
         else {
-            updatedCondition.value.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
+            mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
+        }
+
+        if(!condition.isUsed){
+            mappingStore.updateConditionDialog = true
+        }else {
+            mappingStore.setConfirmationDialogText('update-condition-in-use', 'Warning', 'The mapping you want to update is currently in use. Do you wish to continue?')
+            mappingStore.confirmationDialog = true
         }
     }
 
@@ -45,19 +53,15 @@
     })
 </script>
 <template>
-    <v-dialog max-width="650">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn @click="toggleUpdate(condition)" v-bind="activatorProps" :prepend-icon="mdiPencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
-        </template>
-
-        <template v-slot:default="{ isActive }">
-            <v-card title="Update Product Mapping">
+    <v-btn @click="toggleUpdate(mapping, condition, c_index)" :prepend-icon="mdiPencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
+    <v-dialog v-model:model-value="mappingStore.updateConditionDialog" max-width="650">
+        <v-card title="Update Product Mapping">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-text-field v-model="updatedCondition.calories" label="Caloric Range" variant="outlined"></v-text-field>
+                <v-text-field v-model="mappingStore.updateSelectedConditon.updatedMapping.calories" label="Caloric Range" variant="outlined"></v-text-field>
                 <div v-if="mapping.type == 'Feed Base'">
                     <v-autocomplete
-                    v-model="updatedCondition.reference"
+                    v-model="mappingStore.updateSelectedConditon.updatedMapping.reference"
                     label="Product Reference"
                     item-value="formtypeHL7Reference" 
                     item-title="formtypeHL7Reference"
@@ -67,21 +71,20 @@
                     :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
                     ></v-autocomplete>
                 </div>
-                <v-switch color="primary" v-model="updatedCondition.isModular" inset :label="updatedCondition.isModular ? 'Modular' : 'Non Modular'"></v-switch>
+                <v-switch color="primary" v-model="mappingStore.updateSelectedConditon.updatedMapping.isModular" inset :label="updatedCondition.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
                 text="Close"
-                @click="isActive.value = false"
+                @click="mappingStore.updateConditionDialog = false"
                 ></v-btn>
                 <v-btn
                 text="Update Condition"
                 color="success"
-                @click="updateCondition(mapping, updatedCondition, c_index, isActive)"
+                @click="handleUpdateCondition"
                 ></v-btn>
             </v-card-actions>
-            </v-card>
-        </template>
+        </v-card>
     </v-dialog>
 </template>

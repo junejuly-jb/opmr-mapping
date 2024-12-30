@@ -32,6 +32,7 @@
 
     const fortifier = ref<FortifierKey>({
         fortifierKey: props.fortifierkey.fortifierKey,
+        fortifierKeyDID: props.fortifierkey.fortifierKeyDID,
         calOzStart: props.fortifierkey.calOzStart,
         calOzEnd: props.fortifierkey.calOzEnd,
         modular: props.fortifierkey.modular,
