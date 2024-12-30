@@ -21,6 +21,14 @@ export const useMappingStore = defineStore ('mappings', () => {
     const unSavedChanges = ref(false);
 
     //functions
+    const getProductDID = (productName) => {
+        const result = products.value.find(product => product.formtypeHL7Reference === productName);
+        if(result){
+            return result.formtypeID
+        } else {
+            return null;
+        }
+    }
     const duplicateMapping = (data, i) => {
         const newMapping:CPOE = JSON.parse(JSON.stringify(data))
         newMapping.mappingId = generateId()
@@ -190,6 +198,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         const condition:Conditions = {
             calories: serializeCalories(data.calories),
             reference: mappings.value[index].type == 'Feed Base' ? data.reference : '',
+            referenceDID: getProductDID(data.reference),
             isUsed: data.isUsed,
             userId: data.userId,
             isModular: data.isModular,
@@ -200,6 +209,7 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     const addFortifier = (data, c_index, mapping) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
+        data.fortifierKeyDID = getProductDID(data.fortifierKey)
         mappings.value[mappingIndex].conditions[c_index].FortifierKey.push(data)
     }
 
@@ -215,6 +225,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const updateCondition = (mapping, data, c_index) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
         mappings.value[mappingIndex].conditions[c_index].reference = mappings.value[mappingIndex].type == 'Feed Base' ? data.reference : ''
+        mappings.value[mappingIndex].conditions[c_index].referenceDID = getProductDID(data.reference)
         mappings.value[mappingIndex].conditions[c_index].calories = serializeCalories(data.calories)
         mappings.value[mappingIndex].conditions[c_index].isModular = data.isModular
     }
@@ -222,6 +233,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const updateFortifierKey = (mapping, c_index, index, data) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
+        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKeyDID = getProductDID(data.fortifierKey)
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
         mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
     }

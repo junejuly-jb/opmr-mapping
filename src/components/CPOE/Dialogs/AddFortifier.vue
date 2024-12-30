@@ -7,6 +7,7 @@
     const mappingStore = useMappingStore();
     const fortifier = ref<FortifierKey>({
         fortifierKey: 'WATER',
+        fortifierKeyDID: null,
         calOzStart: null,
         calOzEnd: null,
         modular: null,
@@ -15,6 +16,7 @@
         mappingStore.addFortifier(fortifier.value, c_index, mapping)
         fortifier.value = {
             fortifierKey: 'Water',
+            fortifierKeyDID: null,
             calOzStart: null,
             calOzEnd: null,
             modular: null,

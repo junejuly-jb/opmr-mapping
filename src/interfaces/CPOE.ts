@@ -8,6 +8,7 @@ export interface CPOE{
 export interface Conditions{
     calories: Array<Number>,
     reference: String,
+    referenceDID: Number | null,
     isUsed: Boolean,
     userId: Number | null,
     isModular: Boolean
@@ -16,6 +17,7 @@ export interface Conditions{
 
 export interface FortifierKey{
     fortifierKey: String | null,
+    fortifierKeyDID: Number | null,
     calOzStart: Number | null,
     calOzEnd: Number | null,
     modular: Number | null
