@@ -16,11 +16,13 @@ export const useMappingStore = defineStore ('mappings', () => {
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
+
     //Selection for updating and deletion
     const updateSelectedConditon = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
     const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
     const deleteSelectedMapping = ref(0)
     const updateSelectedFortifierKey = ref({mapping: null, c_index: null, index: null, data: null})
+
     //Dialogs
     const fileUploadDialog = ref(false)
     const confirmationDialog = ref(false)
@@ -50,6 +52,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             return null;
         }
     }
+    
     const duplicateMapping = (data, i) => {
         const newMapping:CPOE = JSON.parse(JSON.stringify(data))
         newMapping.mappingId = generateId()

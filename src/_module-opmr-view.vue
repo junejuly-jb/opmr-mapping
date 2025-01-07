@@ -7,6 +7,7 @@
   import { onMounted } from 'vue';
   import Notification from './components/CPOE/Notification.vue';
   import UpdateCondition from './components/CPOE/Dialogs/UpdateCondition.vue';
+  import UpdateFortifier from './components/CPOE/Dialogs/UpdateFortifier.vue';
 
   const mappingStore = useMappingStore()
   onMounted(() => { 
@@ -18,6 +19,7 @@
 <template>
   <div>
     <UpdateCondition/>
+    <UpdateFortifier :condition="condition" :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
     <Notification/>
     <FileUpload/>
     <div class="cpoe__heading">

@@ -1,24 +1,8 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
-    import { FortifierKey } from '../../../interfaces/CPOE'
     import { useMappingStore } from '../../../stores/mappings';
-    import { mdiPencil } from '@mdi/js';
 
     const mappingStore = useMappingStore();
     
-    const updateFortifier = () => {
-        mappingStore.updateSelectedFortifierKey.c_index = props.c_index
-        mappingStore.updateSelectedFortifierKey.mapping = JSON.parse(JSON.stringify(props.mapping))
-        mappingStore.updateSelectedFortifierKey.index = props.index
-        mappingStore.updateSelectedFortifierKey.data = JSON.parse(JSON.stringify(props.fortifierkey))
-        if(props.condition.isUsed){
-            mappingStore.setConfirmationDialogText('update-fortifier-in-use', 'Warning', 'The condition of the associated fortifier you selected is currently in use. Do you wish to continue?')
-            mappingStore.confirmationDialog = true
-        } else {
-            mappingStore.updateFortifierDialog = true
-        }
-    }
-
     const handleUpdateFortifierKey = () => {
         mappingStore.updateFortifierKey()
         mappingStore.updateFortifierDialog = false
@@ -48,7 +32,6 @@
 
 </script>
 <template>
-    <v-btn size="x-small" color="primary" variant="tonal" :icon="mdiPencil" @click="updateFortifier"></v-btn>
     <v-dialog v-model:model-value="mappingStore.updateFortifierDialog" max-width="650">
         <v-card title="Update Fortifier Key">
         <v-spacer></v-spacer>
