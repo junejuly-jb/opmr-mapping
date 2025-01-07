@@ -21,32 +21,18 @@
         index: {
             type: Number,
             required: true
+        },
+        condition: {
+            type: Object,
+            required: true
         }
     });
 </script>
 <template>
     <div class="opmr__chips">
         <span>
-            <v-menu location="start">
-                <template v-slot:activator="{ props }">
-                    <v-btn
-                    dark
-                    v-bind="props"
-                    icon
-                    size="small"
-                    variant="text"
-                    >
-                    <v-icon :icon="mdiDotsVertical"></v-icon>
-                    </v-btn>
-                </template>
-
-                <v-list>
-                    <UpdateFortifier :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
-                    <v-list-item @click="mappingStore.removeFortifier(mapping, c_index, index)">
-                        <v-list-item-title><v-icon :icon="mdiDelete"></v-icon><span class="spacer"></span><span class="spacer"></span>Delete</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
+            <UpdateFortifier :condition="condition" :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
+            <v-btn class="mx-1" size="x-small" color="error" variant="tonal" :icon="mdiDelete" @click="mappingStore.removeFortifier(mapping, c_index, index)"></v-btn>
         </span>
         <span>
             <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>

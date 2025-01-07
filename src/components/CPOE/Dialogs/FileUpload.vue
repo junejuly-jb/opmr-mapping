@@ -87,6 +87,7 @@
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[2],
+                referenceDID: mappingStore.getProductDID(item[2]),
                 isUsed: false,
                 userId: null,
                 isModular: false,
@@ -96,6 +97,7 @@
               if(item[3]){ // check if the condition has fortifier associated if yes, add the fortifierkey
                 data.conditions[0].FortifierKey.push({
                   "fortifierKey": item[3],
+                  "fortifierKeyDID": mappingStore.getProductDID(item[3]),
                   "calOzStart": null,
                   "calOzEnd": null,
                   "modular": null,
@@ -107,6 +109,7 @@
               const condition = {
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[2],
+                referenceDID: mappingStore.getProductDID(item[2]),
                 isUsed: false,
                 userId: null,
                 isModular: false,
@@ -117,6 +120,7 @@
               if(item[3]){ //add fortifierkey if column is not null
                 const fortifier = {
                   fortifierKey: item[3],
+                  fortifierKeyDID: mappingStore.getProductDID(item[3]),
                   calOzStart: null,
                   calOzEnd: null,
                   modular: null,
@@ -128,6 +132,7 @@
             else if(!item[0] && !item[1] && !item[2] && item[3]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
               const fortifier = {
                 fortifierKey: item[3],
+                fortifierKeyDID: mappingStore.getProductDID(item[3]),
                 calOzStart: null,
                 calOzEnd: null,
                 modular: null,
@@ -168,6 +173,7 @@
               data.conditions = [{ //it always assumed that if feed base reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: '', //always blank if fortifier
+                referenceDID: null, //always blank if fortifier
                 isUsed: false,
                 userId: null,
                 isModular: false,
@@ -176,6 +182,7 @@
               if(item[2]){ //check Additive has value
                 data.conditions[0].FortifierKey.push({
                   "fortifierKey": item[2],
+                  "fortifierKeyDID": mappingStore.getProductDID(item[2]),
                   "calOzStart": null,
                   "calOzEnd": null,
                   "modular": null
@@ -187,6 +194,7 @@
               if(item[2]){
                 const fortifier = {
                   fortifierKey: item[2],
+                  fortifierKeyDID: mappingStore.getProductDID(item[2]),
                   calOzStart: null,
                   calOzEnd: null,
                   modular: null

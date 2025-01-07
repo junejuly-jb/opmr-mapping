@@ -6,11 +6,23 @@
 
     const mappingStore = useMappingStore();
     
-    const updateFortifier = (isActive) => {
-        mappingStore.updateFortifierKey(props.mapping, props.c_index, props.index, fortifier.value)
-        isActive.value = false
+    const updateFortifier = () => {
+        mappingStore.updateSelectedFortifierKey.c_index = props.c_index
+        mappingStore.updateSelectedFortifierKey.mapping = JSON.parse(JSON.stringify(props.mapping))
+        mappingStore.updateSelectedFortifierKey.index = props.index
+        mappingStore.updateSelectedFortifierKey.data = JSON.parse(JSON.stringify(props.fortifierkey))
+        if(props.condition.isUsed){
+            mappingStore.setConfirmationDialogText('update-fortifier-in-use', 'Warning', 'The condition of the associated fortifier you selected is currently in use. Do you wish to continue?')
+            mappingStore.confirmationDialog = true
+        } else {
+            mappingStore.updateFortifierDialog = true
+        }
     }
 
+    const handleUpdateFortifierKey = () => {
+        mappingStore.updateFortifierKey()
+        mappingStore.updateFortifierDialog = false
+    }
     const props = defineProps({
         mapping: {
             type: Object,
@@ -27,55 +39,43 @@
         fortifierkey: {
             type: Object,
             required: true
+        },
+        condition: {
+            type: Object,
+            required: true
         }
-    });
-
-    const fortifier = ref<FortifierKey>({
-        fortifierKey: props.fortifierkey.fortifierKey,
-        fortifierKeyDID: props.fortifierkey.fortifierKeyDID,
-        calOzStart: props.fortifierkey.calOzStart,
-        calOzEnd: props.fortifierkey.calOzEnd,
-        modular: props.fortifierkey.modular,
     });
 
 </script>
 <template>
-    <v-dialog max-width="650">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-list-item v-bind="activatorProps">
-                <v-list-item-title><v-icon :icon="mdiPencil"></v-icon><span class="spacer"></span><span class="spacer"></span>Update</v-list-item-title>
-            </v-list-item>
-        </template>
-
-        <template v-slot:default="{ isActive }">
-            <v-card title="Update Fortifier Key">
+    <v-btn size="x-small" color="primary" variant="tonal" :icon="mdiPencil" @click="updateFortifier"></v-btn>
+    <v-dialog v-model:model-value="mappingStore.updateFortifierDialog" max-width="650">
+        <v-card title="Update Fortifier Key">
+        <v-spacer></v-spacer>
+        <v-card-text>
+            <v-autocomplete
+                v-model="mappingStore.updateSelectedFortifierKey.data.fortifierKey"
+                label="Fortifier Key"
+                item-value="formtypeHL7Reference" 
+                item-title="formtypeHL7Reference"
+                :items="mappingStore.products"
+                variant="outlined"
+                clearable
+            ></v-autocomplete>
+        </v-card-text>
+        <v-card-actions>
             <v-spacer></v-spacer>
-            <v-card-text>
-                <v-autocomplete
-                    v-model="fortifier.fortifierKey"
-                    label="Fortifier Key"
-                    item-value="formtypeHL7Reference" 
-                    item-title="formtypeHL7Reference"
-                    :items="mappingStore.products"
-                    variant="outlined"
-                    clearable
-                ></v-autocomplete>
-                <!-- <v-switch color="primary" v-model="fortifier.isModular" inset :label="fortifier.isModular ? 'Modular' : 'Non Modular'"></v-switch> -->
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                text="Close"
-                @click="isActive.value = false"
-                ></v-btn>
-                <v-btn
-                text="Update Fortifier"
-                color="success"
-                @click="updateFortifier(isActive)"
-                ></v-btn>
-            </v-card-actions>
-            </v-card>
-        </template>
+            <v-btn
+            text="Close"
+            @click="mappingStore.updateFortifierDialog = false"
+            ></v-btn>
+            <v-btn
+            text="Update Fortifier"
+            color="success"
+            @click="handleUpdateFortifierKey"
+            ></v-btn>
+        </v-card-actions>
+        </v-card>
     </v-dialog>
 </template>
 <style setup>

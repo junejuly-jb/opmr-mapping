@@ -20,6 +20,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const updateSelectedConditon = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
     const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
     const deleteSelectedMapping = ref(0)
+    const updateSelectedFortifierKey = ref({mapping: null, c_index: null, index: null, data: null})
     //Dialogs
     const fileUploadDialog = ref(false)
     const confirmationDialog = ref(false)
@@ -31,11 +32,14 @@ export const useMappingStore = defineStore ('mappings', () => {
             //(delete-condition-in-use) - alert use that condition is in use
             //(delete-mapping-in-use) - alert use that mapping is in use
             //(confirmation-merge-overwrite) - confirmation to merge/overwrite when loading mappings
+            //(update-fortifier-in-use) - alert use that fortifier is in use
+            //(delete-fortifier-in-use) - alert use that fortifier is in use
             title: '', 
             text: ''
         }
     )
     const updateConditionDialog = ref(false)
+    const updateFortifierDialog = ref(false)
 
     //functions
     const getProductDID = (productName) => {
@@ -216,6 +220,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
     const addCondition = (data) => {
+        console.log(data)
         const index = mappings.value.findIndex(obj => obj.mappingId === data.parent)
         const condition:Conditions = {
             calories: serializeCalories(data.calories),
@@ -252,12 +257,12 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isModular = updateSelectedConditon.value.updatedMapping.isModular
     }
 
-    const updateFortifierKey = (mapping, c_index, index, data) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKey = data.fortifierKey
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].fortifierKeyDID = getProductDID(data.fortifierKey)
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].calOzEnd = data.calOzEnd
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey[index].modular = data.modular
+    const updateFortifierKey = () => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedFortifierKey.value.mapping.mappingId);
+        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKey = updateSelectedFortifierKey.value.data.fortifierKey
+        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKeyDID = getProductDID(updateSelectedFortifierKey.value.data.fortifierKey)
+        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].calOzEnd = updateSelectedFortifierKey.value.data.calOzEnd
+        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].modular = updateSelectedFortifierKey.value.data.modular
     }
 
     const serializeCalories = (cal) => {
@@ -294,6 +299,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedConditon, deleteSelectedCondition,
-        deleteSelectedMapping
+        deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID
     };
 })

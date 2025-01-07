@@ -6,6 +6,7 @@
   import FileUpload from './components/CPOE/Dialogs/FileUpload.vue';
   import { onMounted } from 'vue';
   import Notification from './components/CPOE/Notification.vue';
+  import UpdateCondition from './components/CPOE/Dialogs/UpdateCondition.vue';
 
   const mappingStore = useMappingStore()
   onMounted(() => { 
@@ -16,6 +17,7 @@
 
 <template>
   <div>
+    <UpdateCondition/>
     <Notification/>
     <FileUpload/>
     <div class="cpoe__heading">

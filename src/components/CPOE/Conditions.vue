@@ -2,8 +2,7 @@
 import Fortifiers from './Fortifiers.vue'
 import AddFortifier from './Dialogs/AddFortifier.vue';
 import { useMappingStore } from '../../stores/mappings'
-import UpdateCondition from './Dialogs/UpdateCondition.vue'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiPencil } from '@mdi/js'
 
 const mappingStore = useMappingStore();
 const getCalories = (cals) => {
@@ -20,6 +19,28 @@ const handleRemoveCondition = (mapping, c_index, condition) => {
         mappingStore.confirmationDialog = true
     } else {
         mappingStore.removeConditionWithinAMapping()
+    }
+}
+
+const toggleUpdateCondition = (mapping, condition, c_index) => {
+    mappingStore.updateSelectedConditon.mapping = JSON.parse(JSON.stringify(mapping))
+    mappingStore.updateSelectedConditon.updatedMapping = JSON.parse(JSON.stringify(condition))
+    mappingStore.updateSelectedConditon.conditionIndex = c_index
+    if(condition.calories.length == 0){
+        mappingStore.updateSelectedConditon.updatedMapping.calories = ''
+    }
+    else if (condition.calories.length == 1) {
+        mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0]
+    }
+    else {
+        mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
+    }
+
+    if(!condition.isUsed){
+        mappingStore.updateConditionDialog = true
+    }else {
+        mappingStore.setConfirmationDialogText('update-condition-in-use', 'Warning', 'The mapping you want to update is currently in use. Do you wish to continue?')
+        mappingStore.confirmationDialog = true
     }
 }
 
@@ -43,7 +64,7 @@ defineProps({
         <div class="cpoe__condition__container">
             <div class="cpoe__btn__array">
                 <div>
-                    <UpdateCondition :condition="condition" :mapping="mapping" :c_index="c_index"/>
+                    <v-btn @click="toggleUpdateCondition(mapping, condition, c_index)" :prepend-icon="mdiPencil" color="primary" variant="tonal" size="small" rounded="xl">Update</v-btn>
                 </div>
                 <div class="spacer-h"></div>
                 <div>
@@ -65,7 +86,7 @@ defineProps({
             <div class="spacer-v"></div>
             <div v-if="condition.FortifierKey.length != 0">
                 <div v-for="(fortifierkey, index ) in condition.FortifierKey">
-                    <Fortifiers :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
+                    <Fortifiers :condition="condition" :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
                 </div>
             </div>
         </div>
