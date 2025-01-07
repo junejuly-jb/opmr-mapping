@@ -22,6 +22,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
     const deleteSelectedMapping = ref(0)
     const updateSelectedFortifierKey = ref({mapping: null, c_index: null, index: null, data: null})
+    const deleteSelectedFortifierKey = ref({mapping: null, c_index: null, index: null})
 
     //Dialogs
     const fileUploadDialog = ref(false)
@@ -52,7 +53,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             return null;
         }
     }
-    
+
     const duplicateMapping = (data, i) => {
         const newMapping:CPOE = JSON.parse(JSON.stringify(data))
         newMapping.mappingId = generateId()
@@ -247,9 +248,9 @@ export const useMappingStore = defineStore ('mappings', () => {
         fileUploadDialog.value = !fileUploadDialog.value
     }
 
-    const removeFortifier = (mapping, c_index, index) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey.splice(index, 1)
+    const removeFortifier = () => {
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === deleteSelectedFortifierKey.value.mapping.mappingId);
+        mappings.value[mappingIndex].conditions[deleteSelectedFortifierKey.value.c_index].FortifierKey.splice(deleteSelectedFortifierKey.value.index, 1)
     }
 
     const updateCondition = () => {
@@ -302,6 +303,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedConditon, deleteSelectedCondition,
-        deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID
+        deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey
     };
 })

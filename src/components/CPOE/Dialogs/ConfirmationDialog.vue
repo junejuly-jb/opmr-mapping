@@ -95,6 +95,12 @@ const handleUpdateFortifier = () => {
     mappingStore.updateFortifierDialog = true
 }
 
+const handleDeleteFortifier = () => {
+    mappingStore.toggleConfirmationDialog(false)
+    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
+    mappingStore.removeFortifier()
+}
+
 </script>
 <template>
     <v-dialog
@@ -148,6 +154,14 @@ const handleUpdateFortifier = () => {
             </v-btn>
             <v-btn @click="handleUpdateFortifier" color="success">
                 Update anyway
+            </v-btn>
+        </template>
+        <template v-else-if="mappingStore.confirmationDialogText.type === 'delete-fortifier-in-use'" v-slot:actions>
+            <v-btn @click="handleClose">
+                Cancel
+            </v-btn>
+            <v-btn @click="handleDeleteFortifier" color="error">
+                Delete Anyway
             </v-btn>
         </template>
         <template v-else v-slot:actions> 

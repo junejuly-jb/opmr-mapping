@@ -17,6 +17,19 @@
             mappingStore.updateFortifierDialog = true
         }
     }
+    
+    const deleteFortifier = () => {
+        mappingStore.deleteSelectedFortifierKey.mapping = props.mapping
+        mappingStore.deleteSelectedFortifierKey.c_index = props.c_index
+        mappingStore.deleteSelectedFortifierKey.index = props.index
+        
+        if(props.condition.isUsed) {
+            mappingStore.setConfirmationDialogText('delete-fortifier-in-use', 'Warning', 'The condition of the associated fortifier you selected is currently in use. Do you wish to continue?')
+            mappingStore.confirmationDialog = true
+        } else {
+            mappingStore.removeFortifier()
+        }
+    }
 
     const props = defineProps({
         fortifierkey: {
@@ -45,7 +58,7 @@
     <div class="opmr__chips">
         <span>
             <v-btn size="x-small" color="primary" variant="tonal" :icon="mdiPencil" @click="toggleUpdateFortifierDialog"></v-btn>
-            <v-btn class="mx-1" size="x-small" color="error" variant="tonal" :icon="mdiDelete" @click="mappingStore.removeFortifier(mapping, c_index, index)"></v-btn>
+            <v-btn class="mx-1" size="x-small" color="error" variant="tonal" :icon="mdiDelete" @click="deleteFortifier"></v-btn>
         </span>
         <span>
             <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>
