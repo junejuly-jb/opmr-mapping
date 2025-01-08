@@ -7,28 +7,6 @@
         mappingStore.updateFortifierKey()
         mappingStore.updateFortifierDialog = false
     }
-    const props = defineProps({
-        mapping: {
-            type: Object,
-            required: true
-        },
-        c_index: {
-            type: Number,
-            required: true
-        },
-        index:{
-            type: Number,
-            required: true
-        },
-        fortifierkey: {
-            type: Object,
-            required: true
-        },
-        condition: {
-            type: Object,
-            required: true
-        }
-    });
 
 </script>
 <template>

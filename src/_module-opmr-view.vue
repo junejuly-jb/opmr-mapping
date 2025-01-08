@@ -19,7 +19,7 @@
 <template>
   <div>
     <UpdateCondition/>
-    <UpdateFortifier :condition="condition" :mapping="mapping" :c_index="c_index" :index="index" :fortifierkey="fortifierkey"/>
+    <UpdateFortifier/>
     <Notification/>
     <FileUpload/>
     <div class="cpoe__heading">
