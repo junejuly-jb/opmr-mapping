@@ -1,10 +1,12 @@
 <script setup lang="ts">
-    import { useMappingStore } from '../../../stores/mappings';
+    import { inject } from 'vue';
+import { useMappingStore } from '../../../stores/mappings';
 
     const mappingStore = useMappingStore();
+    const user = inject('authUser');
     
     const handleUpdateFortifierKey = () => {
-        mappingStore.updateFortifierKey()
+        mappingStore.updateFortifierKey(user)
         mappingStore.updateFortifierDialog = false
     }
 

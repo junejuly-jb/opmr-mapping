@@ -12,7 +12,7 @@ export interface Conditions{
     isUsed: Boolean,
     user: User,
     isModular: Boolean
-    lastUpdate: Date | null
+    lastUpdate: Number | null
     FortifierKey: Array<FortifierKey>
 }
 

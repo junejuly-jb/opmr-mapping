@@ -1,10 +1,12 @@
 <script setup>
-    import { useMappingStore } from '../../../stores/mappings';
+    import { inject } from 'vue';
+import { useMappingStore } from '../../../stores/mappings';
 
     const mappingStore = useMappingStore();
+    const user = inject('authUser')
 
     const handleUpdateCondition = () => {
-        mappingStore.updateCondition()
+        mappingStore.updateCondition(user)
         mappingStore.updateConditionDialog = false
     }
 </script>

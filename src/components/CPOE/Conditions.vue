@@ -44,6 +44,17 @@ const toggleUpdateCondition = (mapping, condition, c_index) => {
     }
 }
 
+const formatDate = (str) => {
+    const date = new Date(str)
+
+    // Extract components
+    const month = date.getMonth() + 1; // Months are 0-based
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+}
+
 defineProps({
   condition: {
     type: Object,
@@ -88,6 +99,9 @@ defineProps({
                 <div v-for="(fortifierkey, index ) in condition.FortifierKey">
                     <Fortifiers :condition="condition" :index="index" :fortifierkey="fortifierkey" :c_index="c_index" :mapping="mapping"/>
                 </div>
+            </div>
+            <div v-if="condition.user.userID" class="mt-3">
+                <small>Updated by: {{ condition.user.userFirstName }} {{ condition.user.userLastName }} {{ formatDate(condition.lastUpdate) }}</small>
             </div>
         </div>
         <div class="is__used" v-if="condition.isUsed">Mapping is in use</div>

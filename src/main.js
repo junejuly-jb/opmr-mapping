@@ -12,7 +12,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 
 import App from './App.vue'
-const user = { userID: 1, userFirstName: 'June', userLastName: 'Aragoncillo' }
+const user = { userID: 1, userFirstName: 'Athlon', userLastName: 'Sparc' }
 
 const vuetify = createVuetify({
     components,

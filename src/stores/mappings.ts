@@ -254,20 +254,32 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[deleteSelectedFortifierKey.value.c_index].FortifierKey.splice(deleteSelectedFortifierKey.value.index, 1)
     }
 
-    const updateCondition = () => {
+    const updateCondition = (user) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedConditon.value.mapping.mappingId);
         mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].reference = mappings.value[mappingIndex].type == 'Feed Base' ? updateSelectedConditon.value.updatedMapping.reference : ''
         mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].referenceDID = getProductDID(updateSelectedConditon.value.updatedMapping.reference)
         mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].calories = serializeCalories(updateSelectedConditon.value.updatedMapping.calories)
         mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isModular = updateSelectedConditon.value.updatedMapping.isModular
+        if(mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isUsed){
+            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userID = user.userID
+            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userLastName = user.userLastName
+            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userFirstName = user.userFirstName
+            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].lastUpdate = Date.now()
+        }
     }
 
-    const updateFortifierKey = () => {
+    const updateFortifierKey = (user) => {
         const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedFortifierKey.value.mapping.mappingId);
         mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKey = updateSelectedFortifierKey.value.data.fortifierKey
         mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKeyDID = getProductDID(updateSelectedFortifierKey.value.data.fortifierKey)
         mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].calOzEnd = updateSelectedFortifierKey.value.data.calOzEnd
         mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].modular = updateSelectedFortifierKey.value.data.modular
+        if(mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].isUsed){
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userID = user.userID
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userFirstName = user.userFirstName
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userLastName = user.userLastName
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].lastUpdate = Date.now()
+        }
     }
 
     const serializeCalories = (cal) => {
