@@ -10,8 +10,9 @@ export interface Conditions{
     reference: String,
     referenceDID: Number | null,
     isUsed: Boolean,
-    userId: Number | null,
+    user: User,
     isModular: Boolean
+    lastUpdate: Date | null
     FortifierKey: Array<FortifierKey>
 }
 
@@ -21,4 +22,10 @@ export interface FortifierKey{
     calOzStart: Number | null,
     calOzEnd: Number | null,
     modular: Number | null
+}
+
+interface User {
+    userID: Number | null,
+    userFirstName: String,
+    userLastName: String
 }

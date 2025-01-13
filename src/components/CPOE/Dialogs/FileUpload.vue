@@ -89,8 +89,9 @@
                 reference: item[2],
                 referenceDID: mappingStore.getProductDID(item[2]),
                 isUsed: false,
-                userId: null,
+                user: { userID: null, userFirstName: "", userLastName: ""},
                 isModular: false,
+                lastUpdate: null,
                 FortifierKey: []
               }]
 
@@ -111,8 +112,9 @@
                 reference: item[2],
                 referenceDID: mappingStore.getProductDID(item[2]),
                 isUsed: false,
-                userId: null,
+                user: { userID: null, userFirstName: "", userLastName: ""},
                 isModular: false,
+                lastUpdate: null,
                 FortifierKey: []
               }
               sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
@@ -175,8 +177,9 @@
                 reference: '', //always blank if fortifier
                 referenceDID: null, //always blank if fortifier
                 isUsed: false,
-                userId: null,
+                user: { userID: null, userFirstName: "", userLastName: ""},
                 isModular: false,
+                lastUpdate: null,
                 FortifierKey: []
               }]
               if(item[2]){ //check Additive has value

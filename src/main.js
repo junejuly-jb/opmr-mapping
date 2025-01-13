@@ -12,6 +12,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 
 import App from './App.vue'
+const user = { userID: 1, userFirstName: 'June', userLastName: 'Aragoncillo' }
 
 const vuetify = createVuetify({
     components,
@@ -25,4 +26,4 @@ const vuetify = createVuetify({
 })
 const pinia = createPinia()
 
-createApp(App).use(vuetify).use(pinia).mount('#app')
+createApp(App).use(vuetify).use(pinia).provide('authUser', user).mount('#app')

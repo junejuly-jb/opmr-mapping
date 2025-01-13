@@ -231,8 +231,9 @@ export const useMappingStore = defineStore ('mappings', () => {
             reference: mappings.value[index].type == 'Feed Base' ? data.reference : '',
             referenceDID: getProductDID(data.reference),
             isUsed: data.isUsed,
-            userId: data.userId,
+            user: { userID: null, userFirstName: '', userLastName: '' },
             isModular: data.isModular,
+            lastUpdate: null,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
