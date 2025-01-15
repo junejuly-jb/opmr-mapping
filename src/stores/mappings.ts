@@ -239,9 +239,11 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const addFortifier = (data, c_index, mapping) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
-        data.fortifierKeyDID = getProductDID(data.fortifierKey)
-        mappings.value[mappingIndex].conditions[c_index].FortifierKey.push(data)
+        if(data.fortifierKey){
+            const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
+            data.fortifierKeyDID = getProductDID(data.fortifierKey)
+            mappings.value[mappingIndex].conditions[c_index].FortifierKey.push(data)
+        }
     }
 
     const toggleFileUploadDialog = () => {
@@ -268,16 +270,22 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const updateFortifierKey = (user) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedFortifierKey.value.mapping.mappingId);
-        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKey = updateSelectedFortifierKey.value.data.fortifierKey
-        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKeyDID = getProductDID(updateSelectedFortifierKey.value.data.fortifierKey)
-        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].calOzEnd = updateSelectedFortifierKey.value.data.calOzEnd
-        mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].modular = updateSelectedFortifierKey.value.data.modular
-        if(mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].isUsed){
-            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userID = user.userID
-            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userFirstName = user.userFirstName
-            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userLastName = user.userLastName
-            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].lastUpdate = Date.now()
+        if(!updateSelectedFortifierKey.value.data.fortifierKey || updateSelectedFortifierKey.value.data.fortifierKey == ''){
+            const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedFortifierKey.value.mapping.mappingId);
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey.splice(updateSelectedFortifierKey.value.index, 1)
+        }
+        else{
+            const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedFortifierKey.value.mapping.mappingId);
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKey = updateSelectedFortifierKey.value.data.fortifierKey
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].fortifierKeyDID = getProductDID(updateSelectedFortifierKey.value.data.fortifierKey)
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].calOzEnd = updateSelectedFortifierKey.value.data.calOzEnd
+            mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].FortifierKey[updateSelectedFortifierKey.value.index].modular = updateSelectedFortifierKey.value.data.modular
+            if(mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].isUsed){
+                mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userID = user.userID
+                mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userFirstName = user.userFirstName
+                mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].user.userLastName = user.userLastName
+                mappings.value[mappingIndex].conditions[updateSelectedFortifierKey.value.c_index].lastUpdate = Date.now()
+            }
         }
     }
 
