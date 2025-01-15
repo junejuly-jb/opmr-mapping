@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useMappingStore } from '../../../stores/mappings';
 import { mdiPlus } from '@mdi/js';
 
@@ -7,21 +7,34 @@ const mappingStore = useMappingStore();
 const calories = ref('')
 const reference = ref('WATER')
 const isModular = ref(false)
+const isEmptyProductReference = ref(false);
+const isEmptyReference = ref(false)
 
 const addCondition = (isActive, mapping) => {
     const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular, parent: mapping.mappingId}
-    mappingStore.addCondition(data)
-    isActive.value = false
-    calories.value = ''
-    reference.value = 'WATER'
-    isModular.value = false
+    if(mapping.type == 'Feed Base' && (data.reference == '' || !data.reference)){
+        isEmptyReference.value = true
+    }
+    else{
+        mappingStore.addCondition(data)
+        isActive.value = false
+        calories.value = ''
+        reference.value = 'WATER'
+        isModular.value = false
+    }
 }
-defineProps({
+const props = defineProps({
   mapping: {
     type: Object,
     required: true,
   }
 });
+
+watch(() => props.mapping.productReference,(newValue) => { isEmptyProductReference.value = !newValue; }, { immediate: true });
+watch(reference, () => {
+    isEmptyReference.value = false
+});
+
 </script>
 <template>
     <v-dialog max-width="650">
@@ -31,6 +44,7 @@ defineProps({
             :prepend-icon="mdiPlus"
             text="Condition"
             variant="plain"
+            :disabled="isEmptyProductReference"
             ></v-btn>
         </template>
 
@@ -42,7 +56,7 @@ defineProps({
                 <div v-if="mapping.type == 'Feed Base'">
                     <v-autocomplete
                         v-model="reference"
-                        label="Product Reference"
+                        label="Product"
                         item-value="formtypeHL7Reference" 
                         item-title="formtypeHL7Reference"
                         :items="mappingStore.products"
@@ -52,6 +66,13 @@ defineProps({
                     ></v-autocomplete>
                 </div>
                 <v-switch color="primary" v-model="isModular" inset :label="isModular ? 'Modular' : 'Non Modular'"></v-switch>
+                <v-alert
+                    v-if="isEmptyReference"
+                    text="Product field is required."
+                    type="error"
+                    density="compact"
+                    variant="tonal"
+                ></v-alert>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

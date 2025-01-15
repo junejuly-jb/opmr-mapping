@@ -224,7 +224,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
     const addCondition = (data) => {
-        console.log(data)
         const index = mappings.value.findIndex(obj => obj.mappingId === data.parent)
         const condition:Conditions = {
             calories: serializeCalories(data.calories),
@@ -283,11 +282,20 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const serializeCalories = (cal) => {
-        if(!cal) return [];
-        const arr = cal.split('-');
-        if(arr.length == 1) return [arr[0]];
-        const rangeArray = Array.from({ length: Number(arr[1]) - Number(arr[0]) + 1 }, (v, i) => Number(arr[0]) + i);
-        return rangeArray
+        if(cal){
+            const str = cal.toString()
+            if(str.includes("-")){
+                const arr = cal.split('-');
+                const rangeArray = Array.from({ length: Number(arr[1]) - Number(arr[0]) + 1 }, (v, i) => Number(arr[0]) + i);
+                return rangeArray;
+            }
+            else{
+                return [str]
+            }
+        }
+        else {
+            return [];
+        }
     }
 
     watch(searchTerm, (newValue, oldValue) => {

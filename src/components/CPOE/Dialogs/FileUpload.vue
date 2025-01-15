@@ -178,14 +178,14 @@
                 referenceDID: null, //always blank if fortifier
                 isUsed: false,
                 user: { userID: null, userFirstName: "", userLastName: ""},
-                isModular: false,
+                isModular: item[2],
                 lastUpdate: null,
                 FortifierKey: []
               }]
-              if(item[2]){ //check Additive has value
+              if(item[3]){ //check Additive has value
                 data.conditions[0].FortifierKey.push({
-                  "fortifierKey": item[2],
-                  "fortifierKeyDID": mappingStore.getProductDID(item[2]),
+                  "fortifierKey": item[3],
+                  "fortifierKeyDID": mappingStore.getProductDID(item[3]),
                   "calOzStart": null,
                   "calOzEnd": null,
                   "modular": null
@@ -194,10 +194,10 @@
               sampleMappings.value.push(data)
             }
             else if(!item[0] && !item[1]){ // if no feed-base reference on the 1st column and no caloric rule, check for additives
-              if(item[2]){
+              if(item[3]){
                 const fortifier = {
-                  fortifierKey: item[2],
-                  fortifierKeyDID: mappingStore.getProductDID(item[2]),
+                  fortifierKey: item[3],
+                  fortifierKeyDID: mappingStore.getProductDID(item[3]),
                   calOzStart: null,
                   calOzEnd: null,
                   modular: null
@@ -226,14 +226,14 @@
         }
       }
       //Check for product if name is not on the product load
-      if(data[2]){ // Applicable for Fortifier and Feed_Base sheets.
+      if(data[2] && type == 'Feed_Base'){ // Applicable for Feed_Base only.
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[2]);
         if(!isMatch){
           const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at C${row}(${type}).`)
         }
       }
-      if(type === 'Feed_Base' && data[3]){ //Applicable to Feed_Base additives only.
+      if(data[3]){ //Applicable to Feed_Base and Fortifiers.
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[3]);
         if(!isMatch){
           const row = parseInt(i) + 2;

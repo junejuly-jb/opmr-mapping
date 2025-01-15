@@ -58,7 +58,9 @@
     <div class="opmr__chips">
         <span>
             <v-btn size="x-small" color="primary" variant="tonal" :icon="mdiPencil" @click="toggleUpdateFortifierDialog"></v-btn>
-            <v-btn class="mx-1" size="x-small" color="error" variant="tonal" :icon="mdiDelete" @click="deleteFortifier"></v-btn>
+            <span class="mx-1"></span>
+            <v-btn v-if="!props.condition.isUsed" size="x-small" color="error" variant="tonal" :icon="mdiDelete" @click="deleteFortifier"></v-btn>
+            <span v-if="!props.condition.isUsed" class="mx-1"></span>
         </span>
         <span>
             <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>
