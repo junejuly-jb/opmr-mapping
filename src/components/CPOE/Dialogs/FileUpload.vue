@@ -100,7 +100,7 @@
                   "fortifierKey": item[3],
                   "fortifierKeyDID": mappingStore.getProductDID(item[3]),
                   "calOzStart": null,
-                  "calOzEnd": null,
+                  "calOzEnd": item[4],
                   "modular": null,
                 })
               }
@@ -124,7 +124,7 @@
                   fortifierKey: item[3],
                   fortifierKeyDID: mappingStore.getProductDID(item[3]),
                   calOzStart: null,
-                  calOzEnd: null,
+                  calOzEnd: item[4],
                   modular: null,
                 }
                 const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
@@ -136,7 +136,7 @@
                 fortifierKey: item[3],
                 fortifierKeyDID: mappingStore.getProductDID(item[3]),
                 calOzStart: null,
-                calOzEnd: null,
+                calOzEnd: item[4],
                 modular: null,
               }
               const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
