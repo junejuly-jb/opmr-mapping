@@ -1,4 +1,5 @@
 <script setup>
+import { watch } from 'vue'
 import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
 import AddCondition from './Dialogs/AddCondition.vue';
@@ -22,13 +23,22 @@ const handleRemoveMapping = (mapping) => {
     }
 }
 
-defineProps({
+
+
+const props = defineProps({
   mapping: {
     type: Object,
     required: true,
   },
   index: Number
 });
+
+watch(() => props.mapping.productReference, (newValue, oldValue) => {
+    if(newValue && newValue.toLowerCase().includes('breast milk')){
+        props.mapping.isBreastMilk = true
+    }
+})
+
 </script>
 <template>
     <div class="opmr__mapping_lists">

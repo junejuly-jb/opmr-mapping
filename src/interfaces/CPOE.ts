@@ -2,6 +2,7 @@ export interface CPOE{
     mappingId: Number,
     productReference: String,
     type: String,
+    isBreastMilk: Boolean,
     conditions: Array<Conditions>
 }
 

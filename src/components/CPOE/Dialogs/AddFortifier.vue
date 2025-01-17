@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import { FortifierKey } from '../../../interfaces/CPOE'
     import { useMappingStore } from '../../../stores/mappings';
     import { mdiPlus } from '@mdi/js';
@@ -7,21 +7,29 @@
     const mappingStore = useMappingStore();
     const fortifier = ref<FortifierKey>({
         fortifierKey: 'WATER',
-        fortifierKeyDID: null,
+        fortifierKeyDID: 0,
         calOzStart: null,
         calOzEnd: null,
         modular: null,
     });
+    const errMessage = ref('')
+
     const addFortifier = (c_index, mapping, isActive) => {
-        mappingStore.addFortifier(fortifier.value, c_index, mapping)
-        fortifier.value = {
-            fortifierKey: 'Water',
-            fortifierKeyDID: null,
-            calOzStart: null,
-            calOzEnd: null,
-            modular: null,
+        if(mapping.conditions[c_index].calories.includes(Number(fortifier.value.calOzEnd))){
+            mappingStore.addFortifier(fortifier.value, c_index, mapping)
+            fortifier.value = {
+                fortifierKey: 'Water',
+                fortifierKeyDID: null,
+                calOzStart: null,
+                calOzEnd: null,
+                modular: null,
+            }
+            errMessage.value = ''
+            isActive.value = false
         }
-        isActive.value = false
+        else {
+            errMessage.value = 'Calorie not in range.'
+        }
     }
     defineProps({
         c_index: {
@@ -52,6 +60,7 @@
             <v-card title="Add Fortifier Key">
             <v-spacer></v-spacer>
             <v-card-text>
+                <v-text-field v-if="mapping.type == 'Fortifier'" v-model="fortifier.calOzEnd" class="w-50" density="compact" label="Mix to Cal" variant="outlined" clearable/>
                 <v-autocomplete
                 v-model="fortifier.fortifierKey"
                 label="Fortifier Key"
@@ -61,6 +70,13 @@
                 variant="outlined"
                 clearable
                 ></v-autocomplete>
+                <v-alert
+                    v-if="errMessage != ''"
+                    :text="errMessage"
+                    type="error"
+                    density="compact"
+                    variant="tonal"
+                ></v-alert>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

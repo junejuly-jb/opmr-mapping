@@ -63,7 +63,7 @@
             <span v-if="!props.condition.isUsed" class="mx-1"></span>
         </span>
         <span>
-            <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}}</v-chip>
+            <v-chip size="small" variant="outlined">{{fortifierkey.fortifierKey}} <span v-if="fortifierkey.calOzEnd"> @ {{ fortifierkey.calOzEnd }}kcal</span></v-chip>
         </span>
     </div>
 </template>

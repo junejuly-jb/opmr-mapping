@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { inject } from 'vue';
-import { useMappingStore } from '../../../stores/mappings';
+    import { useMappingStore } from '../../../stores/mappings';
 
     const mappingStore = useMappingStore();
     const user = inject('authUser');
@@ -16,6 +16,7 @@ import { useMappingStore } from '../../../stores/mappings';
         <v-card title="Update Fortifier Key">
         <v-spacer></v-spacer>
         <v-card-text>
+            <v-text-field v-if="mappingStore.updateSelectedFortifierKey.mapping.type == 'Fortifier'" v-model="mappingStore.updateSelectedFortifierKey.data.calOzEnd" class="w-50" density="compact" label="Mix to Cal" variant="outlined" clearable/>
             <v-autocomplete
                 v-model="mappingStore.updateSelectedFortifierKey.data.fortifierKey"
                 label="Fortifier Key"
