@@ -15,10 +15,10 @@ import { useMappingStore } from '../../../stores/mappings';
         <v-card title="Update Product Mapping">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-text-field v-model="mappingStore.updateSelectedConditon.updatedMapping.calories" label="Caloric Range" variant="outlined"></v-text-field>
-                <div v-if="mappingStore.updateSelectedConditon.mapping.type == 'Feed Base'">
+                <v-text-field v-model="mappingStore.updateSelectedCondition.updatedMapping.calories" label="Caloric Range" variant="outlined"></v-text-field>
+                <div v-if="mappingStore.updateSelectedCondition.mapping.type == 'Feed Base'">
                     <v-autocomplete
-                    v-model="mappingStore.updateSelectedConditon.updatedMapping.reference"
+                    v-model="mappingStore.updateSelectedCondition.updatedMapping.reference"
                     label="Product Reference"
                     item-value="formtypeHL7Reference" 
                     item-title="formtypeHL7Reference"
@@ -28,7 +28,7 @@ import { useMappingStore } from '../../../stores/mappings';
                     :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
                     ></v-autocomplete>
                 </div>
-                <v-switch color="primary" v-model="mappingStore.updateSelectedConditon.updatedMapping.isModular" inset :label="mappingStore.updateSelectedConditon.updatedMapping.isModular ? 'Modular' : 'Non Modular'"></v-switch>
+                <v-switch v-if="!mappingStore.updateSelectedCondition.mapping.isBreastMilk" color="primary" v-model="mappingStore.updateSelectedCondition.updatedMapping.isModular" inset :label="mappingStore.updateSelectedCondition.updatedMapping.isModular ? 'Modular' : 'Non Modular'"></v-switch>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

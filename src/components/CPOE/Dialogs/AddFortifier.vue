@@ -15,7 +15,38 @@
     const errMessage = ref('')
 
     const addFortifier = (c_index, mapping, isActive) => {
-        if(mapping.conditions[c_index].calories.includes(Number(fortifier.value.calOzEnd))){
+        if(mapping.type === 'Fortifier'){ //if fortifier, check if the calozend is in range
+            if(!fortifier.value.calOzEnd){ // if null, add the fortifier directly
+                mappingStore.addFortifier(fortifier.value, c_index, mapping)
+                fortifier.value = {
+                    fortifierKey: 'Water',
+                    fortifierKeyDID: null,
+                    calOzStart: null,
+                    calOzEnd: null,
+                    modular: null,
+                }
+                errMessage.value = ''
+                isActive.value = false
+            }
+            else{ //check the calozend
+                if(mapping.conditions[c_index].calories.includes(Number(fortifier.value.calOzEnd))){ //check if calozend is in range
+                mappingStore.addFortifier(fortifier.value, c_index, mapping)
+                fortifier.value = {
+                    fortifierKey: 'Water',
+                    fortifierKeyDID: null,
+                    calOzStart: null,
+                    calOzEnd: null,
+                    modular: null,
+                }
+                    errMessage.value = ''
+                    isActive.value = false
+                }
+                else {
+                    errMessage.value = 'Calorie not in range.'
+                }
+            }
+        }
+        else {
             mappingStore.addFortifier(fortifier.value, c_index, mapping)
             fortifier.value = {
                 fortifierKey: 'Water',
@@ -27,9 +58,7 @@
             errMessage.value = ''
             isActive.value = false
         }
-        else {
-            errMessage.value = 'Calorie not in range.'
-        }
+        
     }
     defineProps({
         c_index: {
@@ -46,6 +75,7 @@
     <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
+            v-if="!mapping.isBreastMilk"
             v-bind="activatorProps"
             :prepend-icon="mdiPlus"
             text="Fortifier"

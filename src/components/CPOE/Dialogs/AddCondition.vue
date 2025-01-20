@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useMappingStore } from '../../../stores/mappings';
 import { mdiPlus } from '@mdi/js';
 
@@ -35,11 +35,18 @@ watch(reference, () => {
     isEmptyReference.value = false
 });
 
+const isMetWithCondition = computed(() => { //check if breastmilk is true and has only 1 condition.
+    return props.mapping.isBreastMilk === true && 
+        Array.isArray(props.mapping.conditions) && 
+        props.mapping.conditions.length > 0
+})
+
 </script>
 <template>
     <v-dialog max-width="650" persistent>
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
+            v-if="!isMetWithCondition"
             v-bind="activatorProps"
             :prepend-icon="mdiPlus"
             text="Condition"

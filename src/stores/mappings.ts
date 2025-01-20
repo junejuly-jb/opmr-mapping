@@ -18,7 +18,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const unSavedChanges = ref(false);
 
     //Selection for updating and deletion
-    const updateSelectedConditon = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
+    const updateSelectedCondition = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
     const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
     const deleteSelectedMapping = ref(0)
     const updateSelectedFortifierKey = ref({mapping: null, c_index: null, index: null, data: null})
@@ -259,16 +259,16 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const updateCondition = (user) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedConditon.value.mapping.mappingId);
-        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].reference = mappings.value[mappingIndex].type == 'Feed Base' ? updateSelectedConditon.value.updatedMapping.reference : ''
-        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].referenceDID = getProductDID(updateSelectedConditon.value.updatedMapping.reference)
-        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].calories = serializeCalories(updateSelectedConditon.value.updatedMapping.calories)
-        mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isModular = updateSelectedConditon.value.updatedMapping.isModular
-        if(mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].isUsed){
-            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userID = user.userID
-            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userLastName = user.userLastName
-            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].user.userFirstName = user.userFirstName
-            mappings.value[mappingIndex].conditions[updateSelectedConditon.value.conditionIndex].lastUpdate = Date.now()
+        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedCondition.value.mapping.mappingId);
+        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].reference = mappings.value[mappingIndex].type == 'Feed Base' ? updateSelectedCondition.value.updatedMapping.reference : ''
+        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].referenceDID = getProductDID(updateSelectedCondition.value.updatedMapping.reference)
+        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].calories = serializeCalories(updateSelectedCondition.value.updatedMapping.calories)
+        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].isModular = updateSelectedCondition.value.updatedMapping.isModular
+        if(mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].isUsed){
+            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userID = user.userID
+            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userLastName = user.userLastName
+            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userFirstName = user.userFirstName
+            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].lastUpdate = Date.now()
         }
     }
 
@@ -334,7 +334,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         isUpdated, checkForUnsavedMappings, confirmationDialog, confirmationDialogText, setConfirmationDialogText,
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
-        unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedConditon, deleteSelectedCondition,
+        unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey
     };
 })

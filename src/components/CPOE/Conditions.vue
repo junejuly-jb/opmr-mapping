@@ -23,17 +23,17 @@ const handleRemoveCondition = (mapping, c_index, condition) => {
 }
 
 const toggleUpdateCondition = (mapping, condition, c_index) => {
-    mappingStore.updateSelectedConditon.mapping = JSON.parse(JSON.stringify(mapping))
-    mappingStore.updateSelectedConditon.updatedMapping = JSON.parse(JSON.stringify(condition))
-    mappingStore.updateSelectedConditon.conditionIndex = c_index
+    mappingStore.updateSelectedCondition.mapping = JSON.parse(JSON.stringify(mapping))
+    mappingStore.updateSelectedCondition.updatedMapping = JSON.parse(JSON.stringify(condition))
+    mappingStore.updateSelectedCondition.conditionIndex = c_index
     if(condition.calories.length == 0){
-        mappingStore.updateSelectedConditon.updatedMapping.calories = ''
+        mappingStore.updateSelectedCondition.updatedMapping.calories = ''
     }
     else if (condition.calories.length == 1) {
-        mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0]
+        mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0]
     }
     else {
-        mappingStore.updateSelectedConditon.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
+        mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
     }
 
     if(!condition.isUsed){
