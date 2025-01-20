@@ -37,7 +37,7 @@ watch(reference, () => {
 
 </script>
 <template>
-    <v-dialog max-width="650">
+    <v-dialog max-width="650" persistent>
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
             v-bind="activatorProps"
@@ -65,7 +65,7 @@ watch(reference, () => {
                         clearable
                     ></v-autocomplete>
                 </div>
-                <v-switch color="primary" v-model="isModular" inset :label="isModular ? 'Modular' : 'Non Modular'"></v-switch>
+                <v-switch v-if="!props.mapping.isBreastMilk" color="primary" v-model="isModular" inset :label="isModular ? 'Modular' : 'Non Modular'"></v-switch>
                 <v-alert
                     v-if="isEmptyReference"
                     text="Product field is required."

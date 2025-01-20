@@ -48,7 +48,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const getProductDID = (productName) => {
         const result = products.value.find(product => product.formtypeHL7Reference === productName);
         if(result){
-            return result.formtypeID
+            return Number(result.formtypeID)
         } else {
             return null;
         }
@@ -68,9 +68,10 @@ export const useMappingStore = defineStore ('mappings', () => {
 
     const generateId = () => {
         if(mappings.value.length > 0){
-            const lastMapping = mappings.value[mappings.value.length - 1]
-            const lastId = Number(lastMapping.mappingId)
-            return lastId + 1;
+            var largestID = mappings.value.reduce((max, item) => {
+                return Number(item.mappingId) > max ? item.mappingId : max;
+            }, 0);
+            return largestID + 1
         }
         return 1;
     }

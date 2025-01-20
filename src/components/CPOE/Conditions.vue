@@ -83,12 +83,12 @@ defineProps({
                 </div>
             </div>
             <div>
-                Reference: {{mapping.type == 'Feed Base' ? condition.reference : 'Feed Base Dependent'}}
+                Product Reference: {{mapping.type == 'Feed Base' ? condition.reference : 'Feed Base Dependent'}}
             </div>
             <div>
                 Caloric Range: {{getCalories(condition.calories)}}
             </div>
-            <div>
+            <div v-if="!mapping.isBreastMilk">
                 Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
             </div>
             <div v-if="condition.calories.length != 0">

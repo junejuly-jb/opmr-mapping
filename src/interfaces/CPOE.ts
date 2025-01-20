@@ -1,5 +1,5 @@
 export interface CPOE{
-    mappingId: Number,
+    mappingId: number,
     productReference: String,
     type: String,
     isBreastMilk: Boolean,
@@ -7,26 +7,26 @@ export interface CPOE{
 }
 
 export interface Conditions{
-    calories: Array<Number>,
+    calories: Array<number>,
     reference: String,
-    referenceDID: Number | null,
+    referenceDID: number | null,
     isUsed: Boolean,
     user: User,
     isModular: Boolean
-    lastUpdate: Number | null
+    lastUpdate: number | null
     FortifierKey: Array<FortifierKey>
 }
 
 export interface FortifierKey{
     fortifierKey: String | null,
-    fortifierKeyDID: Number | null,
-    calOzStart: Number | null,
-    calOzEnd: Number | null,
-    modular: Number | null
+    fortifierKeyDID: number | null,
+    calOzStart: number | null,
+    calOzEnd: number | null,
+    modular: number | null
 }
 
 interface User {
-    userID: Number | null,
+    userID: number | null,
     userFirstName: String,
     userLastName: String
 }

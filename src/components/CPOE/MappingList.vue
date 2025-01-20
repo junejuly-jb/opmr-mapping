@@ -80,7 +80,7 @@ watch(() => props.mapping.productReference, (newValue, oldValue) => {
         <div class="col-1">
             <div>
                 <v-chip class="my-3">{{mapping.type}}</v-chip>
-                <v-text-field width="300" v-model="mapping.productReference" density="compact" label="Product Reference" variant="outlined" clearable></v-text-field>
+                <v-text-field width="300" v-model="mapping.productReference" density="compact" label="HL7 Reference" variant="outlined" clearable></v-text-field>
             </div>
         </div>
         <div class="col-2">
