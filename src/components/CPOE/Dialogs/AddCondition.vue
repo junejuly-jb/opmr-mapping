@@ -18,7 +18,7 @@ const isEmptyProductReference = ref(false);
 const isEmptyReference = ref(false)
 
 const addCondition = (isActive, mapping) => {
-    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular, parent: mapping.mappingId}
+    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular.value, parent: mapping.mappingId}
     if(mapping.type == 'Feed Base' && (data.reference == '' || !data.reference)){
         isEmptyReference.value = true
     }

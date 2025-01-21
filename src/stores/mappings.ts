@@ -244,7 +244,6 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const addFortifier = (data, c_index, mapping) => {
-        console.log(data)
         if(data.fortifierKey){
             const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === mapping.mappingId);
             data.fortifierKeyDID = getProductDID(data.fortifierKey)

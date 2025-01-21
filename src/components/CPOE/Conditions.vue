@@ -91,7 +91,7 @@ defineProps({
             <div v-if="!mapping.isBreastMilk">
                 Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
             </div>
-            <div v-if="condition.calories.length != 0">
+            <div>
                 <AddFortifier :c_index="c_index" :mapping="mapping"/>
             </div>
             <div class="spacer-v"></div>
