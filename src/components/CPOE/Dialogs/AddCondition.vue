@@ -3,9 +3,16 @@ import { computed, ref, watch } from 'vue';
 import { useMappingStore } from '../../../stores/mappings';
 import { mdiPlus } from '@mdi/js';
 
+const props = defineProps({
+  mapping: {
+    type: Object,
+    required: true,
+  }
+});
+
 const mappingStore = useMappingStore();
 const calories = ref('')
-const reference = ref('WATER')
+const reference = ref('')
 const isModular = ref(false)
 const isEmptyProductReference = ref(false);
 const isEmptyReference = ref(false)
@@ -23,18 +30,24 @@ const addCondition = (isActive, mapping) => {
         isModular.value = false
     }
 }
-const props = defineProps({
-  mapping: {
-    type: Object,
-    required: true,
-  }
-});
 
-watch(() => props.mapping.productReference,(newValue) => { isEmptyProductReference.value = !newValue; }, { immediate: true });
+
+watch(() => props.mapping.productReference,(newValue) => { 
+        isEmptyProductReference.value = !newValue; 
+    }, 
+    { immediate: true });
+
 watch(reference, () => {
     isEmptyReference.value = false
 });
 
+watch(() => props.mapping.isBreastMilk, (newValue) => {
+    if(newValue) {
+        reference.value = mappingStore.bmTypes[0].formtypeHL7Reference
+    } else {
+        reference.value = mappingStore.products[0].formtypeHL7Reference
+    }
+}, { immediate: true })
 const isMetWithCondition = computed(() => { //check if breastmilk is true and has only 1 condition.
     return props.mapping.isBreastMilk === true && 
         Array.isArray(props.mapping.conditions) && 
@@ -66,7 +79,7 @@ const isMetWithCondition = computed(() => { //check if breastmilk is true and ha
                         label="Product"
                         item-value="formtypeHL7Reference" 
                         item-title="formtypeHL7Reference"
-                        :items="mappingStore.products"
+                        :items="props.mapping.isBreastMilk ? mappingStore.bmTypes : mappingStore.products"
                         variant="outlined"
                         :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
                         clearable

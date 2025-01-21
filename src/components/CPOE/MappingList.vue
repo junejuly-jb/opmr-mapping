@@ -34,8 +34,11 @@ const props = defineProps({
 });
 
 watch(() => props.mapping.productReference, (newValue, oldValue) => {
-    if(newValue && newValue.toLowerCase().includes('breast milk')){
+    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase())){
         props.mapping.isBreastMilk = true
+    }
+    else {
+        props.mapping.isBreastMilk = false
     }
 })
 

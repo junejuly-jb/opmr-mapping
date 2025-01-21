@@ -84,6 +84,7 @@
               data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Feed Base'
+              data.isBreastMilk = checkIfBreastMilk(item[0])
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[2],
@@ -219,6 +220,7 @@
     }
 
     const checkForErrors = (data, i, type) => {
+      const filters = ['ehm','ebm','dbm','dhm'];
       if(data[1]){ //Check for invalid caloric rule
         if(!checkCaloricFormat(data[1])){
           const row = parseInt(i) + 2;
@@ -227,14 +229,14 @@
       }
       //Check for product if name is not on the product load
       if(data[2] && type == 'Feed_Base'){ // Applicable for Feed_Base only.
-        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[2]);
-        if(!isMatch){
+        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[2].toLowerCase());
+        if(!isMatch && !filters.includes(data[2].toLowerCase())){ //not product match and ebm and dbm
           const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at C${row}(${type}).`)
         }
       }
       if(data[3]){ //Applicable to Feed_Base and Fortifiers.
-        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference === data[3]);
+        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase());
         if(!isMatch){
           const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at D${row}(${type}).`)
@@ -242,6 +244,12 @@
       }
     }
 
+    const checkIfBreastMilk = (data) => {
+      if(mappingStore.globalFiltersForBM.includes(data.toLowerCase())){
+        return true;
+      }
+      return false;
+    }
     const setEmptyMapping = () => {
       sampleMappings.value = []
       isDoneLoading.value = false

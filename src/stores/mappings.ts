@@ -9,6 +9,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])
     const forRefMapping = ref<String>('')
     const products = ref<Array<Products>>([])
+    const bmTypes = ref<Array<Products>>([])
     const searchTerm = ref('');
     const currentPage = ref(1);
     const itemsPerPage = ref(5);
@@ -16,6 +17,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
+    const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"]
 
     //Selection for updating and deletion
     const updateSelectedCondition = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
@@ -117,6 +119,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             const data = await OPMRServices.getProducts();
             if(data.data.success){
                 products.value = data.data.data
+                bmTypes.value = data.data.bmType
                 const id = Date.now()
                 addNotifs(id, 'Products loaded successfully.', 'success')
                 setTimeout(() => {
@@ -335,6 +338,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         toggleConfirmationDialog, setBulkMapping, mergeMappings, setCurrentPage, serializeCalories,
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
-        deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey
+        deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
+        globalFiltersForBM
     };
 })

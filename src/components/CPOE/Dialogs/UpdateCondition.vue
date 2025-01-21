@@ -22,7 +22,7 @@ import { useMappingStore } from '../../../stores/mappings';
                     label="Product Reference"
                     item-value="formtypeHL7Reference" 
                     item-title="formtypeHL7Reference"
-                    :items="mappingStore.products"
+                    :items="!mappingStore.updateSelectedCondition.mapping.isBreastMilk ? mappingStore.products : mappingStore.bmTypes"
                     variant="outlined"
                     clearable
                     :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
