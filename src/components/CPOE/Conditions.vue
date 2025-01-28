@@ -91,6 +91,9 @@ defineProps({
             <div v-if="!mapping.isBreastMilk">
                 Is Modular: {{condition.isModular ? 'Yes' : 'No'}}
             </div>
+            <div v-if="mapping.isBreastMilk && condition.milktype && mappingStore.useMilkTypes">
+                Milk Type: {{ condition.milktype }}
+            </div>
             <div>
                 <AddFortifier :c_index="c_index" :mapping="mapping"/>
             </div>
