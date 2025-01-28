@@ -20,7 +20,7 @@ const milkType = ref('')
 const caloricItem = ref([])
 
 const addCondition = (isActive, mapping) => {
-    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular.value, parent: mapping.mappingId, milktype: milkType.value}
+    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular.value, parent: mapping.mappingId, milktype: props.mapping.isBreastMilk ? milkType.value : null}
     if(mapping.type == 'Feed Base' && (data.reference == '' || !data.reference)){
         isEmptyReference.value = true
     }
