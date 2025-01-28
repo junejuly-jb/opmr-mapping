@@ -12,8 +12,9 @@ export interface Conditions{
     referenceDID: number | null,
     isUsed: Boolean,
     user: User,
-    isModular: Boolean
-    lastUpdate: number | null
+    isModular: Boolean,
+    lastUpdate: number | null,
+    milktype: String | null,
     FortifierKey: Array<FortifierKey>
 }
 

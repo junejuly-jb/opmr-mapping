@@ -75,7 +75,7 @@
 
         //check for caloric errorrs.
         sheetData.forEach((item, index) => {
-          checkForErrors(item, index, 'Feed_Base')
+          checkForErrors(item, index, 'Feed_Base', [])
         })
         if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
@@ -87,21 +87,22 @@
               data.isBreastMilk = checkIfBreastMilk(item[0])
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
-                reference: item[2],
-                referenceDID: mappingStore.getProductDID(item[2]),
+                reference: item[3],
+                referenceDID: mappingStore.getProductDID(item[3]),
                 isUsed: false,
                 user: { userID: null, userFirstName: "", userLastName: ""},
                 isModular: false,
                 lastUpdate: null,
+                milktype: item[2],
                 FortifierKey: []
               }]
 
-              if(item[3]){ // check if the condition has fortifier associated if yes, add the fortifierkey
+              if(item[4]){ // check if the condition has fortifier associated if yes, add the fortifierkey
                 data.conditions[0].FortifierKey.push({
-                  "fortifierKey": item[3],
-                  "fortifierKeyDID": mappingStore.getProductDID(item[3]),
+                  "fortifierKey": item[4],
+                  "fortifierKeyDID": mappingStore.getProductDID(item[4]),
                   "calOzStart": null,
-                  "calOzEnd": item[4],
+                  "calOzEnd": item[5],
                   "modular": null,
                 })
               }
@@ -110,34 +111,35 @@
             else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
               const condition = {
                 calories: mappingStore.serializeCalories(item[1]),
-                reference: item[2],
-                referenceDID: mappingStore.getProductDID(item[2]),
+                reference: item[3],
+                referenceDID: mappingStore.getProductDID(item[3]),
                 isUsed: false,
                 user: { userID: null, userFirstName: "", userLastName: ""},
                 isModular: false,
                 lastUpdate: null,
+                milktype: item[2],
                 FortifierKey: []
               }
               sampleMappings.value[sampleMappings.value.length - 1].conditions.push(condition)
 
-              if(item[3]){ //add fortifierkey if column is not null
+              if(item[4]){ //add fortifierkey if column is not null
                 const fortifier = {
-                  fortifierKey: item[3],
-                  fortifierKeyDID: mappingStore.getProductDID(item[3]),
+                  fortifierKey: item[4],
+                  fortifierKeyDID: mappingStore.getProductDID(item[4]),
                   calOzStart: null,
-                  calOzEnd: item[4],
+                  calOzEnd: item[5],
                   modular: null,
                 }
                 const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
                 lastMapping.conditions[lastMapping.conditions.length - 1].FortifierKey.push(fortifier)
               }
             }
-            else if(!item[0] && !item[1] && !item[2] && item[3]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
+            else if(!item[0] && !item[1] && !item[3] && item[4]){ //check if product reference, caloric range and product is null (insert the additive to the last mapping on the last condition)
               const fortifier = {
-                fortifierKey: item[3],
-                fortifierKeyDID: mappingStore.getProductDID(item[3]),
+                fortifierKey: item[4],
+                fortifierKeyDID: mappingStore.getProductDID(item[4]),
                 calOzStart: null,
-                calOzEnd: item[4],
+                calOzEnd: item[5],
                 modular: null,
               }
               const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
@@ -163,8 +165,13 @@
         sheetData = sheetData.slice(1)
 
         //check for caloric errorrs.
+        var fortifierLastCaloricRange = []
         sheetData.forEach((item, index) => {
-          checkForErrors(item, index, 'Fortifier')
+          //get last caloric range value from fortifier tab
+          if(item[1]){
+            fortifierLastCaloricRange = mappingStore.serializeCalories(item[1])
+          }
+          checkForErrors(item, index, 'Fortifier', fortifierLastCaloricRange)
         })
         if(errors.value.length < 1){
           sheetData.forEach((item, index) => {
@@ -188,7 +195,7 @@
                   "fortifierKey": item[3],
                   "fortifierKeyDID": mappingStore.getProductDID(item[3]),
                   "calOzStart": null,
-                  "calOzEnd": null,
+                  "calOzEnd": item[4],
                   "modular": null
                 })
               }
@@ -200,7 +207,7 @@
                   fortifierKey: item[3],
                   fortifierKeyDID: mappingStore.getProductDID(item[3]),
                   calOzStart: null,
-                  calOzEnd: null,
+                  calOzEnd: item[4],
                   modular: null
                 }
                 const lastMapping = sampleMappings.value[sampleMappings.value.length - 1]
@@ -219,7 +226,7 @@
       return regex.test(str);
     }
 
-    const checkForErrors = (data, i, type) => {
+    const checkForErrors = (data, i, type, fortifierLastCaloricRange) => {
       const filters = ['ehm','ebm','dbm','dhm'];
       if(data[1]){ //Check for invalid caloric rule
         if(!checkCaloricFormat(data[1])){
@@ -228,18 +235,33 @@
         }
       }
       //Check for product if name is not on the product load
-      if(data[2] && type == 'Feed_Base'){ // Applicable for Feed_Base only.
-        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[2].toLowerCase());
-        if(!isMatch && !filters.includes(data[2].toLowerCase())){ //not product match and ebm and dbm
-          const row = parseInt(i) + 2;
-          errors.value.push(`Product name not found at C${row}(${type}).`)
-        }
-      }
-      if(data[3]){ //Applicable to Feed_Base and Fortifiers.
+      if(data[3]){ // Applicable for Feed_Base only.
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase());
-        if(!isMatch){
+        if(!isMatch && !filters.includes(data[3].toLowerCase())){ //not product match and ebm and dbm
           const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at D${row}(${type}).`)
+        }
+      }
+      if(data[4] && type == 'Feed_Base'){ //Applicable to Feed_Base check if product is on the product load.
+        const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[4].toLowerCase());
+        if(!isMatch){
+          const row = parseInt(i) + 2;
+          errors.value.push(`Product name not found at E${row}(${type}).`)
+        }
+      }
+      if(type == 'Feed_Base' && data[2]){ //Check Milk Type Exists on milktypes array Applicable on FeedBase Only
+        const isMatch = mappingStore.milktypes.some(obj => obj.milktypeName.toLowerCase() === data[2].toLowerCase());
+        if(!isMatch){
+          const row = parseInt(i) + 2;
+          errors.value.push(`Milk type name not found at C${row}(${type}).`)
+        }
+      }
+      //check if mix to cal is in range of fortifier caloric value (fortifier tab only!!!)
+      if(type == 'Fortifier' && data[4]){
+        const inRange = fortifierLastCaloricRange.includes(data[4])
+        if(!inRange){
+          const row = parseInt(i) + 2;
+          errors.value.push(`Mix to cal not in range at E${row}(${type})`)
         }
       }
     }

@@ -15,5 +15,8 @@ export default {
         return apiClient.post('/api/customer/interoperability/save-mappings', payload, {
             headers: { "Content-Type": "application/json" }
         })
+    },
+    getMilktypes(){
+        return apiClient.get('/api/customer/interoperability/get-milktypes');
     }
 }

@@ -1,13 +1,27 @@
 <script setup lang="ts">
-    import { inject } from 'vue';
+    import { inject, ref } from 'vue';
     import { useMappingStore } from '../../../stores/mappings';
 
     const mappingStore = useMappingStore();
     const user = inject('authUser');
+    const errMessage = ref('');
     
     const handleUpdateFortifierKey = () => {
-        mappingStore.updateFortifierKey(user)
-        mappingStore.updateFortifierDialog = false
+        //Check if type is fortifier else feed base
+        if(mappingStore.updateSelectedFortifierKey.mapping.type == 'Fortifier'){
+            const c_index = mappingStore.updateSelectedFortifierKey.c_index
+            if(mappingStore.updateSelectedFortifierKey.mapping.conditions[c_index].calories.includes(Number(mappingStore.updateSelectedFortifierKey.data.calOzEnd))){
+                mappingStore.updateFortifierKey(user)
+                mappingStore.updateFortifierDialog = false
+            }
+            else {
+                errMessage.value = 'Calorie not in range.'
+            }
+        }
+        else {
+            mappingStore.updateFortifierKey(user)
+            mappingStore.updateFortifierDialog = false
+        }
     }
 
 </script>
@@ -16,7 +30,7 @@
         <v-card title="Update Fortifier Key">
         <v-spacer></v-spacer>
         <v-card-text>
-            <v-text-field v-if="mappingStore.updateSelectedFortifierKey.mapping.type == 'Fortifier'" v-model="mappingStore.updateSelectedFortifierKey.data.calOzEnd" class="w-50" density="compact" label="Mix to Cal" variant="outlined" clearable/>
+            <v-text-field v-model="mappingStore.updateSelectedFortifierKey.data.calOzEnd" label="Mix to Cal" variant="outlined" clearable/>
             <v-autocomplete
                 v-model="mappingStore.updateSelectedFortifierKey.data.fortifierKey"
                 label="Fortifier Key"
@@ -26,6 +40,13 @@
                 variant="outlined"
                 clearable
             ></v-autocomplete>
+            <v-alert
+                v-if="errMessage != ''"
+                :text="errMessage"
+                type="error"
+                density="compact"
+                variant="tonal"
+            ></v-alert>
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>

@@ -75,7 +75,6 @@
     <v-dialog max-width="650">
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
-            v-if="!mapping.isBreastMilk"
             v-bind="activatorProps"
             :prepend-icon="mdiPlus"
             text="Fortifier"
@@ -90,7 +89,7 @@
             <v-card title="Add Fortifier Key">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-text-field v-if="mapping.type == 'Fortifier'" v-model="fortifier.calOzEnd" class="w-50" density="compact" label="Mix to Cal" variant="outlined" clearable/>
+                <v-text-field v-model="fortifier.calOzEnd" label="Mix to Cal" variant="outlined" clearable/>
                 <v-autocomplete
                 v-model="fortifier.fortifierKey"
                 label="Fortifier Key"

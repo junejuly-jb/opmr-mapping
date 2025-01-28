@@ -16,9 +16,11 @@ const reference = ref('')
 const isModular = ref(false)
 const isEmptyProductReference = ref(false);
 const isEmptyReference = ref(false)
+const milkType = ref('')
+const caloricItem = ref([])
 
 const addCondition = (isActive, mapping) => {
-    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular.value, parent: mapping.mappingId}
+    const data = { calories: calories.value, reference: reference.value, isUsed: false, userId: null, isModular: isModular.value, parent: mapping.mappingId, milktype: milkType.value}
     if(mapping.type == 'Feed Base' && (data.reference == '' || !data.reference)){
         isEmptyReference.value = true
     }
@@ -48,6 +50,18 @@ watch(() => props.mapping.isBreastMilk, (newValue) => {
         reference.value = mappingStore.products[0].formtypeHL7Reference
     }
 }, { immediate: true })
+
+watch(milkType, (newValue) => {
+    const milktype = mappingStore.milktypes.find(item => item.milktypeName === newValue);
+    if(milktype && props.mapping.isBreastMilk){
+        caloricItem.value = milktype.milktypeCaloricRange
+        calories.value = milktype.milktypeCaloricRange[0]
+    }
+    else {
+        calories.value = ''
+    }
+}, {immediate: true})
+
 const isMetWithCondition = computed(() => { //check if breastmilk is true and has only 1 condition.
     return props.mapping.isBreastMilk === true && 
         Array.isArray(props.mapping.conditions) && 
@@ -69,10 +83,32 @@ const isMetWithCondition = computed(() => { //check if breastmilk is true and ha
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card title="Set Product Mapping">
+            <v-card title="Set Mapping Condition">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-text-field v-model="calories" label="Caloric Range" variant="outlined"></v-text-field>
+                <v-autocomplete
+                    v-if="mappingStore.useMilkTypes && props.mapping.isBreastMilk"
+                    v-model="milkType"
+                    label="Milk Type"
+                    item-value="milktypeName" 
+                    item-title="milktypeName"
+                    :items="mappingStore.milktypes"
+                    variant="outlined"
+                    :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
+                    clearable
+                ></v-autocomplete>
+                <v-autocomplete
+                    v-if="mappingStore.useMilkTypes && props.mapping.isBreastMilk"
+                    v-model="calories"
+                    label="Calorie"
+                    item-value="caloricItem" 
+                    item-title="caloricItem"
+                    :items="caloricItem"
+                    variant="outlined"
+                    :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
+                    clearable
+                ></v-autocomplete>
+                <v-text-field v-else v-model="calories" label="Caloric Range" variant="outlined"></v-text-field>
                 <div v-if="mapping.type == 'Feed Base'">
                     <v-autocomplete
                         v-model="reference"

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { type CPOE, type Conditions } from '../interfaces/CPOE'
 import { type Products } from '../interfaces/Products';
 import { type Notification } from '../interfaces/Notification';
+import { type Milktype } from '../interfaces/Milktype'
 import OPMRServices from '../services/OPMRServices';
 
 export const useMappingStore = defineStore ('mappings', () => {
@@ -18,6 +19,8 @@ export const useMappingStore = defineStore ('mappings', () => {
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
     const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"]
+    const milktypes = ref<Array<Milktype>>([])
+    const useMilkTypes = ref(false)
 
     //Selection for updating and deletion
     const updateSelectedCondition = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
@@ -134,6 +137,33 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
         
     }
+
+    const getMilktypes = async () => {
+        try {
+            const data = await OPMRServices.getMilktypes();
+            if(data.data.success){
+                useMilkTypes.value = data.data.useMilktype
+                data.data.milkTypes.forEach(element => {
+                    const start = Number(element.start);
+                    const end = Number(element.end);
+                    if (!isNaN(start) && !isNaN(end)) {
+                        const milktype: Milktype = {
+                            milktypeID: element.milktypeID,
+                            milktypeName: element.milktypeName,
+                            milktypeCaloricRange: Array.from({ length: end - start + 1 }, (_, i) => start + i),
+                        };
+                        milktypes.value.push(milktype)
+                    }
+                });
+            }
+            else {
+                addNotifs(Date.now(), 'Unable to retrieve Milk Types.', 'error')
+            }
+        } catch (error) {
+            addNotifs(Date.now(), 'Unable to retrieve Milk Types.', 'error')
+        }
+    }
+
     const setCurrentPage = (val) => {
         currentPage.value = val
     }
@@ -238,6 +268,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             user: { userID: null, userFirstName: '', userLastName: '' },
             isModular: data.isModular,
             lastUpdate: null,
+            milktype: data.milktype,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
@@ -338,6 +369,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
-        globalFiltersForBM
+        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes
     };
 })

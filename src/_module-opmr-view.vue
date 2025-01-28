@@ -13,6 +13,7 @@
   onMounted(() => { 
     mappingStore.getMappings()
     mappingStore.getProducts()
+    mappingStore.getMilktypes()
   })
 </script>
 
