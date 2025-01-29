@@ -1,5 +1,5 @@
 export interface Milktype{
     milktypeID: number,
-    milktypeName: String,
+    milktypeName: string,
     milktypeCaloricRange: Array<number>,
 }
