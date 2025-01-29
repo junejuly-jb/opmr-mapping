@@ -10,12 +10,18 @@
         //Check if type is fortifier else feed base
         if(mappingStore.updateSelectedFortifierKey.mapping.type == 'Fortifier'){
             const c_index = mappingStore.updateSelectedFortifierKey.c_index
-            if(mappingStore.updateSelectedFortifierKey.mapping.conditions[c_index].calories.includes(Number(mappingStore.updateSelectedFortifierKey.data.calOzEnd))){
+            if(!mappingStore.updateSelectedFortifierKey.data.calOzEnd){
                 mappingStore.updateFortifierKey(user)
                 mappingStore.updateFortifierDialog = false
             }
             else {
-                errMessage.value = 'Calorie not in range.'
+                if(mappingStore.updateSelectedFortifierKey.mapping.conditions[c_index].calories.includes(Number(mappingStore.updateSelectedFortifierKey.data.calOzEnd))){
+                    mappingStore.updateFortifierKey(user)
+                    mappingStore.updateFortifierDialog = false
+                }
+                else {
+                    errMessage.value = 'Calorie not in range.'
+                }
             }
         }
         else {

@@ -22,12 +22,21 @@ export const useMappingStore = defineStore ('mappings', () => {
     const milktypes = ref<Array<Milktype>>([])
     const useMilkTypes = ref(false)
 
+    //Constant initialize empty mapping
+    const emptyMap = ref<CPOE>({
+        mappingId: -1,
+        productReference: "",
+        type: "",
+        isBreastMilk: false,
+        conditions: []
+    });
+
     //Selection for updating and deletion
-    const updateSelectedCondition = ref({ mapping: null, updatedMapping: null, conditionIndex: null})
-    const deleteSelectedCondition = ref({ mapping: null, conditionIndex: null})
+    const updateSelectedCondition = ref({ mapping: emptyMap, updatedMapping: null, conditionIndex: -1})
+    const deleteSelectedCondition = ref({ mapping: emptyMap, conditionIndex: -1})
     const deleteSelectedMapping = ref(0)
-    const updateSelectedFortifierKey = ref({mapping: null, c_index: null, index: null, data: null})
-    const deleteSelectedFortifierKey = ref({mapping: null, c_index: null, index: null})
+    const updateSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1, data: null})
+    const deleteSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1})
 
     //Dialogs
     const fileUploadDialog = ref(false)
@@ -143,18 +152,20 @@ export const useMappingStore = defineStore ('mappings', () => {
             const data = await OPMRServices.getMilktypes();
             if(data.data.success){
                 useMilkTypes.value = data.data.useMilktype
-                data.data.milktypes.forEach(element => {
-                    const start = Number(element.start);
-                    const end = Number(element.end);
-                    if (!isNaN(start) && !isNaN(end)) {
-                        const milktype: Milktype = {
-                            milktypeID: element.milktypeID,
-                            milktypeName: element.milktypeName,
-                            milktypeCaloricRange: Array.from({ length: end - start + 1 }, (_, i) => start + i),
-                        };
-                        milktypes.value.push(milktype)
-                    }
-                });
+                if(data.data.useMilktype){
+                    data.data.milktypes.forEach(element => {
+                        const start = Number(element.start);
+                        const end = Number(element.end);
+                        if (!isNaN(start) && !isNaN(end)) {
+                            const milktype: Milktype = {
+                                milktypeID: element.milktypeID,
+                                milktypeName: element.milktypeName,
+                                milktypeCaloricRange: Array.from({ length: end - start + 1 }, (_, i) => start + i),
+                            };
+                            milktypes.value.push(milktype)
+                        }
+                    });
+                }
             }
             else {
                 addNotifs(Date.now(), 'Unable to retrieve Milk Types.', 'error')
