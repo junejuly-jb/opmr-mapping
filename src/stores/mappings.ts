@@ -143,7 +143,7 @@ export const useMappingStore = defineStore ('mappings', () => {
             const data = await OPMRServices.getMilktypes();
             if(data.data.success){
                 useMilkTypes.value = data.data.useMilktype
-                data.data.milkTypes.forEach(element => {
+                data.data.milktypes.forEach(element => {
                     const start = Number(element.start);
                     const end = Number(element.end);
                     if (!isNaN(start) && !isNaN(end)) {

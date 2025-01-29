@@ -34,7 +34,7 @@ const props = defineProps({
 });
 
 watch(() => props.mapping.productReference, (newValue, oldValue) => {
-    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase())){
+    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase()) && props.mapping.isBreastMilk){ //always watch the product reference if hits a breast milk keyword
         props.mapping.isBreastMilk = true
     }
     else {
