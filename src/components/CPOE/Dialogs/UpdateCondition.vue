@@ -1,6 +1,6 @@
 <script setup>
     import { inject } from 'vue';
-import { useMappingStore } from '../../../stores/mappings';
+    import { useMappingStore } from '../../../stores/mappings';
 
     const mappingStore = useMappingStore();
     const user = inject('authUser')

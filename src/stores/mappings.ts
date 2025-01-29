@@ -5,6 +5,7 @@ import { type Products } from '../interfaces/Products';
 import { type Notification } from '../interfaces/Notification';
 import { type Milktype } from '../interfaces/Milktype'
 import OPMRServices from '../services/OPMRServices';
+import { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])
@@ -18,7 +19,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
-    const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"]
+    const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"];
     const milktypes = ref<Array<Milktype>>([])
     const useMilkTypes = ref(false)
 
@@ -31,12 +32,18 @@ export const useMappingStore = defineStore ('mappings', () => {
         conditions: []
     });
 
-    //Selection for updating and deletion
+    //Selection for updating, deletion and adding
     const updateSelectedCondition = ref({ mapping: emptyMap, updatedMapping: null, conditionIndex: -1})
     const deleteSelectedCondition = ref({ mapping: emptyMap, conditionIndex: -1})
     const deleteSelectedMapping = ref(0)
     const updateSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1, data: null})
     const deleteSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1})
+    const addConditionSelectedMapping = ref({mapping: emptyMap, data: {
+        milkType: '',
+        calories: '',
+        reference: '',
+        isModular: false
+    }, milktypeCaloricRange: [] })
 
     //Dialogs
     const fileUploadDialog = ref(false)
@@ -57,6 +64,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     )
     const updateConditionDialog = ref(false)
     const updateFortifierDialog = ref(false)
+    const addConditionDialog = ref(false)
 
     //functions
     const getProductDID = (productName) => {
@@ -269,17 +277,17 @@ export const useMappingStore = defineStore ('mappings', () => {
         const index = mappings.value.findIndex(obj => obj.mappingId === deleteSelectedCondition.value.mapping.mappingId)
         mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
-    const addCondition = (data) => {
-        const index = mappings.value.findIndex(obj => obj.mappingId === data.parent)
+    const addCondition = () => {
+        const index = mappings.value.findIndex(obj => obj.mappingId === addConditionSelectedMapping.value.mapping.mappingId)
         const condition:Conditions = {
-            calories: serializeCalories(data.calories),
-            reference: mappings.value[index].type == 'Feed Base' ? data.reference : '',
-            referenceDID: getProductDID(data.reference),
-            isUsed: data.isUsed,
+            calories: serializeCalories(addConditionSelectedMapping.value.data.calories),
+            reference: mappings.value[index].type == 'Feed Base' ? addConditionSelectedMapping.value.data.reference : '',
+            referenceDID: getProductDID(addConditionSelectedMapping.value.data.reference),
+            isUsed: false,
             user: { userID: null, userFirstName: '', userLastName: '' },
-            isModular: data.isModular,
+            isModular: addConditionSelectedMapping.value.data.isModular,
             lastUpdate: null,
-            milktype: data.milktype,
+            milktype: addConditionSelectedMapping.value.data.milkType,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
@@ -370,6 +378,30 @@ export const useMappingStore = defineStore ('mappings', () => {
         
     }, { deep: true })
 
+    watch(() => addConditionSelectedMapping.value.mapping, (newVal) => { //watch val when clicking add condition
+        if(newVal && newVal.isBreastMilk && useMilkTypes.value){ //set val if breastmilk and uses milktypes
+            addConditionSelectedMapping.value.data.milkType = milktypes.value[0]?.milktypeName
+            addConditionSelectedMapping.value.data.calories = milktypes.value[0]?.milktypeCaloricRange[0].toString()
+            addConditionSelectedMapping.value.data.reference = bmTypes.value[0]?.formtypeHL7Reference.toString()
+            addConditionSelectedMapping.value.milktypeCaloricRange = milktypes.value[0].milktypeCaloricRange
+            addConditionSelectedMapping.value.data.isModular = false
+        }
+        else {
+            addConditionSelectedMapping.value.data.milkType = null
+            addConditionSelectedMapping.value.data.calories = ''
+            addConditionSelectedMapping.value.data.reference = newVal.isBreastMilk ? bmTypes.value[0].formtypeHL7Reference.toString() : products.value[0].formtypeHL7Reference.toString()
+            addConditionSelectedMapping.value.data.isModular = false
+        }
+    }, { deep: true })
+
+    watch(() => addConditionSelectedMapping.value.data.milkType, (newVal, oldVal) => { //watch if milktype dropdown is changed
+        if(oldVal && newVal){
+            const milktype = milktypes.value.find(item => item.milktypeName === newVal)
+            addConditionSelectedMapping.value.data.calories = milktype.milktypeCaloricRange[0].toString()
+            addConditionSelectedMapping.value.milktypeCaloricRange = milktype.milktypeCaloricRange
+        }
+    })
+
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
         removeMapping, addCondition, removeConditionWithinAMapping,
         fileUploadDialog, toggleFileUploadDialog, addFortifier,
@@ -380,6 +412,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
-        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes
+        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog
     };
 })

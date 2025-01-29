@@ -2,10 +2,18 @@
 import { watch } from 'vue'
 import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
-import AddCondition from './Dialogs/AddCondition.vue';
-import { mdiMinusCircle, mdiContentCopy } from '@mdi/js';
+import { mdiMinusCircle, mdiContentCopy, mdiPlus } from '@mdi/js';
 
 const mappingStore = useMappingStore();
+
+const props = defineProps({
+  mapping: {
+    type: Object,
+    required: true,
+  },
+  index: Number
+});
+
 const handleRemoveMapping = (mapping) => {
     mappingStore.deleteSelectedMapping = mapping.mappingId
     if(mapping.conditions && mapping.conditions.length != 0){
@@ -23,18 +31,13 @@ const handleRemoveMapping = (mapping) => {
     }
 }
 
-
-
-const props = defineProps({
-  mapping: {
-    type: Object,
-    required: true,
-  },
-  index: Number
-});
+const toggleAddCondition = () => {
+    mappingStore.addConditionSelectedMapping.mapping = props.mapping
+    mappingStore.addConditionDialog = true
+}
 
 watch(() => props.mapping.productReference, (newValue, oldValue) => {
-    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase()) && props.mapping.isBreastMilk){ //always watch the product reference if hits a breast milk keyword
+    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase())){ //always watch the product reference if hits a breast milk keyword
         props.mapping.isBreastMilk = true
     }
     else {
@@ -87,7 +90,12 @@ watch(() => props.mapping.productReference, (newValue, oldValue) => {
             </div>
         </div>
         <div class="col-2">
-            <AddCondition :mapping="mapping"/>
+            <v-btn
+                :prepend-icon="mdiPlus"
+                text="Condition"
+                variant="plain"
+                @click="toggleAddCondition"
+            ></v-btn>
             <div class="test">
                 <div class="item" v-for="(condition, c_index) in mapping.conditions">
                     <Conditions :condition="condition" :mapping="mapping" :c_index="c_index"/>
