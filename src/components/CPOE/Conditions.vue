@@ -24,17 +24,23 @@ const handleRemoveCondition = (mapping, c_index, condition) => {
 
 const toggleUpdateCondition = (mapping, condition, c_index) => {
     mappingStore.updateSelectedCondition.mapping = JSON.parse(JSON.stringify(mapping))
-    mappingStore.updateSelectedCondition.updatedMapping = JSON.parse(JSON.stringify(condition))
     mappingStore.updateSelectedCondition.conditionIndex = c_index
-    if(condition.calories.length == 0){
-        mappingStore.updateSelectedCondition.updatedMapping.calories = ''
-    }
-    else if (condition.calories.length == 1) {
-        mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0]
-    }
-    else {
-        mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
-    }
+
+    // if(mappingStore.useMilkTypes && mapping.isBreastMilk){ //check if uses milktype, breastmilk
+    //     const milktype = mappingStore.milktypes.find(item => item.milktypeName === condition.milktype)
+    //     if(milktype){
+    //         mappingStore.updateSelectedCondition.milktypeCaloricRange = milktype.milktypeCaloricRange
+    //     }
+    // }
+    // if(condition.calories.length == 0){
+    //     mappingStore.updateSelectedCondition.updatedMapping.calories = ''
+    // }
+    // else if (condition.calories.length == 1) {
+    //     mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0]
+    // }
+    // else {
+    //     mappingStore.updateSelectedCondition.updatedMapping.calories = condition.calories[0] + '-' + condition.calories[condition.calories.length - 1]
+    // }
 
     if(!condition.isUsed){
         mappingStore.updateConditionDialog = true

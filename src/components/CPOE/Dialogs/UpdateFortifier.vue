@@ -40,12 +40,19 @@
             <v-autocomplete
                 v-model="mappingStore.updateSelectedFortifierKey.data.fortifierKey"
                 label="Fortifier Key"
-                item-value="formtypeHL7Reference" 
+                item-value="item.formtypeID" 
                 item-title="formtypeHL7Reference"
                 :items="mappingStore.products"
                 variant="outlined"
                 clearable
+                :key="mappingStore.products.length"
             ></v-autocomplete>
+            <select v-model="mappingStore.updateSelectedFortifierKey.data.fortifierKey">
+                <option value="" disabled>Select a product</option>
+                <option v-for="product in mappingStore.products" :value="product.formtypeID">
+                    {{ product.formtypeHL7Reference }}
+                </option>
+            </select>
             <v-alert
                 v-if="errMessage != ''"
                 :text="errMessage"
