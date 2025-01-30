@@ -5,7 +5,6 @@ import { type Products } from '../interfaces/Products';
 import { type Notification } from '../interfaces/Notification';
 import { type Milktype } from '../interfaces/Milktype'
 import OPMRServices from '../services/OPMRServices';
-import { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export const useMappingStore = defineStore ('mappings', () => {
     const mappings = ref<Array<CPOE>>([])
@@ -32,18 +31,14 @@ export const useMappingStore = defineStore ('mappings', () => {
         conditions: []
     });
 
+
     //Selection for updating, deletion and adding
-    const updateSelectedCondition = ref({ mapping: emptyMap, updatedMapping: null, conditionIndex: -1})
+    const updateSelectedCondition = ref({ mapping: emptyMap, conditionIndex: -1 })
     const deleteSelectedCondition = ref({ mapping: emptyMap, conditionIndex: -1})
     const deleteSelectedMapping = ref(0)
     const updateSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1, data: null})
     const deleteSelectedFortifierKey = ref({mapping: emptyMap, c_index: -1, index: -1})
-    const addConditionSelectedMapping = ref({mapping: emptyMap, data: {
-        milkType: '',
-        calories: '',
-        reference: '',
-        isModular: false
-    }, milktypeCaloricRange: [] })
+    const addConditionSelectedMapping = ref({ mapping: emptyMap })
 
     //Dialogs
     const fileUploadDialog = ref(false)
@@ -277,17 +272,18 @@ export const useMappingStore = defineStore ('mappings', () => {
         const index = mappings.value.findIndex(obj => obj.mappingId === deleteSelectedCondition.value.mapping.mappingId)
         mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
-    const addCondition = () => {
+    const addCondition = (data) => {
+        console.log(data)
         const index = mappings.value.findIndex(obj => obj.mappingId === addConditionSelectedMapping.value.mapping.mappingId)
         const condition:Conditions = {
-            calories: serializeCalories(addConditionSelectedMapping.value.data.calories),
-            reference: mappings.value[index].type == 'Feed Base' ? addConditionSelectedMapping.value.data.reference : '',
-            referenceDID: getProductDID(addConditionSelectedMapping.value.data.reference),
+            calories: serializeCalories(data.value.calories),
+            reference: mappings.value[index].type == 'Feed Base' ? data.value.reference : '',
+            referenceDID: getProductDID(data.value.reference),
             isUsed: false,
             user: { userID: null, userFirstName: '', userLastName: '' },
-            isModular: addConditionSelectedMapping.value.data.isModular,
+            isModular: data.value.isModular,
             lastUpdate: null,
-            milktype: addConditionSelectedMapping.value.data.milkType,
+            milktype: data.value.milktype,
             FortifierKey: []
         }
         mappings.value[index].conditions.push(condition)
@@ -310,17 +306,25 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[mappingIndex].conditions[deleteSelectedFortifierKey.value.c_index].FortifierKey.splice(deleteSelectedFortifierKey.value.index, 1)
     }
 
-    const updateCondition = (user) => {
-        const mappingIndex = mappings.value.findIndex(obj => obj.mappingId === updateSelectedCondition.value.mapping.mappingId);
-        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].reference = mappings.value[mappingIndex].type == 'Feed Base' ? updateSelectedCondition.value.updatedMapping.reference : ''
-        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].referenceDID = getProductDID(updateSelectedCondition.value.updatedMapping.reference)
-        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].calories = serializeCalories(updateSelectedCondition.value.updatedMapping.calories)
-        mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].isModular = updateSelectedCondition.value.updatedMapping.isModular
-        if(mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].isUsed){
-            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userID = user.userID
-            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userLastName = user.userLastName
-            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].user.userFirstName = user.userFirstName
-            mappings.value[mappingIndex].conditions[updateSelectedCondition.value.conditionIndex].lastUpdate = Date.now()
+    const updateCondition = (user, data) => {
+
+        //get mapping and condition index
+        const iMapping = mappings.value.findIndex(obj => obj.mappingId === updateSelectedCondition.value.mapping.mappingId);
+        const iCondition = updateSelectedCondition.value.conditionIndex
+        
+        //update
+        mappings.value[iMapping].conditions[iCondition].reference = mappings.value[iMapping].type == 'Feed Base' ? data.value.reference : ''
+        mappings.value[iMapping].conditions[iCondition].referenceDID = getProductDID(data.value.reference)
+        mappings.value[iMapping].conditions[iCondition].calories = serializeCalories(data.value.calories)
+        mappings.value[iMapping].conditions[iCondition].milktype = data.value.milktype
+        mappings.value[iMapping].conditions[iCondition].isModular = data.value.isModular
+
+        //update user if the status is isUsed
+        if(mappings.value[iMapping].conditions[iCondition].isUsed){
+            mappings.value[iMapping].conditions[iCondition].user.userID = user.userID
+            mappings.value[iMapping].conditions[iCondition].user.userLastName = user.userLastName
+            mappings.value[iMapping].conditions[iCondition].user.userFirstName = user.userFirstName
+            mappings.value[iMapping].conditions[iCondition].lastUpdate = Date.now()
         }
     }
 
@@ -377,30 +381,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
         
     }, { deep: true })
-
-    watch(() => addConditionSelectedMapping.value.mapping, (newVal) => { //watch val when clicking add condition
-        if(newVal && newVal.isBreastMilk && useMilkTypes.value){ //set val if breastmilk and uses milktypes
-            addConditionSelectedMapping.value.data.milkType = milktypes.value[0]?.milktypeName
-            addConditionSelectedMapping.value.data.calories = milktypes.value[0]?.milktypeCaloricRange[0].toString()
-            addConditionSelectedMapping.value.data.reference = bmTypes.value[0]?.formtypeHL7Reference.toString()
-            addConditionSelectedMapping.value.milktypeCaloricRange = milktypes.value[0].milktypeCaloricRange
-            addConditionSelectedMapping.value.data.isModular = false
-        }
-        else {
-            addConditionSelectedMapping.value.data.milkType = null
-            addConditionSelectedMapping.value.data.calories = ''
-            addConditionSelectedMapping.value.data.reference = newVal.isBreastMilk ? bmTypes.value[0].formtypeHL7Reference.toString() : products.value[0].formtypeHL7Reference.toString()
-            addConditionSelectedMapping.value.data.isModular = false
-        }
-    }, { deep: true })
-
-    watch(() => addConditionSelectedMapping.value.data.milkType, (newVal, oldVal) => { //watch if milktype dropdown is changed
-        if(oldVal && newVal){
-            const milktype = milktypes.value.find(item => item.milktypeName === newVal)
-            addConditionSelectedMapping.value.data.calories = milktype.milktypeCaloricRange[0].toString()
-            addConditionSelectedMapping.value.milktypeCaloricRange = milktype.milktypeCaloricRange
-        }
-    })
 
     return { searchTerm, filteredMapping, mappings, setEmptyMapping, 
         removeMapping, addCondition, removeConditionWithinAMapping,
