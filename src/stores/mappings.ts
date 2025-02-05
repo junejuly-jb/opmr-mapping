@@ -253,12 +253,12 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
     })
 
-    const setEmptyMapping = (type) => { 
+    const setEmptyMapping = (type, isBreastMilk) => { 
         const emptyMap = <CPOE>({
             mappingId: generateId(),
             type: type,
             productReference: '',
-            isBreastMilk: false,
+            isBreastMilk: isBreastMilk,
             conditions: []
         })
         mappings.value.unshift(emptyMap)

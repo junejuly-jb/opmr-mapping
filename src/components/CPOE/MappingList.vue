@@ -36,15 +36,6 @@ const toggleAddCondition = () => {
     mappingStore.addConditionDialog = true
 }
 
-watch(() => props.mapping.productReference, (newValue, oldValue) => {
-    if(newValue && mappingStore.globalFiltersForBM.includes(newValue.toLowerCase())){ //always watch the product reference if hits a breast milk keyword
-        props.mapping.isBreastMilk = true
-    }
-    else {
-        props.mapping.isBreastMilk = false
-    }
-})
-
 </script>
 <template>
     <div class="opmr__mapping_lists">

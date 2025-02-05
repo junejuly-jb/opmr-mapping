@@ -84,7 +84,7 @@
               data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Feed Base'
-              data.isBreastMilk = checkIfBreastMilk(item[0])
+              data.isBreastMilk = (item[6] && item[6] == 1) ? true : false 
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[3],
@@ -180,6 +180,7 @@
               data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Fortifier'
+              data.isBreastMilk = false
               data.conditions = [{ //it always assumed that if feed base reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: '', //always blank if fortifier
@@ -266,12 +267,6 @@
       }
     }
 
-    const checkIfBreastMilk = (data) => {
-      if(mappingStore.globalFiltersForBM.includes(data.toLowerCase())){
-        return true;
-      }
-      return false;
-    }
     const setEmptyMapping = () => {
       sampleMappings.value = []
       isDoneLoading.value = false

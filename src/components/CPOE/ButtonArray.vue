@@ -24,16 +24,22 @@ const downloadExcel = () => {
                 feed_base.push({
                   "Feed-Base-Reference": (conditionIndex === 0 && additiveIndex === 0) ? item["productReference"] : "",
                   "Caloric-Rule": additiveIndex === 0 ? getCalories(condition["calories"]) : "",
+                  "Milk-Type": condition['milktype'],
                   "Product-Name": additiveIndex === 0 ? condition["reference"] : "",
-                  "Additive": additive["fortifierKey"]
+                  "Additive": additive["fortifierKey"],
+                  "Mix-To": additive['calOzEnd'],
+                  "isBreastMilk": item['isBreastMilk'] ? 1 : ''
                 });
               });
             } else {
               feed_base.push({
                 "Feed-Base-Reference": conditionIndex === 0 ? item["productReference"] : "",
                 "Caloric-Rule": getCalories(condition["calories"]),
+                "Milk-Type": condition['milktype'],
                 "Product-Name": condition["reference"],
-                "Additive": ""
+                "Additive": "",
+                "Mix-To": "",
+                "isBreastMilk": item['isBreastMilk'] ? 1 : ''
               });
             }
           });
@@ -41,21 +47,25 @@ const downloadExcel = () => {
           feed_base.push({
             "Feed-Base-Reference": item["productReference"],
             "Caloric-Rule": "",
+            "Milk-Type": "",
             "Product-Name": "",
-            "Additive": ""
+            "Additive": "",
+            "Mix-To": "",
+            "isBreastMilk": item['isBreastMilk']
           });
         }
       }
       else {
         if(item.conditions && item.conditions.length > 0){ // check conditions if not null
-          item.conditions.forEach((condition, conditionIndex) => { // loop to conditions array
+          item.conditions.forEach((condition, conditionIndex) => { // loop thru conditions array
             if(condition.FortifierKey && condition.FortifierKey.length > 0){ //check fortifier array if not null
               condition.FortifierKey.forEach((additive, additiveIndex) => { // loop thru fortifier array
                 fortifiers.push({
                   "Feed-Base-Reference": (conditionIndex === 0 && additiveIndex === 0) ? item["productReference"] : "",
                   "Calorie-Rule": additiveIndex === 0 ? getCalories(condition["calories"]) : "",
+                  "IsModular": additiveIndex === 0 ? (condition['isModular'] ? 1 : 0) : "",
                   "Additive": additive["fortifierKey"],
-                  "IsModular": ""
+                  "Mix-To": additive['calOzEnd']
                 });
               });
             }
@@ -63,8 +73,9 @@ const downloadExcel = () => {
               fortifiers.push({
                 "Feed-Base-Reference": conditionIndex === 0 ? item["productReference"] : "",
                 "Calorie-Rule": getCalories(condition["calories"]),
+                "IsModular": condition['isModular'] ? 1 : 0,
                 "Additive": "",
-                "IsModular": ""
+                "Mix-To": ""
               });
             }
           });
@@ -72,8 +83,9 @@ const downloadExcel = () => {
           fortifiers.push({
             "Feed-Base-Reference": item["productReference"],
             "Calorie-Rule": "",
+            "IsModular": "",
             "Additive": "",
-            "IsModular": ""
+            "Mix-To": ""
           });
         }
       }
@@ -126,10 +138,13 @@ const getCalories = (arr) => {
           </v-btn>
         </template>
         <v-list>
-          <v-list-item @click="mappingStore.setEmptyMapping('Feed Base')">
+          <v-list-item @click="mappingStore.setEmptyMapping('Feed Base', false)">
             <v-list-item-title>Feed Base</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="mappingStore.setEmptyMapping('Fortifier')">
+          <v-list-item @click="mappingStore.setEmptyMapping('Feed Base', true)">
+            <v-list-item-title>Feed Base - Breast Milk</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="mappingStore.setEmptyMapping('Fortifier', false)">
             <v-list-item-title>Fortifier</v-list-item-title>
           </v-list-item>
         </v-list>
