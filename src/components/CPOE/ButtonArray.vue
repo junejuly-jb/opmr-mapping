@@ -5,8 +5,57 @@ import * as XLSX from "xlsx";
 
 const mappingStore = useMappingStore();
 const handleSave = () => {
-  mappingStore.setConfirmationDialogText('save-mapping','Save','Do you want to save your changes to the OPMR mapping rules?')
-  mappingStore.toggleConfirmationDialog(true)
+  const duplicates = findDuplicates(mappingStore.mappings)
+  const specialChars = checkForSpecialChars(mappingStore.mappings)
+  if(duplicates.length > 0 || specialChars.length > 0){
+    if(duplicates.length > 0){
+      var messages = []
+      duplicates.forEach(element => {
+        messages.push(`${element.productReference} - ${element.type}`)
+      });
+      mappingStore.errors.push({title: 'Duplicate entry', data: messages })
+    }
+    if(specialChars.length){
+      var messages = []
+      specialChars.forEach(element => {
+        messages.push(element)
+      });
+      mappingStore.errors.push({title: 'Unsupported characters', data: messages })
+    }
+    mappingStore.errorDialog = true
+  }
+  else {
+    mappingStore.setConfirmationDialogText('save-mapping','Save','Do you want to save your changes to the OPMR mapping rules?')
+    mappingStore.toggleConfirmationDialog(true)
+  }
+}
+
+const findDuplicates = (arr) => {
+  const seen = new Set();
+  const duplicates = [];
+
+  for (const item of arr) {
+    const type = item.type.toLowerCase().trim()
+    const productRef = item.productReference.toLowerCase().trim();
+    const key = `${type}-${productRef}`;
+      if (seen.has(key)) {
+          duplicates.push(item); // Store the duplicate
+      } else {
+          seen.add(key);
+      }
+  }
+  return duplicates;
+}
+
+const checkForSpecialChars = (arr) => {
+  var specialChars = []
+  const regex = /[^a-zA-Z0-9 ]/; // Matches anything that is NOT a letter, number, or space
+  arr.forEach(item => {
+    if(regex.test(item.productReference)){
+      specialChars.push(item.productReference)
+    }
+  })
+  return specialChars;
 }
 
 const downloadExcel = () => {

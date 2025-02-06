@@ -21,6 +21,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"];
     const milktypes = ref<Array<Milktype>>([])
     const useMilkTypes = ref(false)
+    const errors = ref([]) //{ title, data: [message]}
 
     //Constant initialize empty mapping
     const emptyMap = ref<CPOE>({
@@ -60,6 +61,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const updateConditionDialog = ref(false)
     const updateFortifierDialog = ref(false)
     const addConditionDialog = ref(false)
+    const errorDialog = ref(false)
 
     //functions
     const getProductDID = (productName) => {
@@ -392,6 +394,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
-        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog
+        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
+        errorDialog, errors
     };
 })

@@ -1,5 +1,4 @@
 <script setup>
-import { watch } from 'vue'
 import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
 import { mdiMinusCircle, mdiContentCopy, mdiPlus } from '@mdi/js';
@@ -76,8 +75,15 @@ const toggleAddCondition = () => {
         </div>
         <div class="col-1">
             <div>
-                <v-chip class="my-3">{{mapping.type}}</v-chip>
-                <v-text-field width="300" v-model="mapping.productReference" density="compact" label="HL7 Reference" variant="outlined" clearable></v-text-field>
+                <v-chip class="my-3">{{mapping.type}} {{ mapping.isBreastMilk ? '- Breast Milk' : '' }}</v-chip>
+                <v-text-field 
+                    width="300"
+                    v-model="mapping.productReference"
+                    density="compact" 
+                    label="HL7 Reference"
+                    variant="outlined"
+                    >
+                </v-text-field>
             </div>
         </div>
         <div class="col-2">
@@ -86,6 +92,7 @@ const toggleAddCondition = () => {
                 text="Condition"
                 variant="plain"
                 @click="toggleAddCondition"
+                :disabled="mapping.productReference == ''"
             ></v-btn>
             <div class="test">
                 <div class="item" v-for="(condition, c_index) in mapping.conditions">

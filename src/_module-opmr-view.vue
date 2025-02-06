@@ -9,6 +9,7 @@
   import UpdateCondition from './components/CPOE/Dialogs/UpdateCondition.vue';
   import UpdateFortifier from './components/CPOE/Dialogs/UpdateFortifier.vue';
   import AddCondition from './components/CPOE/Dialogs/AddCondition.vue';
+  import ErrorDialog from './components/CPOE/Dialogs/ErrorDialog.vue'
 
   const mappingStore = useMappingStore()
   onMounted(() => { 
@@ -25,6 +26,7 @@
     <Notification/>
     <FileUpload/>
     <AddCondition/>
+    <ErrorDialog/>
     <div class="cpoe__heading">
       <h2>OPMR Mapping Rules</h2>
     </div>
