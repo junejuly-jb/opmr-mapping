@@ -5,9 +5,10 @@ import * as XLSX from "xlsx";
 
 const mappingStore = useMappingStore();
 const handleSave = () => {
-  const duplicates = findDuplicates(mappingStore.mappings)
-  const specialChars = checkForSpecialChars(mappingStore.mappings)
-  if(duplicates.length > 0 || specialChars.length > 0){
+  const duplicates = findDuplicates(mappingStore.mappings) //check for duplicates
+  const specialChars = checkForSpecialChars(mappingStore.mappings) // check for special chars
+  const hasEmptyHL7Ref = checkForEmptyReference(mappingStore.mappings)
+  if(duplicates.length > 0 || specialChars.length > 0 || hasEmptyHL7Ref > 0){
     if(duplicates.length > 0){
       var messages = []
       duplicates.forEach(element => {
@@ -15,12 +16,15 @@ const handleSave = () => {
       });
       mappingStore.errors.push({title: 'Duplicate entry', data: messages })
     }
-    if(specialChars.length){
+    if(specialChars.length > 0){
       var messages = []
       specialChars.forEach(element => {
         messages.push(element)
       });
       mappingStore.errors.push({title: 'Unsupported characters', data: messages })
+    }
+    if(hasEmptyHL7Ref > 0){
+      mappingStore.errors.push({title: 'HL7 reference required', data: [`${hasEmptyHL7Ref} HL7 reference ${hasEmptyHL7Ref > 1 ? 'are': 'is'} empty.`]})
     }
     mappingStore.errorDialog = true
   }
@@ -56,6 +60,11 @@ const checkForSpecialChars = (arr) => {
     }
   })
   return specialChars;
+}
+
+const checkForEmptyReference = (arr) => {
+  const isEmpty = arr.filter(item => item.productReference === "").length;
+  return isEmpty
 }
 
 const downloadExcel = () => {

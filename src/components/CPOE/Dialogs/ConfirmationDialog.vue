@@ -1,6 +1,7 @@
 <script setup>
 import { useMappingStore } from '../../../stores/mappings';
 import OPMRServices from '../../../services/OPMRServices'
+import { ref } from 'vue';
 const emit = defineEmits(['notify'])
 const mappingStore = useMappingStore()
 
@@ -10,6 +11,8 @@ const props = defineProps({
         required: true,
     },
 })
+
+const errors = ref([]);
 
 const handleOverwrite = () => {
     try {
@@ -26,20 +29,37 @@ const handleOverwrite = () => {
 }
 const handleMerge = () => {
     try {
-        mappingStore.mergeMappings(props.sampleMappings)
-        mappingStore.toggleConfirmationDialog(false)
-        mappingStore.toggleFileUploadDialog()
-        mappingStore.setCurrentPage(1)
-        emit('notify')
-        mappingStore.setConfirmationDialogText('','','')
+        const duplicates = checkDuplicates(mappingStore.mappings, props.sampleMappings)
+        if(duplicates.length < 0){
+            mappingStore.mergeMappings(props.sampleMappings)
+            mappingStore.toggleConfirmationDialog(false)
+            mappingStore.toggleFileUploadDialog()
+            mappingStore.setCurrentPage(1)
+            emit('notify')
+            mappingStore.setConfirmationDialogText('','','')
+        }
+        else{
+            duplicates.forEach(element => {
+                errors.value.push(element.productReference)
+            });
+        }
     } catch (error) {
         console.log(error)
     }
 }
 
+const checkDuplicates = (arr1, arr2) => {
+    const set1 = new Set(arr1.map(item => JSON.stringify({ productReference: item.productReference, type: item.type })));
+    return arr2.filter(item => set1.has(JSON.stringify({ productReference: item.productReference, type: item.type })));
+};
+
 const handleClose = () => {
     mappingStore.toggleConfirmationDialog(false)
-    setTimeout(() => { mappingStore.setConfirmationDialogText('','','') },500)
+    
+    setTimeout(() => { 
+        mappingStore.setConfirmationDialogText('','','')
+        errors.value = []
+    },500)
 }
 
 const handleSave = async () => {
@@ -113,6 +133,12 @@ const handleDeleteFortifier = () => {
             :text="mappingStore.confirmationDialogText.text"
             :title="mappingStore.confirmationDialogText.title"
         >
+        <v-card-text v-if="errors.length > 0">
+            Duplicate mapping detected:
+            <v-alert variant="tonal" density="compact" color="error">
+                <div v-for="error in errors">{{ error }}</div>
+            </v-alert>
+        </v-card-text>
         <template v-if="mappingStore.confirmationDialogText.type === 'confirmation-merge-overwrite'" v-slot:actions>
           <v-btn @click="handleClose">
             Close
