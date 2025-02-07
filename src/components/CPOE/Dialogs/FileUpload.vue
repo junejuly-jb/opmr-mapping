@@ -34,6 +34,7 @@
         mappingStore.setBulkMapping(sampleMappings.value)
         mappingStore.toggleFileUploadDialog()
         isDoneLoading.value = false
+        sampleMappings.value = []
       }
     }
 

@@ -185,13 +185,11 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setBulkMapping = (data) => {
-        mappings.value = []
-        data.forEach(item => {
-            item.mappingId = generateId()
-            mappings.value.push(item)
-        })
-        // mappings.value = data
-    }
+        mappings.value = data.map(item => ({
+            ...item,
+            mappingId: generateId() // Assign a new mappingId
+        }));
+    };
 
     const mergeMappings = (data) => {
         data.forEach(item => {
