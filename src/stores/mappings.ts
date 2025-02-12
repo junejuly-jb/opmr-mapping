@@ -185,11 +185,13 @@ export const useMappingStore = defineStore ('mappings', () => {
     }
 
     const setBulkMapping = (data) => {
-        mappings.value = data.map(item => ({
-            ...item,
-            mappingId: generateId() // Assign a new mappingId
-        }));
-    };
+        mappings.value = []
+        data.forEach(item => {
+            item.mappingId = generateId()
+            mappings.value.push(item)
+        })
+        // mappings.value = data
+    }
 
     const mergeMappings = (data) => {
         data.forEach(item => {
@@ -309,7 +311,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const updateCondition = (user, data) => {
 
         //get mapping and condition index
-        const iMapping = mappings.value.findIndex(obj => obj.mappingId === updateSelectedCondition.value.mapping.mappingId);
+        const iMapping = mappings.value.findIndex(obj => obj.mappingId == updateSelectedCondition.value.mapping.mappingId);
         const iCondition = updateSelectedCondition.value.conditionIndex
         
         //update
