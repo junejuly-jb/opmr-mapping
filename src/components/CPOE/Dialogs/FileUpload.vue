@@ -17,6 +17,7 @@
 
     const handleFileChange = (event) => {
       errors.value = []
+      sampleMappings.value = []
       const file = event.target.files[0];
       if (file) {
         readExcel(file);

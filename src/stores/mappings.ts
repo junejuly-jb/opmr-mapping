@@ -275,7 +275,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         mappings.value[index].conditions.splice(deleteSelectedCondition.value.conditionIndex, 1)
     }
     const addCondition = (data) => {
-        console.log(data)
         const index = mappings.value.findIndex(obj => obj.mappingId === addConditionSelectedMapping.value.mapping.mappingId)
         const condition:Conditions = {
             calories: serializeCalories(data.value.calories),

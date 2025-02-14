@@ -30,7 +30,7 @@ const handleOverwrite = () => {
 const handleMerge = () => {
     try {
         const duplicates = checkDuplicates(mappingStore.mappings, props.sampleMappings)
-        if(duplicates.length < 0){
+        if(duplicates.length === 0){
             mappingStore.mergeMappings(props.sampleMappings)
             mappingStore.toggleConfirmationDialog(false)
             mappingStore.toggleFileUploadDialog()
