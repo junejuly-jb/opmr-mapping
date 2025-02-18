@@ -53,7 +53,8 @@ const findDuplicates = (arr) => {
 
 const checkForSpecialChars = (arr) => {
   var specialChars = []
-  const regex = /[^a-zA-Z0-9 ]/; // Matches anything that is NOT a letter, number, or space
+  // Updated regex to match anything NOT a letter, number, space, comma, period, parentheses, hyphen, or forward slash
+  const regex = /[^a-zA-Z0-9 ,\.\(\)\-\/]/;
   arr.forEach(item => {
     if(regex.test(item.productReference)){
       specialChars.push(item.productReference)
