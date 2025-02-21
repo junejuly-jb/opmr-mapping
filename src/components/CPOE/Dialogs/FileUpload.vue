@@ -230,7 +230,6 @@
     }
 
     const checkForErrors = (data, i, type, fortifierLastCaloricRange) => {
-      const filters = ['ehm','ebm','dbm','dhm'];
       if(data[1]){ //Check for invalid caloric rule
         if(!checkCaloricFormat(data[1])){
           const row = parseInt(i) + 2;
@@ -240,8 +239,10 @@
       //Check for product if name is not on the product load
       if(data[3]){ // Applicable for Feed_Base only.
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase());
-        if(!isMatch && !filters.includes(data[3].toLowerCase())){ //not product match and ebm and dbm
-          const row = parseInt(i) + 2;
+        const isMatchBMType = mappingStore.bmTypes.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase())
+        if(!isMatch && !isMatchBMType){ //not product match and ebm and dbm
+        console.log(data[3])
+        const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at D${row}(${type}).`)
         }
       }

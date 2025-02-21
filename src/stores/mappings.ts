@@ -18,7 +18,6 @@ export const useMappingStore = defineStore ('mappings', () => {
     const notifs = ref<Array<Notification>>([])
     const isSaving = ref(false)
     const unSavedChanges = ref(false);
-    const globalFiltersForBM = ['ebm','ehm','dbm','dhm','breast milk', "mom's milk", 'moms milk', "mother's milk","mothers milk","donor breast milk","donor's milk", "donor's breast milk"];
     const milktypes = ref<Array<Milktype>>([])
     const useMilkTypes = ref(false)
     const errors = ref([]) //{ title, data: [message]}
@@ -393,7 +392,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         getProducts, products, getMappings, notifs, removeNotifs, isSaving, toggleSaving, addNotifs, autoRemoveNotifs,
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
-        globalFiltersForBM, getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
+        getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
         errorDialog, errors
     };
 })
