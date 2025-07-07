@@ -43,6 +43,7 @@ const findDuplicates = (arr) => {
   return duplicates;
 }
 
+
 const checkForEmptyReference = (arr) => {
   const isEmpty = arr.filter(item => item.productReference === "").length;
   return isEmpty

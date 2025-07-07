@@ -110,7 +110,7 @@
               }
               sampleMappings.value.push(data)
             }
-            else if(!item[0] && item[1]){ // if no productreference on the 1st column, check the second column for condition
+            else if(!item[0] && item[3]){ // if no productreference on the 1st column, check the second column for condition
               const condition = {
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[3],
