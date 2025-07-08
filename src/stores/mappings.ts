@@ -28,6 +28,7 @@ export const useMappingStore = defineStore ('mappings', () => {
         productReference: "",
         type: "",
         isBreastMilk: false,
+        fortified: false,
         conditions: []
     });
 

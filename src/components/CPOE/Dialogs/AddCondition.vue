@@ -11,20 +11,62 @@ const localFormData = ref({
     isModular: false
 })
 const caloricRange = ref([])
+const cals = ref(null);
+const hasFirstCondition = ref(false);
 
-const addCondition = () => {
-    if(localFormData.value.reference){
+const addCondition = async () => {
+    const isValidCals = await cals.value?.validate?.();
+
+    if(localFormData.value.reference && isValidCals.length <=0 ){
         mappingStore.addCondition(localFormData)
         mappingStore.addConditionDialog = false
     }
 }
 
+const isValidItem = (item) => {
+  const singleNumber = /^\d+$/ 
+  const validRange = /^(\d+)-(\d+)$/
+
+  const min = caloricRange.value[0]
+  const max = caloricRange.value[caloricRange.value.length - 1]
+
+
+  if (singleNumber.test(item)) {
+    const value = Number(item)
+    return value >= min && value <= max
+  }
+
+  const rangeMatch = item.match(validRange)
+  if (rangeMatch) {
+    const start = Number(rangeMatch[1])
+    const end = Number(rangeMatch[2])
+    return start < end && start >= min && end <= max
+  }
+
+  return false
+}
+
+const validateRangeOrNumber = (value) => {
+  if (!value || (Array.isArray(value) && value.length === 0)) return true
+  const values = Array.isArray(value) ? value : [value]
+
+  for (const v of values) {
+    if (!isValidItem(v)) {
+      return `Only whole numbers or valid ranges within ${caloricRange.value[0]}-${caloricRange.value[caloricRange.value.length-1]} are allowed`
+    }
+  }
+
+  return true
+}
+
 watch(() => mappingStore.addConditionDialog, (newVal, oldVal) => { //watch if the dialog was opened!
     if(newVal){
         if(mappingStore.addConditionSelectedMapping.mapping.isBreastMilk && mappingStore.useMilkTypes){
-            localFormData.value.milktype = mappingStore.milktypes[0].milktypeName
+            hasFirstCondition.value = mappingStore.addConditionSelectedMapping.mapping.conditions.length > 0 ? true : false;
+            
+            localFormData.value.milktype = mappingStore.addConditionSelectedMapping.mapping.conditions.length > 0 ? mappingStore.addConditionSelectedMapping.mapping.conditions[0].milktype : mappingStore.milktypes[0].milktypeName
             localFormData.value.reference = mappingStore.bmTypes[0].formtypeHL7Reference
-            localFormData.value.calories = mappingStore.milktypes[0].milktypeCaloricRange[0]
+            localFormData.value.calories = '';
 
             const milktype = mappingStore.milktypes.find(item => item.milktypeName === localFormData.value.milktype)
             if(milktype){
@@ -55,7 +97,7 @@ watch(() => localFormData.value.milktype, (newVal, oldVal) => {
         <v-card title="Set Mapping Condition">
             <v-spacer></v-spacer>
             <v-card-text>
-                <v-autocomplete
+                <v-select
                     v-if="mappingStore.addConditionSelectedMapping.mapping.isBreastMilk && mappingStore.useMilkTypes"
                     v-model="localFormData.milktype"
                     label="Milk Type"
@@ -64,18 +106,24 @@ watch(() => localFormData.value.milktype, (newVal, oldVal) => {
                     :items="mappingStore.milktypes"
                     variant="outlined"
                     :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
-                ></v-autocomplete>
-                <v-autocomplete
+                    :disabled="hasFirstCondition"
+                ></v-select>
+                <v-text-field
                     v-if="mappingStore.addConditionSelectedMapping.mapping.isBreastMilk && mappingStore.useMilkTypes"
                     v-model="localFormData.calories"
                     label="Calorie"
-                    :items="caloricRange"
                     variant="outlined"
-                    :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
-                ></v-autocomplete>
-                <v-text-field v-else v-model="localFormData.calories" label="Caloric Range" variant="outlined"></v-text-field>
+                    :rules="mappingStore.addConditionSelectedMapping.mapping.fortified ? [] : [validateRangeOrNumber]"
+                    ref="cals"
+                ></v-text-field>
+                <v-text-field
+                    v-else
+                    v-model="localFormData.calories"
+                    label="Caloric Range" 
+                    variant="outlined">
+                </v-text-field>
                 <div v-if="mappingStore.addConditionSelectedMapping.mapping.type == 'Feed Base'">
-                    <v-autocomplete
+                    <v-select
                         v-model="localFormData.reference"
                         :label="mappingStore.addConditionSelectedMapping.mapping.isBreastMilk ? 'Base' : 'Product'"
                         item-value="formtypeHL7Reference"
@@ -83,8 +131,7 @@ watch(() => localFormData.value.milktype, (newVal, oldVal) => {
                         :items="mappingStore.addConditionSelectedMapping.mapping.isBreastMilk ? mappingStore.bmTypes : mappingStore.products"
                         variant="outlined"
                         :rules="[v => !!v || 'This field is required']"
-                        clearable
-                    ></v-autocomplete>
+                    ></v-select>
                 </div>
                 <v-switch 
                     v-if="!mappingStore.addConditionSelectedMapping.mapping.isBreastMilk" 

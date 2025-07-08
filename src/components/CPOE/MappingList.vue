@@ -2,6 +2,7 @@
 import { useMappingStore } from '../../stores/mappings';
 import Conditions from './Conditions.vue';
 import { mdiMinusCircle, mdiContentCopy, mdiPlus } from '@mdi/js';
+import { ref, watch } from 'vue';
 
 const mappingStore = useMappingStore();
 
@@ -34,6 +35,10 @@ const toggleAddCondition = () => {
     mappingStore.addConditionSelectedMapping.mapping = props.mapping
     mappingStore.addConditionDialog = true
 }
+
+watch(() => props.mapping.productReference, (newVal, oldVal) => {
+    props.mapping.fortified = (newVal.toLowerCase().includes("fortified") && props.mapping.isBreastMilk)
+})
 
 </script>
 <template>
@@ -75,7 +80,7 @@ const toggleAddCondition = () => {
         </div>
         <div class="col-1">
             <div>
-                <v-chip class="my-3">{{mapping.type}} {{ mapping.isBreastMilk ? '- Breast Milk' : '' }}</v-chip>
+                <v-chip class="my-3">{{mapping.type}} {{ mapping.isBreastMilk ? '- Breast Milk' : '' }} {{ mapping.fortified ? '(Fortified)' : '' }}</v-chip>
                 <v-text-field 
                     width="300"
                     v-model="mapping.productReference"

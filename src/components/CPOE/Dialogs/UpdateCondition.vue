@@ -12,6 +12,8 @@
         isModular: false
     })
     const caloricRange = ref([])
+    const cals = ref(null);
+    const hasFirstCondition = ref(false)
 
     const handleUpdateCondition = () => {
         //Feed base reference cannot be empty!
@@ -27,8 +29,45 @@
         }
     }
 
+    const isValidItem = (item) => {
+        const singleNumber = /^\d+$/ 
+        const validRange = /^(\d+)-(\d+)$/
+
+        const min = caloricRange.value[0]
+        const max = caloricRange.value[caloricRange.value.length - 1]
+
+
+        if (singleNumber.test(item)) {
+            const value = Number(item)
+            return value >= min && value <= max
+        }
+
+        const rangeMatch = item.match(validRange)
+        if (rangeMatch) {
+            const start = Number(rangeMatch[1])
+            const end = Number(rangeMatch[2])
+            return start < end && start >= min && end <= max
+        }
+
+        return false
+        }
+
+        const validateRangeOrNumber = (value) => {
+        if (!value || (Array.isArray(value) && value.length === 0)) return true
+        const values = Array.isArray(value) ? value : [value]
+
+        for (const v of values) {
+            if (!isValidItem(v)) {
+            return `Only whole numbers or valid ranges within ${caloricRange.value[0]}-${caloricRange.value[caloricRange.value.length-1]} are allowed`
+            }
+        }
+
+        return true
+        }
+
     watch(() => mappingStore.updateConditionDialog, (newVal, oldVal) => {
         if(newVal){
+            hasFirstCondition.value = mappingStore.updateSelectedCondition.mapping.conditions.length > 1 ? true : false
             const index = mappingStore.updateSelectedCondition.conditionIndex
             localFormData.value.reference = mappingStore.updateSelectedCondition.mapping.conditions[index].reference
             localFormData.value.milktype = mappingStore.updateSelectedCondition.mapping.conditions[index].milktype
@@ -74,15 +113,16 @@
                     :items="mappingStore.milktypes"
                     variant="outlined"
                     :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
+                    :disabled="hasFirstCondition"
                 ></v-autocomplete>
-                <v-autocomplete
+                <v-text-field
                     v-if="mappingStore.updateSelectedCondition.mapping.isBreastMilk && mappingStore.useMilkTypes"
                     v-model="localFormData.calories"
                     label="Calorie"
-                    :items="caloricRange"
                     variant="outlined"
-                    :menu-props="{ top: true, offsetY: true, maxWidth:200 }"
-                ></v-autocomplete>
+                    :rules="mappingStore.updateSelectedCondition.mapping.fortified ? [] : [validateRangeOrNumber]"
+                    ref="cals"
+                ></v-text-field>
                 <v-text-field v-else v-model="localFormData.calories" label="Caloric Range" variant="outlined"></v-text-field>
                 <div v-if="mappingStore.updateSelectedCondition.mapping.type == 'Feed Base'">
                     <v-autocomplete

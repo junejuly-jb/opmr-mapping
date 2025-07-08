@@ -1,25 +1,26 @@
 export interface CPOE{
     mappingId: number,
-    productReference: String,
-    type: String,
-    isBreastMilk: Boolean,
+    productReference: string,
+    type: string,
+    isBreastMilk: boolean,
+    fortified: boolean,
     conditions: Array<Conditions>
 }
 
 export interface Conditions{
     calories: Array<number>,
-    reference: String,
+    reference: string,
     referenceDID: number | null,
-    isUsed: Boolean,
+    isUsed: boolean,
     user: User,
-    isModular: Boolean,
+    isModular: boolean,
     lastUpdate: number | null,
-    milktype: String | null,
+    milktype: string | null,
     FortifierKey: Array<FortifierKey>
 }
 
 export interface FortifierKey{
-    fortifierKey: String | null,
+    fortifierKey: string | null,
     fortifierKeyDID: number | null,
     calOzStart: number | null,
     calOzEnd: number | null,
@@ -28,6 +29,6 @@ export interface FortifierKey{
 
 interface User {
     userID: number | null,
-    userFirstName: String,
-    userLastName: String
+    userFirstName: string,
+    userLastName: string
 }
