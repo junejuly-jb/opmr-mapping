@@ -16,6 +16,7 @@
     mappingStore.getMappings()
     mappingStore.getProducts()
     mappingStore.getMilktypes()
+    mappingStore.getAppSettings()
   })
 </script>
 

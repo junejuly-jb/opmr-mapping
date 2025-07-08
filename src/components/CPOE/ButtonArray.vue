@@ -7,7 +7,8 @@ const mappingStore = useMappingStore();
 const handleSave = () => {
   const duplicates = findDuplicates(mappingStore.mappings) //check for duplicates
   const hasEmptyHL7Ref = checkForEmptyReference(mappingStore.mappings)
-  if(duplicates.length > 0 || hasEmptyHL7Ref > 0){
+  const fortifiedBreastMilkWithoutFortifier = checkForFortifiedBreastMilkWithoutFortifier(mappingStore.mappings)
+  if(duplicates.length > 0 || hasEmptyHL7Ref > 0 || fortifiedBreastMilkWithoutFortifier.length > 0){
     if(duplicates.length > 0){
       var messages = []
       duplicates.forEach(element => {
@@ -17,6 +18,9 @@ const handleSave = () => {
     }
     if(hasEmptyHL7Ref > 0){
       mappingStore.errors.push({title: 'HL7 reference required', data: [`${hasEmptyHL7Ref} HL7 reference ${hasEmptyHL7Ref > 1 ? 'are': 'is'} empty.`]})
+    }
+    if(fortifiedBreastMilkWithoutFortifier.length > 0){
+      mappingStore.errors.push({title: 'Fortified milk must have fortifiers', data: fortifiedBreastMilkWithoutFortifier})
     }
     mappingStore.errorDialog = true
   }
@@ -47,6 +51,21 @@ const findDuplicates = (arr) => {
 const checkForEmptyReference = (arr) => {
   const isEmpty = arr.filter(item => item.productReference === "").length;
   return isEmpty
+}
+
+const checkForFortifiedBreastMilkWithoutFortifier = (arr) => {
+  const withoutFortifiers = [];
+  arr.forEach(element => {
+    if(element.fortified){
+      element.conditions.forEach( condition => {
+        if(condition.FortifierKey.length <= 0){
+          withoutFortifiers.push(`${element.productReference} (${element.type} - ${element.isBreastMilk ? 'Breast Milk' : ''})`)
+        }
+      })
+    }
+  });
+
+  return withoutFortifiers
 }
 
 const downloadExcel = () => {

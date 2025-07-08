@@ -21,6 +21,7 @@ export const useMappingStore = defineStore ('mappings', () => {
     const milktypes = ref<Array<Milktype>>([])
     const useMilkTypes = ref(false)
     const errors = ref([]) //{ title, data: [message]}
+    const appsettings = ref([])
 
     //Constant initialize empty mapping
     const emptyMap = ref<CPOE>({
@@ -366,6 +367,20 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
     }
 
+    const getAppSettings = async () => {
+        try {
+            const data = await OPMRServices.getAppSettings();
+            if(data.data.success){
+                appsettings.value = data.data.settings
+            }
+            else {
+                addNotifs(Date.now(), 'Unable to fetch app settings.', 'error')
+            }
+        } catch (error) {
+            addNotifs(Date.now(), 'Unable to fetch app settings.', 'error')
+        }
+    }
+
     watch(searchTerm, (newValue, oldValue) => {
         currentPage.value = 1
     });
@@ -394,6 +409,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
         getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
-        errorDialog, errors
+        errorDialog, errors, getAppSettings, appsettings
     };
 })

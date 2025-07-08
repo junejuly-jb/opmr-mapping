@@ -98,6 +98,37 @@
             }
         }
     })
+
+    const validateCaloricRangeForNonMilkTypes = (value) => {
+        if (!mappingStore.appsettings.donor_allow_feed_orders_with_custom_cal_oz) {
+            return true;
+        }
+
+        const trimmed = String(value).trim();
+
+        if (/^\d+$/.test(trimmed)) {
+            const numericValue = Number(trimmed);
+            if (!mappingStore.appsettings.donor_cal_oz_options.includes(numericValue)) {
+            return `Caloric value must be in range (e.g. [${mappingStore.appsettings.donor_cal_oz_options[0]} ... ${mappingStore.appsettings.donor_cal_oz_options[mappingStore.appsettings.donor_cal_oz_options.length - 1]}])`;
+            }
+            return true;
+        }
+
+        if (/^\d+\s*-\s*\d+$/.test(trimmed)) {
+            const [start, end] = trimmed.split('-').map(Number);
+            
+            if (start > end) return 'Invalid range: start calorie is greater than end.';
+
+            for (let i = start; i <= end; i++) {
+            if (!mappingStore.appsettings.donor_cal_oz_options.includes(i)) {
+                return `All values in the range must be in: [${mappingStore.appsettings.donor_cal_oz_options[0]} ... ${mappingStore.appsettings.donor_cal_oz_options[mappingStore.appsettings.donor_cal_oz_options.length - 1]}]`;
+            }
+            }
+            return true;
+        }
+
+        return `Invalid input: must be a number or range (e.g. [${mappingStore.appsettings.donor_cal_oz_options[0]} ... ${mappingStore.appsettings.donor_cal_oz_options[mappingStore.appsettings.donor_cal_oz_options.length - 1]}]).`;
+    };
 </script>
 <template>
     <v-dialog v-model:model-value="mappingStore.updateConditionDialog" max-width="650" persistent>
@@ -123,7 +154,14 @@
                     :rules="mappingStore.updateSelectedCondition.mapping.fortified ? [] : [validateRangeOrNumber]"
                     ref="cals"
                 ></v-text-field>
-                <v-text-field v-else v-model="localFormData.calories" label="Caloric Range" variant="outlined"></v-text-field>
+                <v-text-field
+                    v-else 
+                    v-model="localFormData.calories" 
+                    label="Caloric Range" variant="outlined"
+                    ref="cals"
+                    :rules="mappingStore.addConditionSelectedMapping.mapping.isBreastMilk && !mappingStore.addConditionSelectedMapping.mapping.fortified ? [validateCaloricRangeForNonMilkTypes] : []"
+                >
+                </v-text-field>
                 <div v-if="mappingStore.updateSelectedCondition.mapping.type == 'Feed Base'">
                     <v-autocomplete
                     v-model="localFormData.reference"

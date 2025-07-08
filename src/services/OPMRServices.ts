@@ -18,5 +18,8 @@ export default {
     },
     getMilktypes(){
         return apiClient.get('/api/customer/interoperability/get-milktypes');
+    },
+    getAppSettings(){
+        return apiClient.get('/api/customer/interoperability/get-appsettings');
     }
 }
