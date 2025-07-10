@@ -15,9 +15,14 @@
       return sampleMappings.value.filter(item => item.type === keyword).length;
     }
 
-    const handleFileChange = (event) => {
+    const clearState = () => {
       errors.value = []
       sampleMappings.value = []
+      isDoneLoading.value = false
+    }
+
+    const handleFileChange = (event) => {
+      clearState();
       const file = event.target.files[0];
       if (file) {
         readExcel(file);
@@ -34,16 +39,13 @@
       else{
         mappingStore.setBulkMapping(sampleMappings.value)
         mappingStore.toggleFileUploadDialog()
-        isDoneLoading.value = false
-        sampleMappings.value = []
+        clearState()
       }
     }
 
     const handleClose = () => {
       setTimeout(() => {
-        isDoneLoading.value = false
-        errors.value = []
-        sampleMappings.value = []
+        clearState()
       },200)
       mappingStore.toggleFileUploadDialog()
     }
@@ -229,10 +231,62 @@
       return regex.test(str);
     }
 
+    const checkCaloricRange = (input, arr) => {
+
+      //check if the calorie is valid!!!
+      const rangePattern = /^(\d+)-(\d+)$/;
+      const numberPattern = /^\d+$/;
+
+      if (rangePattern.test(input)) {
+          const [, startStr, endStr] = input.match(rangePattern);
+          const start = Number(startStr);
+          const end = Number(endStr);
+
+          if (start >= end) {
+              return false;
+          }
+
+          for (let i = start; i <= end; i++) {
+              if (!arr.includes(i)) {
+                  return false;
+              }
+          }
+          return true;
+
+      } else if (numberPattern.test(input)) {
+          const num = Number(input);
+          return arr.includes(num);
+      }
+
+      return false;
+    }
+
     const checkForErrors = (data, i, type, fortifierLastCaloricRange) => {
+      const row = parseInt(i) + 2;
+      if((data[6] || data[6] == 1) && type == 'Feed_Base'){ //check if breastmilk and type is feed base
+        if(mappingStore.useMilkTypes && data[2]){//milktype checking and milktype column is not null.
+          //if fortified disregard calorie checking
+          if(!data[0].toLowerCase().includes("fortified")){
+            const milktype = mappingStore.milktypes.find(obj => obj.milktypeName.toLowerCase() == data[2].toLowerCase())
+            console.log(milktype)
+            if(milktype && !checkCaloricRange(data[1], milktype.milktypeCaloricRange)) {
+              errors.value.push(`Invalid calorie range value at B${row}(${type}). Accepted values: [${milktype.milktypeCaloricRange[0]}...${milktype.milktypeCaloricRange[milktype.milktypeCaloricRange.length - 1]}]` )
+            }
+          }
+          //else check for milktype min and max calories
+        } else {
+          //check if donor/allow_feed_orders_with_custom_cal_oz is turned on
+          if(mappingStore.appsettings.donor_allow_feed_orders_with_custom_cal_oz){
+            if(!checkCaloricRange(data[1], mappingStore.appsettings.donor_cal_oz_options)){
+              errors.value.push(`Invalid calorie range value at B${row}(${type}). Accepted values: [${mappingStore.appsettings.donor_cal_oz_options[0]}...${mappingStore.appsettings.donor_cal_oz_options[mappingStore.appsettings.donor_cal_oz_options.length - 1]}]` )
+            }
+          }
+          //if turned on, refer to donor_cal_oz_options array
+        }
+      }
+
       if(data[1]){ //Check for invalid caloric rule
         if(!checkCaloricFormat(data[1])){
-          const row = parseInt(i) + 2;
           errors.value.push(`Invalid calorie range value at B${row}(${type}).` )
         }
       }
@@ -241,22 +295,18 @@
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase());
         const isMatchBMType = mappingStore.bmTypes.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[3].toLowerCase())
         if(!isMatch && !isMatchBMType){ //not product match and ebm and dbm
-        console.log(data[3])
-        const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at D${row}(${type}).`)
         }
       }
       if(data[4] && type == 'Feed_Base'){ //Applicable to Feed_Base check if product is on the product load.
         const isMatch = mappingStore.products.some(obj => obj.formtypeHL7Reference.toLowerCase() === data[4].toLowerCase());
         if(!isMatch){
-          const row = parseInt(i) + 2;
           errors.value.push(`Product name not found at E${row}(${type}).`)
         }
       }
       if(type == 'Feed_Base' && data[2]){ //Check Milk Type Exists on milktypes array Applicable on FeedBase Only
         const isMatch = mappingStore.milktypes.some(obj => obj.milktypeName.toLowerCase() === data[2].toLowerCase());
         if(!isMatch){
-          const row = parseInt(i) + 2;
           errors.value.push(`Milk type name not found at C${row}(${type}).`)
         }
       }
@@ -264,7 +314,6 @@
       if(type == 'Fortifier' && data[4]){
         const inRange = fortifierLastCaloricRange.includes(data[4])
         if(!inRange){
-          const row = parseInt(i) + 2;
           errors.value.push(`Mix to cal not in range at E${row}(${type})`)
         }
       }
@@ -288,7 +337,16 @@
             title="File Upload"
         >
         <div class="mx-5">
-            <v-file-input @change="handleFileChange" type="file" clearable label="File input" variant="outlined" accept=".xlsx, .xls"></v-file-input>
+            <v-file-input 
+              @change="handleFileChange" 
+              type="file" 
+              clearable 
+              label="File input" 
+              variant="outlined" 
+              accept=".xlsx, .xls"
+              @update:modelValue="clearState"
+              >
+            </v-file-input>
             <div v-if="errors.length < 1 && isDoneLoading">
               <div class="my-1">
                 <v-chip color="success">{{ feedbaseCount('Feed Base') }}</v-chip> mapping rules loaded for feed bases.

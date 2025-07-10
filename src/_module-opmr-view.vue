@@ -1,10 +1,11 @@
 <script setup>
-  import { mdiMagnify } from '@mdi/js';
+  import { mdiMagnify, mdiCog } from '@mdi/js';
   import MappingList from './components/CPOE/MappingList.vue';
   import { useMappingStore } from './stores/mappings';
   import ButtonArray from './components/CPOE/ButtonArray.vue';
   import FileUpload from './components/CPOE/Dialogs/FileUpload.vue';
   import { inject, onMounted } from 'vue';
+  import { ref } from 'vue';
   import Notification from './components/CPOE/Notification.vue';
   import UpdateCondition from './components/CPOE/Dialogs/UpdateCondition.vue';
   import UpdateFortifier from './components/CPOE/Dialogs/UpdateFortifier.vue';
@@ -12,6 +13,7 @@
   import ErrorDialog from './components/CPOE/Dialogs/ErrorDialog.vue'
 
   const mappingStore = useMappingStore()
+  const drawer = ref(null)
   onMounted(() => { 
     mappingStore.getMappings()
     mappingStore.getProducts()
@@ -53,6 +55,7 @@
       <MappingList :index="index" :mapping="mapping"></MappingList>
     </div>
   </div>
+  
 </template>
 
 <style>

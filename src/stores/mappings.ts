@@ -22,6 +22,11 @@ export const useMappingStore = defineStore ('mappings', () => {
     const useMilkTypes = ref(false)
     const errors = ref([]) //{ title, data: [message]}
     const appsettings = ref([])
+    const drawer = ref(false)
+
+    const toggleDrawer = () => {
+        drawer.value = !drawer.value
+    }
 
     //Constant initialize empty mapping
     const emptyMap = ref<CPOE>({
@@ -409,6 +414,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
         getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
-        errorDialog, errors, getAppSettings, appsettings
+        errorDialog, errors, getAppSettings, appsettings, toggleDrawer, drawer
     };
 })

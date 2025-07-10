@@ -1,9 +1,12 @@
 <script setup>
 import { useMappingStore } from '../../stores/mappings';
-import { mdiPlus, mdiFile, mdiCheck, mdiDownload } from '@mdi/js';
+import { mdiPlus, mdiFile, mdiCheck, mdiDownload, mdiInformation } from '@mdi/js';
 import * as XLSX from "xlsx";
+import { ref } from 'vue';
 
 const mappingStore = useMappingStore();
+const drawer = ref(false)
+
 const handleSave = () => {
   const duplicates = findDuplicates(mappingStore.mappings) //check for duplicates
   const hasEmptyHL7Ref = checkForEmptyReference(mappingStore.mappings)
@@ -183,6 +186,15 @@ const getCalories = (arr) => {
 <template>
     <div class="opmr__spacer__v">
       <span class="opmr__spacer__h"></span>
+      <!-- <v-btn
+        color="primary"
+        @click="drawer = true"
+      >
+        <v-icon
+          :icon="mdiInformation"
+        ></v-icon>
+      </v-btn>
+      <span class="opmr__spacer__h"></span> -->
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn
