@@ -88,7 +88,8 @@
               data.mappingId = 0
               data.productReference = item[0]
               data.type = 'Feed Base'
-              data.isBreastMilk = (item[6] && item[6] == 1) ? true : false 
+              data.isBreastMilk = (item[6] && item[6] == 1) ? true : false
+              data.fortified = item[0].toLowerCase().includes("fortified") ? true : false
               data.conditions = [{ //it always assumed that if product reference is not null, the condition has always value
                 calories: mappingStore.serializeCalories(item[1]),
                 reference: item[3],
