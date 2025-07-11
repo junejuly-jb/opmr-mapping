@@ -11,7 +11,10 @@ const handleSave = () => {
   const duplicates = findDuplicates(mappingStore.mappings) //check for duplicates
   const hasEmptyHL7Ref = checkForEmptyReference(mappingStore.mappings)
   const fortifiedBreastMilkWithoutFortifier = checkForFortifiedBreastMilkWithoutFortifier(mappingStore.mappings)
-  if(duplicates.length > 0 || hasEmptyHL7Ref > 0 || fortifiedBreastMilkWithoutFortifier.length > 0){
+  const invalidConditionMilktype = checkValidMilkTypeCondition(mappingStore.mappings)
+  const invalidMilktypeCalorie = invalidConditionMilktype.length === 0 ? checkMilkTypeCaloricValue(mappingStore.mappings) : [];
+  const invalidNonMilktypeCalorie = checkNonMilkTypeCaloricValue(mappingStore.mappings)
+  if(duplicates.length > 0 || hasEmptyHL7Ref > 0 || fortifiedBreastMilkWithoutFortifier.length > 0 || invalidConditionMilktype.length > 0 || invalidMilktypeCalorie.length > 0 || invalidNonMilktypeCalorie.length > 0){
     if(duplicates.length > 0){
       var messages = []
       duplicates.forEach(element => {
@@ -24,6 +27,15 @@ const handleSave = () => {
     }
     if(fortifiedBreastMilkWithoutFortifier.length > 0){
       mappingStore.errors.push({title: 'Fortified milk must have fortifiers', data: fortifiedBreastMilkWithoutFortifier})
+    }
+    if(invalidConditionMilktype.length > 0){
+      mappingStore.errors.push({title: 'Different milktypes on multiple condition', data: invalidConditionMilktype})
+    }
+    if(invalidMilktypeCalorie.length > 0){
+      mappingStore.errors.push({title: 'Calorie not in range ', data: invalidMilktypeCalorie})
+    }
+    if(invalidNonMilktypeCalorie.length > 0){
+      mappingStore.errors.push({title: 'Calorie not in range ', data: invalidNonMilktypeCalorie})
     }
     mappingStore.errorDialog = true
   }
@@ -169,6 +181,67 @@ const downloadExcel = () => {
     mappingStore.autoRemoveNotifs(id)
   }
   
+}
+
+const checkValidMilkTypeCondition = (arr) => {
+  var invalidConditions = []
+  if(mappingStore.useMilkTypes){
+    arr.forEach(mapping => {
+      if(mapping.isBreastMilk){
+        if(mapping.conditions.length > 0){
+          if(mapping.conditions[0].milktype){
+            var lastMilkType = mapping.conditions[0].milktype
+            mapping.conditions.forEach( cond => {
+              if(cond.milktype != lastMilkType){
+                invalidConditions.push(`Milktype must be the same on the first condition (${mapping.type} - ${mapping.productReference})`)
+              }
+            })
+          }
+        }
+      }
+    })
+  }
+  return invalidConditions
+}
+
+const checkMilkTypeCaloricValue = (arr) => {
+  //if milktype check caloric value on milktype min max calorie disregard checking if fortified
+  var invalidCalMilkType = []
+  if(mappingStore.useMilkTypes){
+    arr.forEach(mapping => {
+      if(mapping.isBreastMilk && !mapping.fortified){
+        mapping.conditions.forEach( cond => {
+          if(cond.milktype){
+            const milktype = mappingStore.milktypes.find(obj => obj.milktypeName.toLowerCase() === cond.milktype.toLowerCase())
+            const isValidCal = mappingStore.checkCaloricRangeFromGivenArray(getCalories(cond.calories), milktype)
+            if(!isValidCal){
+              invalidCalMilkType.push(`Invalid calorie range for ${cond.milktype} (${mapping.productReference} - ${mapping.type})`);
+            }
+          }
+        })
+      }
+    })
+  }
+
+  return invalidCalMilkType;
+}
+
+const checkNonMilkTypeCaloricValue = (arr) => {
+  //milktype unsupported !!!
+  var invalidCal = []
+  if(!mappingStore.useMilkTypes){
+    arr.forEach(mapping => {
+      if(mapping.isBreastMilk && mappingStore.appsettings.donor_allow_feed_orders_with_custom_cal_oz && !mapping.fortified){
+        mapping.conditions.forEach( cond => {
+          const isValidCal = mappingStore.checkCaloricRangeFromGivenArray(getCalories(cond.calories), mappingStore.appsettings.donor_cal_oz_options)
+          if(!isValidCal){
+            invalidCal.push(`Invalid calorie range (${mapping.productReference} - ${mapping.type}) Accepted value: [${mappingStore.appsettings.donor_cal_oz_options[0]} ... ${mappingStore.appsettings.donor_cal_oz_options[mappingStore.appsettings.donor_cal_oz_options.length - 1]}]`)
+          }
+        })
+      }
+    })
+  }
+  return invalidCal
 }
 
 const getCalories = (arr) => {

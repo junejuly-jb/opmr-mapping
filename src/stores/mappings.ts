@@ -386,6 +386,36 @@ export const useMappingStore = defineStore ('mappings', () => {
         }
     }
 
+    const checkCaloricRangeFromGivenArray = (input, arr) => {
+
+      //check if the calorie is valid!!!
+      const rangePattern = /^(\d+)-(\d+)$/;
+      const numberPattern = /^\d+$/;
+
+      if (rangePattern.test(input)) {
+          const [, startStr, endStr] = input.match(rangePattern);
+          const start = Number(startStr);
+          const end = Number(endStr);
+
+          if (start >= end) {
+              return false;
+          }
+
+          for (let i = start; i <= end; i++) {
+              if (!arr.includes(i)) {
+                  return false;
+              }
+          }
+          return true;
+
+      } else if (numberPattern.test(input)) {
+          const num = Number(input);
+          return arr.includes(num);
+      }
+
+      return false;
+    }
+
     watch(searchTerm, (newValue, oldValue) => {
         currentPage.value = 1
     });
@@ -414,6 +444,6 @@ export const useMappingStore = defineStore ('mappings', () => {
         unSavedChanges, duplicateMapping, updateConditionDialog, updateSelectedCondition, deleteSelectedCondition,
         deleteSelectedMapping, updateFortifierDialog, updateSelectedFortifierKey, getProductDID, deleteSelectedFortifierKey, bmTypes,
         getMilktypes, milktypes, useMilkTypes, addConditionSelectedMapping, addConditionDialog,
-        errorDialog, errors, getAppSettings, appsettings, toggleDrawer, drawer
+        errorDialog, errors, getAppSettings, appsettings, toggleDrawer, drawer, checkCaloricRangeFromGivenArray
     };
 })

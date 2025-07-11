@@ -11,7 +11,7 @@
 </script>
 <template>
     <v-dialog
-        width="600"
+        width="800"
         v-model="mappingStore.errorDialog"
         >
         <v-card title="Check for errors" class="px-5">
@@ -23,9 +23,11 @@
                     type="error" 
                     :title="err.title"
                     >
-                    <div v-for="message in err.data">
-                        {{ message }}
-                    </div>
+                    <ul style="padding-left: 1.2rem; list-style-type: disc;">
+                        <div v-for="message in err.data">
+                                <li>{{ message }}</li>
+                        </div>
+                    </ul>
                 </v-alert>
             </div>
             <template v-slot:actions>
